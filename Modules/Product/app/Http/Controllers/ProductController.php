@@ -6,7 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\Product\Http\Requests\CreateProductrequest;
+use Modules\Product\Http\Requests\UpdateProductrequest;
+use Modules\Product\Models\Product;
 use Modules\Product\Repository\ProductRepository;
+use Modules\Product\Transformers\IndexProductResource;
+use Modules\Product\Transformers\ShowProductResource;
 
 class ProductController extends Controller
 {
@@ -18,7 +22,13 @@ class ProductController extends Controller
     }
     public function index()
     {
-        return view('product::index');
+        $user = Auth::user();
+
+        if (! $user) {
+            return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
+        }
+
+        return IndexProductResource::collection($this->productRepo->index());
     }
 
     public function store(CreateProductrequest $request)
@@ -38,18 +48,47 @@ class ProductController extends Controller
         return response()->json(['message' => __('messages.product.store.failed', ['name' => $request->name])], 500);
     }
 
-    public function show($id)
+    public function show(Product $product)
     {
-        return view('product::show');
+        $user = Auth::user();
+
+        if (! $user) {
+            return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
+        }
+
+        return new ShowProductResource($product);
     }
 
-    public function update(Request $request, $id)
+    public function update(Product $product , UpdateProductrequest $request)
     {
-        //
+        $user = Auth::user();
+
+        if (! $user) {
+            return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
+        }
+
+        $error = $this->productRepo->update($product , $request);
+
+        if ($error === null) {
+            return response()->json(['message' => __('messages.product.update.success', ['name' => $request->name])], 201);
+        }
+
+        return response()->json(['message' => __('messages.product.update.failed', ['name' => $request->name])], 500);
     }
 
-    public function destroy($id)
+    public function destroy(Product $product)
     {
-        //
+        $auth = Auth::id();
+
+        if (! $auth) {
+            return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
+        }
+
+        $error = $this->productRepo->delete($product);
+        if ($error === null) {
+            return response()->json(['message' => __('messages.product.delete.success')], 200);
+        }
+
+        return response()->json(['message' => __('messages.product.delete.failed')], 500);
     }
 }
