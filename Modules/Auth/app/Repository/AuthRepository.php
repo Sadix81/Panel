@@ -15,7 +15,25 @@ use Modules\Otp\Models\Otp;
 class Authrepository implements AuthrepositoryInterface{
 
     public function register($request)
-    {
+    {   
+        $allUsers = User::all(['username', 'mobile', 'email'])->toArray();
+
+        $usernames = array_column($allUsers, 'username');
+        $mobiles = array_column($allUsers, 'mobile');
+        $emails = array_column($allUsers, 'email');
+        
+        if(in_array($request->username , $usernames)){
+            return response()->json(['messages' => 'username has already selected'] , 409); //409 for conflict
+        }
+
+        if(in_array($request->mobile , $mobiles)){
+            return response()->json(['messages' => 'mobile has already selected'] , 409); //409 for conflict
+        }
+
+        if(in_array($request->username , $emails)){
+            return response()->json(['messages' => 'email has already selected'] , 409);  //409 for conflict
+        }
+
         $user = User::create([
             'username' => $request->username,
             'lastname' => $request->lastname,
@@ -23,7 +41,8 @@ class Authrepository implements AuthrepositoryInterface{
             'email' => $request->email,
             'avatar' => $request->avatar,
             'password' => password_hash($request->password, PASSWORD_DEFAULT),
-        ]); 
+        ]);
+
         return $user;
 
     }
