@@ -2,5 +2,6 @@
     "Auth": true,
     "Otp": true,
     "Category": true,
-    "Product": true
+    "Product": true,
+    "Color": true
 }
