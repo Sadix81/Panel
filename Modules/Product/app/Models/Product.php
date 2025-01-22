@@ -15,13 +15,13 @@ class Product extends Model
 
     protected $fillable = [
         'name',
-        'category_id',
-        'price',
-        'Quantity', //تعداد موجودی
-        'color',
         'description',
+        'status',
+        'category_id',
+        // 'price',
+        // 'Quantity',
+        // 'color',
         // 'image_url',
-        'is_active',
     ];
 
     public function categories(){

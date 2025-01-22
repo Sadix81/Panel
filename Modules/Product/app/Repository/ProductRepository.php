@@ -16,7 +16,7 @@ class ProductRepository implements ProductRepositoryInterface {
             'category' => request()->has('category') ? request('category') : null,
             'search' => request()->has('search') ? request('search') : null,
             'price' => request()->has('price') ? request('price') : null,
-            'is_active' => request()->has('is_active') ? 1 : null,
+            'status' => request()->has('status') ? 1 : null,
         ];
 
         try {
@@ -29,11 +29,11 @@ class ProductRepository implements ProductRepositoryInterface {
                 if ($req['search']) {
                     $query->where('name', 'Like', '%'.$req['search'].'%');
                 }
-                if ($req['price']) {
-                    $query->where('price', '>=', $req['price']);
-                }
-                if ($req['is_active']) {
-                    $query->where('is_active', 1)
+                // if ($req['price']) {
+                //     $query->where('price', '>=', $req['price']);
+                // }
+                if ($req['status']) {
+                    $query->where('status', 1)
                     ->where('Quantity' , '>' , 0);
                 }
                 })
@@ -60,12 +60,12 @@ class ProductRepository implements ProductRepositoryInterface {
         try {
             $product = Product::create([
                 'name' => $request->name,
-                'price' => $request->price,
-                'Quantity' => $request->Quantity,
-                'color' => $request->color,
                 'description' => $request->description,
+                'status' => $request->status,
+                // 'price' => $request->price,
+                // 'Quantity' => $request->Quantity,
+                // 'color' => $request->color,
                 // 'image_url' => $image_url,
-                'is_active' => $request->is_active,
             ]);
             if ($request->has('category_id')) {
                 $product->categories()->attach($request->category_id);
@@ -89,12 +89,12 @@ class ProductRepository implements ProductRepositoryInterface {
         try {
             $product->update([
                 'name' => $request->name ? $request->name : $product->name,
-                'price' => $request->price ? $request->price : $product->price,
-                'Quantity' => $request->Quantity ? $request->Quantity : $product->Quantity,
-                'color' => $request->color ? $request->color : $product->color,
                 'description' => $request->description ? $request->description : $product->description,
+                'status' => $request->status ? $request->status : $product->status,
+                // 'price' => $request->price ? $request->price : $product->price,
+                // 'Quantity' => $request->Quantity ? $request->Quantity : $product->Quantity,
+                // 'color' => $request->color ? $request->color : $product->color,
                 // 'image_url' => $image_url,
-                'is_active' => $request->is_active ? $request->is_active : $product->is_active,
             ]);
             if ($request->has('category_id')) {
                 if (is_array($request->category_id) && !empty($request->category_id)) {

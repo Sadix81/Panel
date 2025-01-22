@@ -14,12 +14,12 @@ class UpdateProductrequest extends FormRequest
     {
         return [
             'name' => ['required' , 'string' , 'max:255' , Rule::unique('products')->ignore($this->product)],
-            'price' => ['required' , 'int' , 'min:0'],
-            'Quantity' => ['required' , 'string'],
-            'color' => ['required' , 'string' , 'min:1'],
             'description' => ['required' , 'string' , 'max:255'],
+            'status' => ['required' , 'integer' , 'in:0,1'],
+            // 'price' => ['required' , 'int' , 'min:0'],
+            // 'Quantity' => ['required' , 'string'],
+            // 'color' => ['required' , 'string' , 'min:1'],
             // 'image' => ['nullable' , 'image' , 'mimes:jpeg,png,jpg,gif' , 'max:2048'], // Validate image
-            'is_active' => ['required' , 'integer' , 'in:0,1'],
             'category_id' => ['nullable', 'array'],
             'category_id.*' => ['nullable', 'exists:categories,id', 'integer'],
         ];
