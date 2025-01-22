@@ -3,5 +3,6 @@
     "Otp": true,
     "Category": true,
     "Product": true,
-    "Color": true
+    "Color": true,
+    "Size": true
 }
