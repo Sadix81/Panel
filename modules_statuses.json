@@ -4,5 +4,6 @@
     "Category": true,
     "Product": true,
     "Color": true,
-    "Size": true
+    "Size": true,
+    "Property": true
 }
