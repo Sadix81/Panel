@@ -3,6 +3,7 @@
 namespace Modules\Size\Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Modules\Size\Models\Size;
 
 class SizeDatabaseSeeder extends Seeder
 {
@@ -11,6 +12,15 @@ class SizeDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([]);
+        $sizes = [
+            ['title' => 'S'],
+            ['title' => 'M'], 
+            ['title' => 'L'], 
+            ['title' => 'XL'], 
+            ['title' => 'XXL'], 
+            ['title' => 'XXXL'], 
+        ];
+        
+        Size::insert($sizes);
     }
 }

@@ -3,6 +3,7 @@
 namespace Modules\Color\Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Modules\Color\Models\Color;
 
 class ColorDatabaseSeeder extends Seeder
 {
@@ -11,6 +12,14 @@ class ColorDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([]);
-    }
+        $colors = [
+            ['name' => 'red'],
+            ['name' => 'blue'], 
+            ['name' => 'yellow'], 
+            ['name' => 'black'], 
+            ['name' => 'white'], 
+            ['name' => 'broun'], 
+        ];
+        
+        Color::insert($colors);    }
 }
