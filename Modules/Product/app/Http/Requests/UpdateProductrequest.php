@@ -14,14 +14,18 @@ class UpdateProductrequest extends FormRequest
     {
         return [
             'name' => ['required' , 'string' , 'max:255' , Rule::unique('products')->ignore($this->product)],
-            'description' => ['required' , 'string' , 'max:255'],
+            'description' => ['nullable' , 'string' , 'max:255'],
             'status' => ['required' , 'integer' , 'in:0,1'],
-            // 'price' => ['required' , 'int' , 'min:0'],
-            // 'Quantity' => ['required' , 'string'],
-            // 'color' => ['required' , 'string' , 'min:1'],
+
+            'price' => ['required' , 'int' , 'min:0'],
+            'quantity' => ['required', 'integer', 'min:0'],
+            'color_id' => ['nullable' , 'array'],
+            'color_id.*' => ['nullable' , 'exists:colors,id' , 'integer' , 'min:1'],
+            'size_id' => ['nullable' , 'array'],
+            'size_id.*' => ['nullable' , 'exists:sizes,id' , 'integer' , 'min:1'],
+            'category_id' => ['required', 'array'],
+            'category_id.*' => ['required', 'exists:categories,id', 'integer', 'gt:0'],
             // 'image' => ['nullable' , 'image' , 'mimes:jpeg,png,jpg,gif' , 'max:2048'], // Validate image
-            'category_id' => ['nullable', 'array'],
-            'category_id.*' => ['nullable', 'exists:categories,id', 'integer'],
         ];
     }
 

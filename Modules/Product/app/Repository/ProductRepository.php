@@ -4,6 +4,7 @@ namespace Modules\Product\Repository;
 
 use Illuminate\Support\Facades\DB;
 use Modules\Product\Models\Product;
+use Modules\Property\Models\Property;
 
 class ProductRepository implements ProductRepositoryInterface {
 
@@ -56,22 +57,81 @@ class ProductRepository implements ProductRepositoryInterface {
         //     $request->image->move(public_path('images'), $image_name);
         //     $image_url = asset('images/' . $image_name);
         // }
+        
 
         try {
             $product = Product::create([
                 'name' => $request->name,
                 'description' => $request->description,
                 'status' => $request->status,
-                // 'price' => $request->price,
-                // 'Quantity' => $request->Quantity,
-                // 'color' => $request->color,
                 // 'image_url' => $image_url,
             ]);
+
             if ($request->has('category_id')) {
                 $product->categories()->attach($request->category_id);
-            }        
+            }  
+
+
+            $categoryIds = $request->category_id; // Array of category IDs
+            $colorIds = $request->color_id; // Array of color IDs
+            $sizeIds = $request->size_id; // Array of size IDs
+            $combinations = [];
+    
+            foreach ($categoryIds as $categoryId) {
+                if (is_array($colorIds) && is_array($sizeIds)) {
+                    // Both color and size are provided
+                    foreach ($colorIds as $colorId) {
+                        foreach ($sizeIds as $sizeId) {
+                            $combinations[] = [
+                                'category_id' => $categoryId,
+                                'color_id' => $colorId,
+                                'size_id' => $sizeId,
+                            ];
+                        }
+                    }
+                } elseif (is_array($colorIds)) {
+                    // Only color is provided
+                    foreach ($colorIds as $colorId) {
+                        $combinations[] = [
+                            'category_id' => $categoryId,
+                            'color_id' => $colorId,
+                            'size_id' => null, // Size is null
+                        ];
+                    }
+                } elseif (is_array($sizeIds)) {
+                    // Only size is provided
+                    foreach ($sizeIds as $sizeId) {
+                        $combinations[] = [
+                            'category_id' => $categoryId,
+                            'color_id' => null, // Color is null
+                            'size_id' => $sizeId,
+                        ];
+                    }
+                } else {
+                    // Neither color nor size is provided
+                    $combinations[] = [
+                        'category_id' => $categoryId,
+                        'color_id' => null,
+                        'size_id' => null,
+                    ];
+                }
+            }
+        
+            // Insert combinations into the database
+            foreach ($combinations as $combination) {
+                Property::create([
+                    'price' => $request->price,
+                    'quantity' => $request->quantity,
+                    'category_id' => $combination['category_id'],
+                    'color_id' => $combination['color_id'],
+                    'size_id' => $combination['size_id'],
+                    'product_id' => $request->product_id ?: $product->id,
+                ]);
+            }
+
             DB::commit();
         } catch (\Throwable $th) {
+            DB::rollBack();
             throw $th;
         }
     }
@@ -91,9 +151,6 @@ class ProductRepository implements ProductRepositoryInterface {
                 'name' => $request->name ? $request->name : $product->name,
                 'description' => $request->description ? $request->description : $product->description,
                 'status' => $request->status ? $request->status : $product->status,
-                // 'price' => $request->price ? $request->price : $product->price,
-                // 'Quantity' => $request->Quantity ? $request->Quantity : $product->Quantity,
-                // 'color' => $request->color ? $request->color : $product->color,
                 // 'image_url' => $image_url,
             ]);
             if ($request->has('category_id')) {
@@ -106,7 +163,70 @@ class ProductRepository implements ProductRepositoryInterface {
                         $product->categories()->sync($validCategoryIds);
                     }
                 }
-            }      
+            }  
+
+            $categoryIds = $request->category_id; // آرایه‌ای از IDهای دسته‌بندی
+            $colorIds = $request->color_id; // آرایه‌ای از IDهای رنگ، می‌تواند null باشد
+            $sizeIds = $request->size_id; // آرایه‌ای از IDهای سایز، می‌تواند null باشد
+
+            if (!is_array($categoryIds)) {
+                return response()->json(['message' => 'Invalid input. category_id must be an array.'], 400);
+            }
+
+            Property::where('product_id', $product->id)->delete();
+
+            $combinations = [];
+            foreach ($categoryIds as $categoryId) {
+                if (is_array($colorIds) && is_array($sizeIds)) {
+                    // هر دو رنگ و سایز موجود است
+                    foreach ($colorIds as $colorId) {
+                        foreach ($sizeIds as $sizeId) {
+                            $combinations[] = [
+                                'category_id' => $categoryId,
+                                'color_id' => $colorId,
+                                'size_id' => $sizeId,
+                            ];
+                        }
+                    }
+                } elseif (is_array($colorIds)) {
+                    // فقط رنگ موجود است
+                    foreach ($colorIds as $colorId) {
+                        $combinations[] = [
+                            'category_id' => $categoryId,
+                            'color_id' => $colorId,
+                            'size_id' => null, // سایز null است
+                        ];
+                    }
+                } elseif (is_array($sizeIds)) {
+                    // فقط سایز موجود است
+                    foreach ($sizeIds as $sizeId) {
+                        $combinations[] = [
+                            'category_id' => $categoryId,
+                            'color_id' => null, // رنگ null است
+                            'size_id' => $sizeId,
+                        ];
+                    }
+                } else {
+                    // هیچ‌کدام موجود نیستند
+                    $combinations[] = [
+                        'category_id' => $categoryId,
+                        'color_id' => null,
+                        'size_id' => null,
+                    ];
+                }
+            }
+        
+            foreach ($combinations as $combination) {
+                Property::create([
+                    'price' => $request->price,
+                    'quantity' => $request->quantity,
+                    'category_id' => $combination['category_id'],
+                    'color_id' => $combination['color_id'],
+                    'size_id' => $combination['size_id'],
+                    'product_id' => $product->id,
+                ]);
+            }        
+            
             DB::commit();
         } catch (\Throwable $th) {
             throw $th;

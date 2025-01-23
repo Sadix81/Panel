@@ -12,15 +12,19 @@ class CreateProductrequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required' , 'string' , 'max:255' , 'unique:categories'],
-            'description' => ['required' , 'string' , 'max:255'],
+            'name' => ['required' , 'string' , 'max:255' , 'unique:products'],
+            'description' => ['nullable' , 'string' , 'max:255'],
             'status' => ['required' , 'integer' , 'in:0,1'],
-            // 'price' => ['required' , 'int' , 'min:0'],
-            // 'Quantity' => ['required' , 'string'],
-            // 'color' => ['required' , 'string' , 'min:1'],
-            // 'image' => ['nullable' , 'image' , 'mimes:jpeg,png,jpg,gif' , 'max:2048'], // Validate image
+
+            'price' => ['required' , 'int' , 'min:0'],
+            'quantity' => ['required', 'integer', 'min:0'],
+            'color_id' => ['nullable' , 'array'],
+            'color_id.*' => ['nullable' , 'exists:colors,id' , 'integer' , 'min:1'],
+            'size_id' => ['nullable' , 'array'],
+            'size_id.*' => ['nullable' , 'exists:sizes,id' , 'integer' , 'min:1'],
             'category_id' => ['required', 'array'],
             'category_id.*' => ['required', 'exists:categories,id', 'integer', 'gt:0'],
+            // 'image' => ['nullable' , 'image' , 'mimes:jpeg,png,jpg,gif' , 'max:2048'], // Validate image
         ];
     }
 
