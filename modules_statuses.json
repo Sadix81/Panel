@@ -6,5 +6,6 @@
     "Color": true,
     "Size": true,
     "Property": true,
-    "Comment": true
+    "Comment": true,
+    "Profile": true
 }
