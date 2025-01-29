@@ -15,13 +15,16 @@ class IndexProductResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'category_id' => $this->categories->pluck('name'),
-            'price' => $this->price,
-            'Quantity' => $this->Quantity, //تعداد موجودی
-            'color' => $this->color,
-            'description' => $this->description,
+            'price' => $this->properties->pluck('price')->unique()->values(),
             // 'image_url' => $this->image_url,
-            'is_active' => $this->is_active,  
+            //تخفیف
+            // 'quantity' => $this->properties->pluck('quantity')->unique()->values(), //تعداد کمتر از شیش تا رو نشون بده روی بنر 
+            
+            // 'category_id' => $this->properties->pluck('category_id')->unique()->values(),
+            // 'color' => $this->properties->pluck('color')->unique()->values(),
+            // 'size' => $this->properties->pluck('size')->unique()->values(),
+            // 'description' => $this->description,
+            // 'status' => $this->status,   
         ];
     }
 }
