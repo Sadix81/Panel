@@ -36,6 +36,21 @@ class ProfileController extends Controller
        return response()->json(['message' => __('messages.user.profile.update.failed')], 500);
    }
 
+   public function delete_avatar(User $user)
+   {
+    $user = Auth::id();
+
+    if (! $user) {
+        return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
+    }
+    $error = $this->profileRepo->delete_avatar($user);
+    if ($error === null) {
+        return response()->json(['message' => __('messages.user.profile.delete.success')], 200);
+    }
+
+    return response()->json(['message' => __('messages.user.profile.delete.failed')], 500);
+   }
+
    public function change_password(UpdatePasswordRequest $request)
    {
 
