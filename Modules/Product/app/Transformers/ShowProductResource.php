@@ -15,7 +15,7 @@ class ShowProductResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'category_id' => $this->properties->pluck('category_id'),
+            'category_id' => $this->properties->pluck('category_id')->unique()->values(),
             'price' => $this->properties->pluck('price')->unique()->values(),
             'quantity' => $this->properties->pluck('quantity')->unique()->values(), //تعداد موجودی
             'color' => $this->properties->pluck('color'),
@@ -23,7 +23,7 @@ class ShowProductResource extends JsonResource
             'description' => $this->description,
             'status' => $this->status,   
             'thumbnail' => $this->thumbnail,   
-            // 'image_url' => $this->image_url,
+            'image_url' => $this->images->pluck('id')->unique()->values(),
             //تخفیف
             // 'quantity' => $this->properties->pluck('quantity')->unique()->values(), //تعداد کمتر از شیش تا رو نشون بده روی بنر 
         ];

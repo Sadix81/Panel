@@ -18,13 +18,8 @@ class IndexProductResource extends JsonResource
             'price' => $this->properties->pluck('price')->unique()->values(),
             'thumbnail' => $this->thumbnail,
             //تخفیف
-            // 'quantity' => $this->properties->pluck('quantity')->unique()->values(), //تعداد کمتر از شیش تا رو نشون بده روی بنر 
-            
-            // 'category_id' => $this->properties->pluck('category_id')->unique()->values(),
-            // 'color' => $this->properties->pluck('color')->unique()->values(),
-            // 'size' => $this->properties->pluck('size')->unique()->values(),
-            // 'description' => $this->description,
-            // 'status' => $this->status,   
+            'quantity' => $this->properties->pluck('quantity')->unique()->values(),
+            'status' => $this->status,   
         ];
     }
 }
