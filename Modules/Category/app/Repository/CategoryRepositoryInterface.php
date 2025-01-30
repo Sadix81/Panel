@@ -10,5 +10,7 @@ interface CategoryRepositoryInterface{
 
     public function update($category , $request);
 
+    public function remove_category_image($category);
+
     public function delete($category);
 }
