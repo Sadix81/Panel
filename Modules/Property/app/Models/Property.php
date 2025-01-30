@@ -28,12 +28,12 @@ class Property extends Model
 
     public function products()
 {
-    return $this->belongsToMany(Product::class);
+    return $this->belongsTo(Product::class);
 }
 
     public function category()
     {
-        return $this->belongsToMany(Category::class);
+        return $this->belongsTo(Category::class);
     }
 
     public function color()

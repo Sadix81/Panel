@@ -14,34 +14,37 @@ class ProductRepository implements ProductRepositoryInterface {
             'sort' => request()->has('sort') ? request('sort') : 'updated_at',
             'order' => request()->has('order') ? request('order') : 'desc',
             'limit' => request()->has('limit') ? request('limit') : '25',
-            'category' => request()->has('category') ? request('category') : null,
+            'category_id' => request()->has('category_id') ? request('category_id') : null,
             'search' => request()->has('search') ? request('search') : null,
             'price' => request()->has('price') ? request('price') : null,
             'status' => request()->has('status') ? 1 : null,
         ];
 
         try {
-            $product = Product::whereHas('categories', function ($query) use ($req) {
-                if ($req['category']) {
-                    $query->where('category_id', $req['category']);
-                }
-            })
-            ->where(function ($query) use ($req) {
-                if ($req['search']) {
-                    $query->where('name', 'Like', '%'.$req['search'].'%');
-                }
-                // if ($req['price']) {
-                //     $query->where('price', '>=', $req['price']);
-                // }
-                if ($req['status']) {
-                    $query->where('status', 1)
-                    ->where('Quantity' , '>' , 0);
-                }
-                })
-                ->orderBy($req['sort'], $req['order'])
-                ->paginate($req['limit']);
+            $query = Product::query();
 
-            return $product;
+            if (!empty($req['status'])) {
+                $query->where('status', $req['status']);
+            }
+    
+            if (!empty($req['search'])) {
+                $query->where('name', 'like', '%' . $req['search'] . '%');
+            }
+    
+            // Filter by properties
+            $query->whereHas('properties', function ($query) use ($req) {
+                if (!empty($req['price'])) {
+                    $query->where('price', '>=', $req['price']);
+                }
+                if (!empty($req['category_id'])) {
+                    $query->where('category_id', $req['category_id']);
+                }
+            });
+    
+            $products = $query->orderBy($req['sort'], $req['order'])
+            ->paginate($req['limit']);
+    
+            return $products;
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -172,7 +175,7 @@ class ProductRepository implements ProductRepositoryInterface {
             if (!is_array($categoryIds)) {
                 return response()->json(['message' => 'Invalid input. category_id must be an array.'], 400);
             }
-
+            
             Property::where('product_id', $product->id)->delete();
 
             $combinations = [];
