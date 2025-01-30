@@ -14,7 +14,7 @@ class UpdateCategoryRequest extends FormRequest
     {
         return [
             'name' => ['required' , 'string' , 'max:50' , Rule::unique('categories')->ignore($this->category)],
-            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,bmp,gif,svg,webp', 'max:5048'], // Max size 5MB
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,bmp,gif,svg,webp', 'max:10240'], // Max size 10MB
             'parent_id' => ['nullable' , 'string' , 'exists:categories,id'],
         ];
     }

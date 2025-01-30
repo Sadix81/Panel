@@ -81,6 +81,21 @@ class CategoryController extends Controller
         return response()->json(['message' => __('messages.category.update.failed', ['name' => $category->name])], 500);
     }
 
+    public function remove_category_image(Category $category)
+    {
+     $user = Auth::id();
+ 
+     if (! $user) {
+         return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
+     }
+     $error = $this->categoryRepo->remove_category_image($category);
+     if ($error === null) {
+         return response()->json(['message' => __('messages.category.image.delete.success')], 200);
+     }
+ 
+     return response()->json(['message' => __('messages.category.image.delete.failed')], 500);
+    }
+
     public function destroy($category)
     {
         $user = Auth::user();

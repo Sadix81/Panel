@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\Category\Models\Category;
 use Modules\Comment\Models\Comment;
+use Modules\Image\Models\Image;
 use Modules\Property\Models\Property;
 
 // use Modules\Product\Database\Factories\ProductFactory;
@@ -20,7 +21,8 @@ class Product extends Model
         'description',
         'status',
         'color',
-        // 'image_url',
+        'thumbnail',
+        'image_url',
     ];
 
     public function categories(){
@@ -29,11 +31,16 @@ class Product extends Model
 
     public function properties()
     {
-        return $this->belongsToMany(Property::class);
+        return $this->hasMany(Property::class);
     }
 
     public function comments(){
         return $this->hasMany(Comment::class);
+    }
+
+    public function images()
+    {
+        return $this->hasMany(Image::class);
     }
 
 }
