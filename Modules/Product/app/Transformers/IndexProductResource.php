@@ -16,7 +16,7 @@ class IndexProductResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'price' => $this->properties->pluck('price')->unique()->values(),
-            // 'image_url' => $this->image_url,
+            'thumbnail' => $this->thumbnail,
             //تخفیف
             // 'quantity' => $this->properties->pluck('quantity')->unique()->values(), //تعداد کمتر از شیش تا رو نشون بده روی بنر 
             

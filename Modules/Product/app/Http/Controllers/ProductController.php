@@ -76,6 +76,36 @@ class ProductController extends Controller
         return response()->json(['message' => __('messages.product.update.failed', ['name' => $request->name])], 500);
     }
 
+    public function thumbnail(Product $product)
+    {
+     $user = Auth::id();
+ 
+     if (! $user) {
+         return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
+     }
+     $error = $this->productRepo->thumbnail($product);
+     if ($error === null) {
+         return response()->json(['message' => __('messages.product.thumbnail.delete.success')], 200);
+     }
+ 
+     return response()->json(['message' => __('messages.product.thumbnail.delete.failed')], 500);
+    }
+
+    public function product_iamge(Product $product)
+    {
+     $user = Auth::id();
+ 
+     if (! $user) {
+         return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
+     }
+     $error = $this->productRepo->product_iamge($product);
+     if ($error === null) {
+         return response()->json(['message' => __('messages.product.thumbnail.delete.success')], 200);
+     }
+ 
+     return response()->json(['message' => __('messages.product.thumbnail.delete.failed')], 500);
+    }
+
     public function destroy(Product $product)
     {
         $auth = Auth::id();
