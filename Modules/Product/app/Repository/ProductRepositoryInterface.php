@@ -10,5 +10,9 @@ interface ProductRepositoryInterface {
 
     public function update($product , $request);
 
+    public function thumbnail($product);
+
+    public function product_iamge($product);
+
     public function delete($product);
 }

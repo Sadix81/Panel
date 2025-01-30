@@ -7,5 +7,6 @@
     "Size": true,
     "Property": true,
     "Comment": true,
-    "Profile": true
+    "Profile": true,
+    "Image": true
 }
