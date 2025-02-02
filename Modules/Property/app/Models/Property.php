@@ -2,8 +2,8 @@
 
 namespace Modules\Property\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Modules\Category\Models\Category;
 use Modules\Color\Models\Color;
 use Modules\Product\Models\Product;
@@ -24,12 +24,10 @@ class Property extends Model
         'category_id',
     ];
 
-
-
     public function products()
-{
-    return $this->belongsTo(Product::class);
-}
+    {
+        return $this->belongsTo(Product::class);
+    }
 
     public function category()
     {
@@ -45,6 +43,4 @@ class Property extends Model
     {
         return $this->belongsTo(Size::class);
     }
-
-
 }

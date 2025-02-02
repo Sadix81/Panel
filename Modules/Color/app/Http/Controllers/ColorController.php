@@ -3,7 +3,6 @@
 namespace Modules\Color\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\Color\Http\Requests\CreateColorRequest;
 use Modules\Color\Http\Requests\UpdateColorRequest;
@@ -21,8 +20,9 @@ class ColorController extends Controller
         $this->colorRepo = $colorRepo;
     }
 
-    public function index(){
-        
+    public function index()
+    {
+
         $user = Auth::id();
 
         if (! $user) {
@@ -41,7 +41,7 @@ class ColorController extends Controller
         }
 
         $error = $this->colorRepo->store($request);
-        if($error === null){
+        if ($error === null) {
             return response()->json(['message' => __('messages.color.store.success', ['name' => $request->name])], 201);
         }
 

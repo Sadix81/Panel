@@ -58,7 +58,8 @@ class User extends Authenticatable
         return $this->hasMany(Otp::class);
     }
 
-    public function comments(){
+    public function comments()
+    {
         return $this->hasMany(Comment::class);
     }
 }

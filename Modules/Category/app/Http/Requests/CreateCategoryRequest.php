@@ -3,7 +3,6 @@
 namespace Modules\Category\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Exists;
 
 class CreateCategoryRequest extends FormRequest
 {
@@ -13,9 +12,9 @@ class CreateCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required' , 'string' , 'max:50' , 'unique:categories'],
+            'name' => ['required', 'string', 'max:50', 'unique:categories'],
             'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,bmp,gif,svg,webp', 'max:10240'], // Max size 10MB
-            'parent_id' => ['nullable' , 'string' , 'exists:categories,id'],
+            'parent_id' => ['nullable', 'string', 'exists:categories,id'],
         ];
     }
 

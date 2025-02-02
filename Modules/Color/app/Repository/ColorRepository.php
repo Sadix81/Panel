@@ -4,8 +4,8 @@ namespace Modules\Color\Repository;
 
 use Modules\Color\Models\Color;
 
-class ColorRepository implements ColorRepositoryInterface{
-
+class ColorRepository implements ColorRepositoryInterface
+{
     public function index()
     {
         $req = [
@@ -20,31 +20,31 @@ class ColorRepository implements ColorRepositoryInterface{
                 $query->where('name', 'like', '%'.$req['search'].'%');
             }
         })
-        ->orderBy($req['sort'], $req['order'])
-        ->paginate($req['limit']);
-        
+            ->orderBy($req['sort'], $req['order'])
+            ->paginate($req['limit']);
+
         return $color;
     }
 
     public function store($request)
     {
         Color::create([
-            'name' => $request->name
+            'name' => $request->name,
         ]);
     }
 
-    public function update($color , $request)
+    public function update($color, $request)
     {
         $color->update([
             'name' => $request->name,
         ]);
     }
-    
+
     public function delete($color)
     {
         $color = Color::find($color);
 
-        if (!$color) {
+        if (! $color) {
             return response()->json(['message' => __('messages.color.not_found')], 404);
         }
         $color->delete();

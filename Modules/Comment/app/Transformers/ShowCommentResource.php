@@ -13,11 +13,11 @@ class ShowCommentResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,  
-            'text' => $this->text,  
-            'product_id' => $this->product_id,  
+            'id' => $this->id,
+            'text' => $this->text,
+            'product_id' => $this->product_id,
             'parent_id' => $this->parent_id,
-            'user_id' => $this->user_id,  
+            'user_id' => $this->user_id,
         ];
     }
 }

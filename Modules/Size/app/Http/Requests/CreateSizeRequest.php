@@ -12,7 +12,7 @@ class CreateSizeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required' , 'string' , 'max:20' , 'unique:sizes']
+            'title' => ['required', 'string', 'max:20', 'unique:sizes'],
         ];
     }
 

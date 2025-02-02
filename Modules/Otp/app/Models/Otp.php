@@ -3,8 +3,9 @@
 namespace Modules\Otp\Models;
 
 use App\Models\User;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
 // use Modules\Otp\Database\Factories\OtpFactory;
 
 class Otp extends Model
@@ -17,7 +18,8 @@ class Otp extends Model
         'user_id',
     ];
 
-    public function users(){
+    public function users()
+    {
         $this->belongsTo(User::class);
     }
 }

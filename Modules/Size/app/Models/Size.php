@@ -2,9 +2,8 @@
 
 namespace Modules\Size\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Modules\Product\Models\Product;
+use Illuminate\Database\Eloquent\Model;
 use Modules\Property\Models\Property;
 
 // use Modules\Size\Database\Factories\SizeFactory;
@@ -13,9 +12,8 @@ class Size extends Model
 {
     use HasFactory;
 
-
     protected $fillable = [
-        'title'
+        'title',
     ];
 
     public function property()

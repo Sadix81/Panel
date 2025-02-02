@@ -2,13 +2,13 @@
 
 namespace Modules\Size\Repository;
 
-interface SizeRepositoryInterface {
-
+interface SizeRepositoryInterface
+{
     public function index();
-    
+
     public function store($reques);
-    
-    public function update($size , $request);
-    
+
+    public function update($size, $request);
+
     public function delete($size);
 }

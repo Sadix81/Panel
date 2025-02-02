@@ -14,12 +14,13 @@ class ColorDatabaseSeeder extends Seeder
     {
         $colors = [
             ['name' => 'red'],
-            ['name' => 'blue'], 
-            ['name' => 'yellow'], 
-            ['name' => 'black'], 
-            ['name' => 'white'], 
-            ['name' => 'broun'], 
+            ['name' => 'blue'],
+            ['name' => 'yellow'],
+            ['name' => 'black'],
+            ['name' => 'white'],
+            ['name' => 'broun'],
         ];
-        
-        Color::insert($colors);    }
+
+        Color::insert($colors);
+    }
 }

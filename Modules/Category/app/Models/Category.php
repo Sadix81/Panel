@@ -2,9 +2,8 @@
 
 namespace Modules\Category\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Modules\Property\Models\Property;
+use Illuminate\Database\Eloquent\Model;
 
 // use Modules\Category\Database\Factories\CategoryFactory;
 
@@ -18,8 +17,8 @@ class Category extends Model
         'parent_id',
     ];
 
-    public function products(){
+    public function products()
+    {
         return $this->belongsToMany(Category::class);
     }
-
 }
