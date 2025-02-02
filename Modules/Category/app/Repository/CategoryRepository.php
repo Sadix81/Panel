@@ -4,8 +4,8 @@ namespace Modules\Category\Repository;
 
 use Modules\Category\Models\Category;
 
-class CategoryRepository implements CategoryRepositoryInterface{
-
+class CategoryRepository implements CategoryRepositoryInterface
+{
     public function index()
     {
         $req = [
@@ -20,9 +20,9 @@ class CategoryRepository implements CategoryRepositoryInterface{
                 $query->where('name', 'like', '%'.$req['search'].'%');
             }
         })
-        ->orderBy($req['sort'], $req['order'])
-        ->paginate($req['limit']);
-        
+            ->orderBy($req['sort'], $req['order'])
+            ->paginate($req['limit']);
+
         return $category;
 
     }
@@ -32,10 +32,10 @@ class CategoryRepository implements CategoryRepositoryInterface{
         if (request()->hasFile('image')) {
             $file = $request->file('image');
             $mimeType = $file->getMimeType();
-        
+
             // ایجاد نام یونیک برای تصویر
-            $image_name = time() . '-' . $file->getClientOriginalName();
-        
+            $image_name = time().'-'.$file->getClientOriginalName();
+
             // بارگذاری تصویر با توجه به نوع MIME
             switch ($mimeType) {
                 case 'image/jpeg':
@@ -51,23 +51,23 @@ class CategoryRepository implements CategoryRepositoryInterface{
                 default:
                     return response()->json(['message' => 'فرمت فایل پشتیبانی نمی‌شود.'], 400);
             }
-        
+
             // JPEG
             if ($mimeType === 'image/jpeg' || $mimeType === 'image/pjpeg') {
-                imagejpeg($image, public_path('images/' . $image_name), 50); // 30 درصد کیفیت
+                imagejpeg($image, public_path('images/'.$image_name), 50); // 30 درصد کیفیت
             } else {
                 // PNG(0 / 9) هرچی عدد بیشتر شود فشرده ساری بیشتر میشود
                 if ($mimeType === 'image/png') {
-                    imagepng($image, public_path('images/' . $image_name), 4);
+                    imagepng($image, public_path('images/'.$image_name), 4);
                 } elseif ($mimeType === 'image/gif') {
-                    imagegif($image, public_path('images/' . $image_name));
+                    imagegif($image, public_path('images/'.$image_name));
                 }
             }
-        
+
             // آزاد کردن منابع تصویر
             imagedestroy($image);
-        
-            $image_url = asset('images/' . $image_name);
+
+            $image_url = asset('images/'.$image_name);
         }
 
         $category = Category::create([
@@ -78,15 +78,15 @@ class CategoryRepository implements CategoryRepositoryInterface{
         $category->save();
     }
 
-    public function update($category , $request)
+    public function update($category, $request)
     {
         if (request()->hasFile('image')) {
             $file = $request->file('image');
             $mimeType = $file->getMimeType();
-        
+
             // ایجاد نام یونیک برای تصویر
-            $image_name = time() . '-' . $file->getClientOriginalName();
-        
+            $image_name = time().'-'.$file->getClientOriginalName();
+
             // بارگذاری تصویر با توجه به نوع MIME
             switch ($mimeType) {
                 case 'image/jpeg':
@@ -102,26 +102,26 @@ class CategoryRepository implements CategoryRepositoryInterface{
                 default:
                     return response()->json(['message' => 'فرمت فایل پشتیبانی نمی‌شود.'], 400);
             }
-        
+
             // JPEG
             if ($mimeType === 'image/jpeg' || $mimeType === 'image/pjpeg') {
-                imagejpeg($image, public_path('images/' . $image_name), 50); // 30 درصد کیفیت
+                imagejpeg($image, public_path('images/'.$image_name), 50); // 30 درصد کیفیت
             } else {
                 // PNG(0 / 9) هرچی عدد بیشتر شود فشرده ساری بیشتر میشود
                 if ($mimeType === 'image/png') {
-                    imagepng($image, public_path('images/' . $image_name), 4);
+                    imagepng($image, public_path('images/'.$image_name), 4);
                 } elseif ($mimeType === 'image/gif') {
-                    imagegif($image, public_path('images/' . $image_name));
+                    imagegif($image, public_path('images/'.$image_name));
                 }
             }
-        
+
             // آزاد کردن منابع تصویر
             imagedestroy($image);
-        
-            $image_url = asset('images/' . $image_name);
+
+            $image_url = asset('images/'.$image_name);
         } else {
             // اگر تصویری آپلود نشده، URL قبلی را حفظ کنید
-            $image_url = $category->avatar; 
+            $image_url = $category->avatar;
         }
 
         $category->update([
@@ -134,7 +134,7 @@ class CategoryRepository implements CategoryRepositoryInterface{
     public function remove_category_image($category)
     {
         $category->update([
-            'image' => null
+            'image' => null,
         ]);
     }
 
@@ -142,13 +142,13 @@ class CategoryRepository implements CategoryRepositoryInterface{
     {
         $category = Category::find($category);
 
-        if (!$category) {
+        if (! $category) {
             return response()->json(['message' => __('messages.category.not_found')], 404);
         }
 
-        $all_categories_parent_id = Category::pluck('parent_id')->toArray(); //get all parent_id(s)
+        $all_categories_parent_id = Category::pluck('parent_id')->toArray(); // get all parent_id(s)
 
-        if(in_array($category->id , $all_categories_parent_id)){
+        if (in_array($category->id, $all_categories_parent_id)) {
             Category::where('parent_id', $category->id)->update(['parent_id' => null]);
         }
         $category->delete();

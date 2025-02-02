@@ -3,7 +3,6 @@
 namespace Modules\Product\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\Product\Http\Requests\CreateProductrequest;
 use Modules\Product\Http\Requests\UpdateProductrequest;
@@ -20,6 +19,7 @@ class ProductController extends Controller
     {
         $this->productRepo = $productRepo;
     }
+
     public function index()
     {
         $user = Auth::user();
@@ -59,7 +59,7 @@ class ProductController extends Controller
         return new ShowProductResource($product);
     }
 
-    public function update(Product $product , UpdateProductrequest $request)
+    public function update(Product $product, UpdateProductrequest $request)
     {
         $user = Auth::user();
 
@@ -67,7 +67,7 @@ class ProductController extends Controller
             return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
         }
 
-        $error = $this->productRepo->update($product , $request);
+        $error = $this->productRepo->update($product, $request);
 
         if ($error === null) {
             return response()->json(['message' => __('messages.product.update.success', ['name' => $request->name])], 201);
@@ -78,32 +78,32 @@ class ProductController extends Controller
 
     public function thumbnail(Product $product)
     {
-     $user = Auth::id();
- 
-     if (! $user) {
-         return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
-     }
-     $error = $this->productRepo->thumbnail($product);
-     if ($error === null) {
-         return response()->json(['message' => __('messages.product.thumbnail.delete.success')], 200);
-     }
- 
-     return response()->json(['message' => __('messages.product.thumbnail.delete.failed')], 500);
+        $user = Auth::id();
+
+        if (! $user) {
+            return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
+        }
+        $error = $this->productRepo->thumbnail($product);
+        if ($error === null) {
+            return response()->json(['message' => __('messages.product.thumbnail.delete.success')], 200);
+        }
+
+        return response()->json(['message' => __('messages.product.thumbnail.delete.failed')], 500);
     }
 
     public function product_iamge(Product $product)
     {
-     $user = Auth::id();
- 
-     if (! $user) {
-         return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
-     }
-     $error = $this->productRepo->product_iamge($product);
-     if ($error === null) {
-         return response()->json(['message' => __('messages.product.thumbnail.delete.success')], 200);
-     }
- 
-     return response()->json(['message' => __('messages.product.thumbnail.delete.failed')], 500);
+        $user = Auth::id();
+
+        if (! $user) {
+            return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
+        }
+        $error = $this->productRepo->product_iamge($product);
+        if ($error === null) {
+            return response()->json(['message' => __('messages.product.thumbnail.delete.success')], 200);
+        }
+
+        return response()->json(['message' => __('messages.product.thumbnail.delete.failed')], 500);
     }
 
     public function destroy(Product $product)

@@ -3,7 +3,6 @@
 namespace Modules\Size\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\Size\Http\Requests\CreateSizeRequest;
 use Modules\Size\Http\Requests\UpdateSizeRequest;
@@ -21,8 +20,9 @@ class SizeController extends Controller
         $this->sizeRepo = $sizeRepo;
     }
 
-    public function index(){
-        
+    public function index()
+    {
+
         $user = Auth::id();
 
         if (! $user) {
@@ -41,7 +41,7 @@ class SizeController extends Controller
         }
 
         $error = $this->sizeRepo->store($request);
-        if($error === null){
+        if ($error === null) {
             return response()->json(['message' => __('messages.size.store.success', ['title' => $request->title])], 201);
         }
 

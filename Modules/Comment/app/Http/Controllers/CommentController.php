@@ -3,7 +3,6 @@
 namespace Modules\Comment\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\Comment\Http\Requests\CreateCommentRequest;
 use Modules\Comment\Http\Requests\UpdateCommentRequest;
@@ -27,7 +26,7 @@ class CommentController extends Controller
         return IndexCommentResource::collection($this->commentRepo->index());
     }
 
-    public function store(Product $product ,CreateCommentRequest $request)
+    public function store(Product $product, CreateCommentRequest $request)
     {
         $user = Auth::id();
 
@@ -35,12 +34,12 @@ class CommentController extends Controller
             return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
         }
 
-        if(! $product){
+        if (! $product) {
             return response()->json(['message' => 'product not found'], 404);
         }
 
-        $error = $this->commentRepo->store($product , $request);
-        if($error === null){
+        $error = $this->commentRepo->store($product, $request);
+        if ($error === null) {
             return response()->json(['message' => __('messages.comment.store.success')], 201);
         }
 
@@ -52,7 +51,7 @@ class CommentController extends Controller
         return new ShowCommentResource($comment);
     }
 
-    public function replay(Comment $comment , CreateCommentRequest $request)
+    public function replay(Comment $comment, CreateCommentRequest $request)
     {
         $user = Auth::id();
 
@@ -60,19 +59,19 @@ class CommentController extends Controller
             return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
         }
 
-        if(! $comment){
+        if (! $comment) {
             return response()->json(['message' => 'product not found'], 404);
         }
 
-        $error = $this->commentRepo->replay($comment , $request);
-        if($error === null){
+        $error = $this->commentRepo->replay($comment, $request);
+        if ($error === null) {
             return response()->json(['message' => __('messages.comment.replay.store.success')], 201);
         }
 
         return response()->json(['message' => __('messages.comment.replay.store.failed')], 500);
     }
 
-    public function update(Comment $comment , UpdateCommentRequest $request)
+    public function update(Comment $comment, UpdateCommentRequest $request)
     {
         $user = Auth::user();
 
@@ -80,8 +79,8 @@ class CommentController extends Controller
             return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
         }
 
-        if((int)$request->parent_id === $comment->id){
-            return response()->json(['message' => __('messages.comment.update.parent_id.failed')],400);
+        if ((int) $request->parent_id === $comment->id) {
+            return response()->json(['message' => __('messages.comment.update.parent_id.failed')], 400);
         }
 
         $error = $this->commentRepo->update($comment, $request);

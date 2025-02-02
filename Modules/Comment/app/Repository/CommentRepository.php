@@ -5,8 +5,8 @@ namespace Modules\Comment\Repository;
 use Illuminate\Support\Facades\Auth;
 use Modules\Comment\Models\Comment;
 
-class CommentRepository implements CommentRepositoryInterface{
-
+class CommentRepository implements CommentRepositoryInterface
+{
     public function index()
     {
         $req = [
@@ -21,14 +21,14 @@ class CommentRepository implements CommentRepositoryInterface{
                 $query->where('text', 'like', '%'.$req['search'].'%');
             }
         })
-        ->orderBy($req['sort'], $req['order'])
-        ->paginate($req['limit']);
-        
+            ->orderBy($req['sort'], $req['order'])
+            ->paginate($req['limit']);
+
         return $category;
 
     }
 
-    public function store($product , $request)
+    public function store($product, $request)
     {
         $auth = Auth::id();
 
@@ -38,10 +38,10 @@ class CommentRepository implements CommentRepositoryInterface{
             'parent_id' => null,
             'user_id' => $auth,
         ]);
-            
+
     }
 
-    public function replay($comment , $request)
+    public function replay($comment, $request)
     {
         $auth = Auth::id();
 
@@ -54,7 +54,7 @@ class CommentRepository implements CommentRepositoryInterface{
 
     }
 
-    public function update($comment , $request)
+    public function update($comment, $request)
     {
 
         $comment->update([
@@ -69,13 +69,13 @@ class CommentRepository implements CommentRepositoryInterface{
     {
         $comment = Comment::find($comment);
 
-        if (!$comment) {
+        if (! $comment) {
             return response()->json(['message' => __('messages.category.not_found')], 404);
         }
 
-        $all_comments_parent_id = Comment::pluck('parent_id')->toArray(); //get all parent_id(s)
+        $all_comments_parent_id = Comment::pluck('parent_id')->toArray(); // get all parent_id(s)
 
-        if(in_array($comment->id , $all_comments_parent_id)){
+        if (in_array($comment->id, $all_comments_parent_id)) {
             Comment::where('parent_id', $comment->id)->update(['parent_id' => null]);
         }
         $comment->delete();

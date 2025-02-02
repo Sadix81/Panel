@@ -14,13 +14,13 @@ class SizeDatabaseSeeder extends Seeder
     {
         $sizes = [
             ['title' => 'S'],
-            ['title' => 'M'], 
-            ['title' => 'L'], 
-            ['title' => 'XL'], 
-            ['title' => 'XXL'], 
-            ['title' => 'XXXL'], 
+            ['title' => 'M'],
+            ['title' => 'L'],
+            ['title' => 'XL'],
+            ['title' => 'XXL'],
+            ['title' => 'XXXL'],
         ];
-        
+
         Size::insert($sizes);
     }
 }

@@ -4,8 +4,8 @@ namespace Modules\Size\Repository;
 
 use Modules\Size\Models\Size;
 
-class SizeRepository implements SizeRepositoryInterface {
-
+class SizeRepository implements SizeRepositoryInterface
+{
     public function index()
     {
         $req = [
@@ -20,31 +20,31 @@ class SizeRepository implements SizeRepositoryInterface {
                 $query->where('title', 'like', '%'.$req['search'].'%');
             }
         })
-        ->orderBy($req['sort'], $req['order'])
-        ->paginate($req['limit']);
-        
+            ->orderBy($req['sort'], $req['order'])
+            ->paginate($req['limit']);
+
         return $size;
     }
 
     public function store($request)
     {
         Size::create([
-            'title' => $request->title
+            'title' => $request->title,
         ]);
     }
 
-    public function update($size , $request)
+    public function update($size, $request)
     {
         $size->update([
             'title' => $request->title,
         ]);
     }
-    
+
     public function delete($size)
     {
         $size = Size::find($size);
 
-        if (!$size) {
+        if (! $size) {
             return response()->json(['message' => __('messages.size.not_found')], 404);
         }
         $size->delete();

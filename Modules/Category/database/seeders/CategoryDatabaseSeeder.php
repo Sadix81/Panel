@@ -14,19 +14,19 @@ class CategoryDatabaseSeeder extends Seeder
     {
         $parentCategories = [
             ['name' => 'list-1'],
-            ['name' => 'list-2'], 
+            ['name' => 'list-2'],
         ];
-        
+
         $insertedParentCategories = Category::insert($parentCategories);
-        
+
         $categories = [
-            ['name' => 'list-3', 'parent_id' => 2], 
-            ['name' => 'list-4', 'parent_id' => 1], 
-            ['name' => 'list-5', 'parent_id' => 3], 
+            ['name' => 'list-3', 'parent_id' => 2],
+            ['name' => 'list-4', 'parent_id' => 1],
+            ['name' => 'list-5', 'parent_id' => 3],
             ['name' => 'list-6', 'parent_id' => 4],
 
         ];
-        
+
         Category::insert($categories);
     }
 }

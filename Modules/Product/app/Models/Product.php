@@ -2,8 +2,8 @@
 
 namespace Modules\Product\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Modules\Category\Models\Category;
 use Modules\Comment\Models\Comment;
 use Modules\Image\Models\Image;
@@ -15,7 +15,6 @@ class Product extends Model
 {
     use HasFactory;
 
-
     protected $fillable = [
         'name',
         'description',
@@ -25,7 +24,8 @@ class Product extends Model
         'image_url',
     ];
 
-    public function categories(){
+    public function categories()
+    {
         return $this->belongsToMany(Category::class);
     }
 
@@ -34,7 +34,8 @@ class Product extends Model
         return $this->hasMany(Property::class);
     }
 
-    public function comments(){
+    public function comments()
+    {
         return $this->hasMany(Comment::class);
     }
 
@@ -42,5 +43,4 @@ class Product extends Model
     {
         return $this->hasMany(Image::class);
     }
-
 }

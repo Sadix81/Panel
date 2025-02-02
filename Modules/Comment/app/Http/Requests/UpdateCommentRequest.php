@@ -12,9 +12,9 @@ class UpdateCommentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'text' => ['required' , 'string' , 'max:255'],
+            'text' => ['required', 'string', 'max:255'],
             // 'product_id' => ['required' , 'integer' , 'exists:products,id'],
-            'parent_id' => ['nullable' , 'integer' , 'exists:comments,id'], 
+            'parent_id' => ['nullable', 'integer', 'exists:comments,id'],
         ];
     }
 

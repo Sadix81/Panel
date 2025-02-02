@@ -12,11 +12,11 @@ class RegisterMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    private $username; 
-    
-    private $code; 
+    private $username;
 
-    public function __construct($username , $code)
+    private $code;
+
+    public function __construct($username, $code)
     {
         $this->username = $username;
         $this->code = $code;
@@ -54,6 +54,4 @@ class RegisterMail extends Mailable
     {
         return [];
     }
-
-    
 }

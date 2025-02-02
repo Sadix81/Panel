@@ -2,13 +2,13 @@
 
 namespace Modules\Category\Repository;
 
-interface CategoryRepositoryInterface{
-
+interface CategoryRepositoryInterface
+{
     public function index();
 
     public function store($request);
 
-    public function update($category , $request);
+    public function update($category, $request);
 
     public function remove_category_image($category);
 
