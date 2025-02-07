@@ -8,5 +8,6 @@
     "Property": true,
     "Comment": true,
     "Profile": true,
-    "Image": true
+    "Image": true,
+    "Discount": true
 }
