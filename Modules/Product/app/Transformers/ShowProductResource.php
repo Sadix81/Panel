@@ -23,7 +23,7 @@ class ShowProductResource extends JsonResource
             'description' => $this->description,
             'status' => $this->status,
             'thumbnail' => $this->thumbnail,
-            'image_url' => $this->images->pluck('id')->unique()->values(),
+            'image_url' => $this->images->pluck('image_url'),
             'type' => $this->properties->pluck('type')->unique()->values(),
             'amount' => $this->properties->pluck('amount')->unique()->values(),
             'discounted_price' => $this->properties->pluck('discounted_price')->unique()->values(),

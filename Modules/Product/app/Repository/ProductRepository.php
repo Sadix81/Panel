@@ -77,7 +77,8 @@ class ProductRepository implements ProductRepositoryInterface
                     if ($file instanceof \Illuminate\Http\UploadedFile) {
                         $mimeType = $file->getMimeType();
                         $image_name = time().'-'.$file->getClientOriginalName();
-
+                        $image_size = $file->getSize(); // دریافت سایز تصویر
+            
                         // بارگذاری تصویر با توجه به نوع MIME
                         switch ($mimeType) {
                             case 'image/jpeg':
@@ -96,13 +97,15 @@ class ProductRepository implements ProductRepositoryInterface
                             default:
                                 return response()->json(['message' => 'فرمت فایل پشتیبانی نمی‌شود.'], 400);
                         }
-
+            
                         // آزاد کردن منابع تصویر
                         imagedestroy($image);
-
-                        // ذخیره آدرس تصویر در جدول تصاویر
+            
+                        // ذخیره آدرس تصویر و اطلاعات اضافی در جدول تصاویر
                         $product->images()->create([
                             'image_url' => asset('images/'.$image_name),
+                            'image_type' => $mimeType, // ذخیره نوع تصویر
+                            'image_size' => $image_size, // ذخیره سایز تصویر
                         ]);
                     }
                 }
