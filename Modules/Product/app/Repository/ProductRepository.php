@@ -18,13 +18,14 @@ class ProductRepository implements ProductRepositoryInterface
             'search' => request()->has('search') ? request('search') : null,
             'price' => request()->has('price') ? request('price') : null,
             'status' => request()->has('status') ? 1 : null,
+            'is_sale' => request()->has('is_sale') ? 1 : null,
         ];
 
         try {
             $query = Product::query();
 
             if (! empty($req['status'])) {
-                $query->where('status', $req['status']);
+                $query->where('status', 1);
             }
 
             if (! empty($req['search'])) {
@@ -38,6 +39,9 @@ class ProductRepository implements ProductRepositoryInterface
                 }
                 if (! empty($req['category_id'])) {
                     $query->where('category_id', $req['category_id']);
+                }
+                if (! empty($req['is_sale'])) {
+                    $query->where('discounted_price', '>' , 0);
                 }
             });
 
@@ -149,6 +153,14 @@ class ProductRepository implements ProductRepositoryInterface
                 }
             }
 
+            if($request->type && $request->amount && $request->type == 'fixed'){
+                $final_price = $request->price - $request->amount;
+            }
+
+            if($request->type && $request->amount && $request->type == 'percentage'){
+                $price = ($request->price * $request->amount) / 100;
+                $final_price = $request->price - $price;
+            }
             // Insert combinations into the database
             foreach ($combinations as $combination) {
                 Property::create([
@@ -157,6 +169,9 @@ class ProductRepository implements ProductRepositoryInterface
                     'category_id' => $combination['category_id'],
                     'color_id' => $combination['color_id'],
                     'size_id' => $combination['size_id'],
+                    'type' => $request->type,
+                    'amount' => $request->amount,
+                    'discounted_price' => $request->type ? $final_price : null,
                     'product_id' => $request->product_id ?: $product->id,
                 ]);
             }
@@ -242,6 +257,15 @@ class ProductRepository implements ProductRepositoryInterface
                 }
             }
 
+            if($request->type && $request->amount && $request->type == 'fixed'){
+                $final_price = $request->price - $request->amount;
+            }
+
+            if($request->type && $request->amount && $request->type == 'percentage'){
+                $price = ($request->price * $request->amount) / 100;
+                $final_price = $request->price - $price;
+            }
+
             foreach ($combinations as $combination) {
                 Property::create([
                     'price' => $request->price,
@@ -249,6 +273,9 @@ class ProductRepository implements ProductRepositoryInterface
                     'category_id' => $combination['category_id'],
                     'color_id' => $combination['color_id'],
                     'size_id' => $combination['size_id'],
+                    'type' => $request->type,
+                    'amount' => $request->amount,
+                    'discounted_price' => $request->type ? $final_price : null,
                     'product_id' => $product->id,
                 ]);
             }

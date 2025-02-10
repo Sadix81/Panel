@@ -17,9 +17,11 @@ class IndexProductResource extends JsonResource
             'name' => $this->name,
             'price' => $this->properties->pluck('price')->unique()->values(),
             'thumbnail' => $this->thumbnail,
-            // تخفیف
             'quantity' => $this->properties->pluck('quantity')->unique()->values(),
             'status' => $this->status,
+            'type' => $this->properties->pluck('type')->unique()->values(),
+            'amount' => $this->properties->pluck('amount')->unique()->values(),
+            'discounted_price' => $this->properties->pluck('discounted_price')->unique()->values(),
         ];
     }
 }
