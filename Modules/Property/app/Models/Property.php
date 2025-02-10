@@ -22,6 +22,9 @@ class Property extends Model
         'color_id',
         'size_id',
         'category_id',
+        'type',
+        'amount',
+        'discounted_price'
     ];
 
     public function products()
