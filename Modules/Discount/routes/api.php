@@ -9,6 +9,6 @@ Route::prefix('/v1/discount')->middleware('auth:api')->group(function () {
     Route::post('/store', [DiscountController::class, 'store']);
     Route::get('/{discount}/show', [DiscountController::class, 'show']);
     Route::put('/{discount}/update', [DiscountController::class, 'update']);
-    // Route::patch('/all/product/update', [DiscountController::class, 'allprductsdiscount']);
+    Route::put('/all/products/price/update', [DiscountController::class, 'allprductsdiscount']);
     Route::delete('/{discount}/delete', [DiscountController::class, 'destroy']);
 });
