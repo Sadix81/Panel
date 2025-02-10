@@ -4,7 +4,7 @@ namespace Modules\Discount\Repository;
 
 use Carbon\Carbon;
 use Modules\Discount\Models\Discount;
-
+use Modules\Property\Models\Property;
 
 class DiscountRepository implements DiscountRepositoryInterface{
 
@@ -77,13 +77,35 @@ class DiscountRepository implements DiscountRepositoryInterface{
         ]);
     }
 
-    // public function allprductsdiscount($discount , $product)
-    // {
-    //     $product = Property::all()->pluck('price');
-    //     if($discount->allprductsdiscount == 1){
-    //         //همه ی محصولات تخفیف بگیرند
-    //     }
-    // }
+    public function allprductsdiscount($discount , $product , $request)
+    {
+        $products = Property::all();
+
+        // تعیین نوع تخفیف و مقدار پیش‌فرض
+        $type = $request->type ?? 'fixed'; // نوع پیش‌فرض تخفیف
+        $amount = $request->amount ?? 0; // مقدار پیش‌فرض تخفیف
+    
+        // اعمال تخفیف برای هر محصول
+        foreach ($products as $product) {
+            $price = $product->price; // قیمت محصول
+    
+            // محاسبه قیمت نهایی بر اساس نوع تخفیف
+            if ($type == 'fixed') {
+                $final_price = $price - $amount;
+            } elseif ($type == 'percentage') {
+                $discountValue = ($price * $amount) / 100;
+                $final_price = $price - $discountValue;
+            } else {
+                continue; // نوع تخفیف نامعتبر، ادامه به محصول بعدی
+            }
+    
+            $product->update([
+                'type' => $type,
+                'amount' => $amount,
+                'discounted_price' => $final_price,
+            ]);
+        }
+    }
 
     public function delete($discount)
     {
