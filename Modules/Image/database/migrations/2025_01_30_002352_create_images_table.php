@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('images', function (Blueprint $table) {
             $table->id();
             $table->string('image_url')->nullable();
+            $table->string('image_type')->nullable(); // فیلد جدید برای نوع تصویر
+            $table->integer('image_size')->nullable(); // فیلد جدید برای سایز تصویر
             $table->foreignId('product_id')->constrained('products')->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
         });
