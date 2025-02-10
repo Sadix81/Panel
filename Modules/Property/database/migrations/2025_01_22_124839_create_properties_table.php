@@ -19,6 +19,9 @@ return new class extends Migration
             $table->foreignId('color_id')->nullable()->constrained('colors')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('size_id')->nullable()->constrained('sizes')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('category_id')->nullable()->constrained('categories')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->enum('type', ['percentage', 'fixed'])->nullable();
+            $table->decimal('amount', 9, 2)->nullable(); 
+            $table->string('discounted_price')->nullable();
             $table->timestamps();
         });
     }
