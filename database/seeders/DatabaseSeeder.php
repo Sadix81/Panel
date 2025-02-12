@@ -8,6 +8,8 @@ use Illuminate\Database\Seeder;
 use Modules\Auth\Database\Seeders\AuthDatabaseSeeder;
 use Modules\Category\Database\Seeders\CategoryDatabaseSeeder;
 use Modules\Color\Database\Seeders\ColorDatabaseSeeder;
+use Modules\Comment\Database\Seeders\CommentDatabaseSeeder;
+use Modules\Product\Database\Seeders\ProductDatabaseSeeder;
 use Modules\Size\Database\Seeders\SizeDatabaseSeeder;
 
 class DatabaseSeeder extends Seeder
@@ -28,6 +30,8 @@ class DatabaseSeeder extends Seeder
             CategoryDatabaseSeeder::class,
             ColorDatabaseSeeder::class,
             SizeDatabaseSeeder::class,
+            ProductDatabaseSeeder::class,
+            CommentDatabaseSeeder::class,
         ]);
     }
 }
