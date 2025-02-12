@@ -18,6 +18,7 @@ class ShowCommentResource extends JsonResource
             'product_id' => $this->product_id,
             'parent_id' => $this->parent_id,
             'user_id' => $this->user_id,
+            'status' => $this->status,
         ];
     }
 }
