@@ -63,6 +63,10 @@ class CommentController extends Controller
             return response()->json(['message' => 'product not found'], 404);
         }
 
+        if($comment->status == 0){
+            return response()->json(['message' => 'امکان ثبت نظر وجود ندارد']);
+        }
+
         $error = $this->commentRepo->replay($comment, $request);
         if ($error === null) {
             return response()->json(['message' => __('messages.comment.replay.store.success')], 201);
@@ -80,6 +84,10 @@ class CommentController extends Controller
         }
 
         if ((int) $request->parent_id === $comment->id) {
+            return response()->json(['message' => __('messages.comment.update.parent_id.failed')], 400);
+        }
+
+        if($comment->id < (int)$request->parent_id){
             return response()->json(['message' => __('messages.comment.update.parent_id.failed')], 400);
         }
 
