@@ -16,7 +16,8 @@ class CommentRepository implements CommentRepositoryInterface
             'search' => request()->has('search') ? request('search') : null,
         ];
 
-        $category = Comment::where(function ($query) use ($req) {
+        $category = Comment::where('status' , 1)
+        ->where(function ($query) use ($req){
             if ($req['search']) {
                 $query->where('text', 'like', '%'.$req['search'].'%');
             }
@@ -37,6 +38,7 @@ class CommentRepository implements CommentRepositoryInterface
             'product_id' => $product->id,
             'parent_id' => null,
             'user_id' => $auth,
+            'status' => 0,
         ]);
 
     }
@@ -60,8 +62,9 @@ class CommentRepository implements CommentRepositoryInterface
         $comment->update([
             'text' => $request->text ? $request->text : $comment->text,
             'product_id' => $comment->product_id,
-            'parent_id' => $comment->parent_id,
+            'parent_id' => $request->parent_id ? $request->parent_id : $comment->parent_id,
             'user_id' => $comment->user_id,
+            'status' => $request->status !==null  ? $request->status : $comment->status,
         ]);
     }
 

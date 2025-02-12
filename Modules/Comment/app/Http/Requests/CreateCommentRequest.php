@@ -14,9 +14,7 @@ class CreateCommentRequest extends FormRequest
     {
         return [
             'text' => ['required', 'string', 'max:255'],
-            // 'product_id' => ['required' , 'integer' , 'exists:products,id'],
             'parent_id' => ['nullable', 'integer', 'exists:comments,id'],
-            // 'user_id' => $auth,
         ];
     }
 
