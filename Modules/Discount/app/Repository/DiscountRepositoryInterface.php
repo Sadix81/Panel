@@ -11,7 +11,5 @@ interface DiscountRepositoryInterface {
 
     public function update($discount , $request);
 
-    public function allprductsdiscount($discount ,$product , $request);
-
     public function delete($discount);
 }

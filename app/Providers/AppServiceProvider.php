@@ -6,6 +6,8 @@ use Illuminate\Support\ServiceProvider;
 use Laravel\Passport\Passport;
 use Modules\Auth\Repository\Authrepository;
 use Modules\Auth\Repository\AuthrepositoryInterface;
+use Modules\Promotion\Repository\PromotionRepository;
+use Modules\Promotion\Repository\PromotionRepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,6 +17,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(AuthrepositoryInterface::class, Authrepository::class);
+        $this->app->bind(PromotionRepositoryInterface::class, PromotionRepository::class);
     }
 
     /**

@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\Discount\Http\Requests;
+namespace Modules\Promotion\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class DiscountAllProductsrequest extends FormRequest
+class DiscountallProductRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -12,13 +12,13 @@ class DiscountAllProductsrequest extends FormRequest
     public function rules(): array
     {
         return [
+            'status' => ['required', 'in:0,1'],
             'type' => ['nullable', 'in:percentage,fixed'],
             'amount' => ['nullable', 'numeric', 'gt:0'],
-            'status' => ['required', 'in:0,1']
         ];
     }
 
-    
+
     public function messages()
     {
         return [
