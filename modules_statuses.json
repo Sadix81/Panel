@@ -9,5 +9,6 @@
     "Comment": true,
     "Profile": true,
     "Image": true,
-    "Discount": true
+    "Discount": true,
+    "Promotion": true
 }

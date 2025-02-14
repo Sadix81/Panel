@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Modules\Category\Models\Category;
 use Modules\Color\Models\Color;
 use Modules\Product\Models\Product;
+use Modules\Promotion\Models\Promotion;
 use Modules\Size\Models\Size;
 
 // use Modules\Property\Database\Factories\PropertyFactory;
@@ -24,7 +25,10 @@ class Property extends Model
         'category_id',
         'type',
         'amount',
-        'discounted_price'
+        'discounted_price',
+        'previous_discount_type',
+        'previous_discount_amount',
+        'previous_discounted_price',
     ];
 
     public function products()
@@ -45,5 +49,9 @@ class Property extends Model
     public function size()
     {
         return $this->belongsTo(Size::class);
+    }
+
+    public function discountPromotions(){
+        return $this->belongsTo(Promotion::class);
     }
 }
