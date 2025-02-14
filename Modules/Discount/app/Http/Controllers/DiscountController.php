@@ -6,13 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\Discount\Http\Requests\CreateDiscountRequest;
-use Modules\Discount\Http\Requests\DiscountAllProductsrequest;
 use Modules\Discount\Http\Requests\UpdateDiscountRequest;
 use Modules\Discount\Models\Discount;
 use Modules\Discount\Repository\DiscountRepository;
 use Modules\Discount\Transformers\IndexDiscountResource;
 use Modules\Discount\Transformers\ShowDiscountResource;
-use Modules\Product\Models\Product;
 
 class DiscountController extends Controller
 {
@@ -94,38 +92,6 @@ class DiscountController extends Controller
         }
 
         return response()->json(['message' => __('messages.discount.update.failed', ['name' => $discount->name])], 500);
-    }
-
-    public function allprductsdiscount(Discount $discount ,Product $product , DiscountAllProductsrequest $request)
-    {
-        $user = Auth::user();
-
-        if (! $user) {
-            return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
-        }
-
-        if($request->type && ! $request->amount){
-            return response()->json(['message' => 'وارد کردن مقدار تخفیف الزامیست']);
-        }
-
-        if($request->type && $request->amount && $request->amount <= 0){
-            return response()->json(['message' => 'مفدار تخفیف باید بزرگتر از صفر باشد']);
-        }
-
-        if($request->type == 'percentage' && $request->amount >= '100'){
-            return response()->json(['message' => 'نمیتوان صددرصد تخفیف اعمال کرد']);
-        }
-
-        if($request->type == 'fixed' && $request->amount >= $request->price){
-            return response()->json(['message' => 'نمیتوان صددرصد تخفیف اعمال کرد']);
-        }
-
-        $error = $this->discountRepository->allprductsdiscount($discount , $product , $request);
-        if ($error === null) {
-            return response()->json(['message' => __('messages.discountAllProducts.update.success')], 200);
-        }
-
-        return response()->json(['message' => __('messages.discountAllProducts.update.failed')], 500);
     }
 
     public function destroy($discount)

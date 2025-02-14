@@ -23,7 +23,6 @@ return new class extends Migration
             $table->integer('usage_limit')->nullable();
             $table->integer('used_count')->default(0);
             $table->boolean('status')->nullable(); //فعال و عیر فعال کردن تخقیق
-            $table->boolean('allprductsdiscount')->default(0)->nullable(); //ایحاد تخفیف برای همه محصولات
             $table->timestamps();
         });
     }

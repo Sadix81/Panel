@@ -22,6 +22,9 @@ return new class extends Migration
             $table->enum('type', ['percentage', 'fixed'])->nullable();
             $table->decimal('amount', 9, 2)->nullable(); 
             $table->string('discounted_price')->nullable();
+            $table->string('previous_discount_type')->default(null)->nullable();
+            $table->string('previous_discount_amount')->default(null)->nullable();
+            $table->string('previous_discounted_price')->default(null)->nullable();
             $table->timestamps();
         });
     }
