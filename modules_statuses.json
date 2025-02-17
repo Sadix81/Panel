@@ -10,5 +10,6 @@
     "Profile": true,
     "Image": true,
     "Discount": true,
-    "Promotion": true
+    "Promotion": true,
+    "Favorite": true
 }

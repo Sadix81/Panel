@@ -9,6 +9,7 @@ use Modules\Auth\Database\Seeders\AuthDatabaseSeeder;
 use Modules\Category\Database\Seeders\CategoryDatabaseSeeder;
 use Modules\Color\Database\Seeders\ColorDatabaseSeeder;
 use Modules\Comment\Database\Seeders\CommentDatabaseSeeder;
+use Modules\Favorite\Database\Seeders\FavoriteDatabaseSeeder;
 use Modules\Product\Database\Seeders\ProductDatabaseSeeder;
 use Modules\Size\Database\Seeders\SizeDatabaseSeeder;
 
@@ -32,6 +33,7 @@ class DatabaseSeeder extends Seeder
             SizeDatabaseSeeder::class,
             ProductDatabaseSeeder::class,
             CommentDatabaseSeeder::class,
+            FavoriteDatabaseSeeder::class,
         ]);
     }
 }
