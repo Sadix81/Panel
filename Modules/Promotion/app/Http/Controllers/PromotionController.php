@@ -30,11 +30,7 @@ class PromotionController extends Controller {
             return response()->json(['message' => 'مفدار تخفیف باید بزرگتر از صفر باشد']);
         }
 
-        if($request->type == 'percentage' && $request->amount >= '100'){
-            return response()->json(['message' => 'نمیتوان صددرصد تخفیف اعمال کرد']);
-        }
-
-        if($request->type == 'fixed' && $request->amount >= $request->price){
+        if($request->type == 'percentage' && $request->amount >= 100){
             return response()->json(['message' => 'نمیتوان صددرصد تخفیف اعمال کرد']);
         }
 
