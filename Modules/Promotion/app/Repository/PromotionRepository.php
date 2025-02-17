@@ -35,6 +35,9 @@ class PromotionRepository implements PromotionRepositoryInterface{
     
                 if ($request->type == 'fixed') {
                     $final_price = $price - $request->amount;
+                    if($request->amount >= $price){
+                        return response()->json(['message' => 'نمیتوان صددرصد تخفیف اعمال کرد']);
+                    }
                 } elseif ($request->type == 'percentage') {
                     $discountValue = ($price * $request->amount) / 100;
                     $final_price = $price - $discountValue;

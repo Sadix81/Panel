@@ -5,6 +5,7 @@ namespace Modules\Auth\Repository;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Modules\Auth\Emails\RegisterMail;
@@ -65,6 +66,8 @@ class Authrepository implements AuthrepositoryInterface
 
     public function ResendCode($request)
     {
+        DB::beginTransaction();
+
         try {
             $user = User::where('email', $request->email)->first();
             $last_user_otp = Otp::where('user_id', $user->id)->first();
@@ -86,7 +89,9 @@ class Authrepository implements AuthrepositoryInterface
 
             Log::info('Email validation Code for '.$user->id.': '.$otp);
             Mail::to($user->email)->send(new RegisterMail($user->username, $otp));
+            DB::commit();
         } catch (\Throwable $th) {
+            DB::rollBack();
             throw $th;
         }
     }
