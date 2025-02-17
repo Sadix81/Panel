@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Category\Models\Category;
 use Modules\Comment\Models\Comment;
+use Modules\Favorite\Models\Favorite;
 use Modules\Image\Models\Image;
 use Modules\Property\Models\Property;
 
@@ -40,5 +41,9 @@ class Product extends Model
     public function images()
     {
         return $this->hasMany(Image::class);
+    }
+
+    public function favorite(){
+        return $this->hasMany(Favorite::class);
     }
 }

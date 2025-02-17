@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use Modules\Comment\Models\Comment;
+use Modules\Favorite\Models\Favorite;
 use Modules\Otp\Models\Otp;
 
 class User extends Authenticatable
@@ -61,5 +62,9 @@ class User extends Authenticatable
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function favorites(){
+        return $this->hasMany(Favorite::class);
     }
 }

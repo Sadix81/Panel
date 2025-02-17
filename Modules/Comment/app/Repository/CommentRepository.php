@@ -16,7 +16,7 @@ class CommentRepository implements CommentRepositoryInterface
             'search' => request()->has('search') ? request('search') : null,
         ];
 
-        $category = Comment::where('status' , 1)
+        $comment = Comment::where('status' , 1)
         ->where(function ($query) use ($req){
             if ($req['search']) {
                 $query->where('text', 'like', '%'.$req['search'].'%');
@@ -25,7 +25,7 @@ class CommentRepository implements CommentRepositoryInterface
             ->orderBy($req['sort'], $req['order'])
             ->paginate($req['limit']);
 
-        return $category;
+        return $comment;
 
     }
 
