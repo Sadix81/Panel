@@ -6,6 +6,7 @@ use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Modules\Auth\Database\Seeders\AuthDatabaseSeeder;
+use Modules\Cart\Database\Seeders\CartDatabaseSeeder;
 use Modules\Category\Database\Seeders\CategoryDatabaseSeeder;
 use Modules\Color\Database\Seeders\ColorDatabaseSeeder;
 use Modules\Comment\Database\Seeders\CommentDatabaseSeeder;
@@ -34,6 +35,7 @@ class DatabaseSeeder extends Seeder
             ProductDatabaseSeeder::class,
             CommentDatabaseSeeder::class,
             FavoriteDatabaseSeeder::class,
+            CartDatabaseSeeder::class,
         ]);
     }
 }
