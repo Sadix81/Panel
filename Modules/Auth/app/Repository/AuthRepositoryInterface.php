@@ -10,5 +10,5 @@ interface AuthrepositoryInterface
 
     public function ResendCode($request);
 
-    public function logout($request);
+    public function logout();
 }
