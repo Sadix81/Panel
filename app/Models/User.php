@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
+use Modules\Cart\Models\Cart;
 use Modules\Comment\Models\Comment;
 use Modules\Favorite\Models\Favorite;
 use Modules\Otp\Models\Otp;
@@ -66,5 +67,9 @@ class User extends Authenticatable
 
     public function favorites(){
         return $this->hasMany(Favorite::class);
+    }
+
+    public function cart(){
+        return $this->hasOne(Cart::class);
     }
 }
