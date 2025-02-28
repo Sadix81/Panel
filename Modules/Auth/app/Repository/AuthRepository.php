@@ -96,9 +96,11 @@ class Authrepository implements AuthrepositoryInterface
         }
     }
 
-    public function logout($request)
+    public function logout()
     {
         $user = Auth::user();
-        $user->token()->revoke();
+        if ($user) {
+            $user->token()->revoke();
+        }
     }
 }
