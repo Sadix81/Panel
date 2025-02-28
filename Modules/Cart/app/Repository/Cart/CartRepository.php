@@ -28,18 +28,17 @@ class CartRepository implements CartRepositoryInterface{
 
     public function index()
     {
-        $auth = Auth::id();
-
-        if (!$auth) {
-            // return response()->json(['message' => 'User not authenticated'], 401);
+        $auth = null;
+        $user = Auth::guard('api')->user();
+        if ($user) {
+            $auth = $user->id; 
         }
-        $cart = Cart::where('user_id', $auth)->first();
-    
-        if (!$cart) {
-            return response()->json(['message' => 'No cart found for this user'], 404);
-        }
-
-        return $cart;
+        
+        $carts = Cart::where('user_id', $auth)
+        // ->whereHas('cartItems') // فقط سبد خریدهایی را که آیتم دارند برمی‌گرداند
+        ->get();
+        
+        return $carts;
     }
 
     public function addToCart($request)
@@ -52,6 +51,8 @@ class CartRepository implements CartRepositoryInterface{
         }
 
         $guestCartId = null;
+        // $total_price = 0;
+        // $discounted_price = 0;
 
 
         if (!$auth) {
@@ -91,25 +92,32 @@ class CartRepository implements CartRepositoryInterface{
             return response()->json(['error' => '.مفدار مورد نظر موجود نمی باشد'], 400);
         }
 
+        // if ($property->discounted_price) {
+        //     $discounted_price += $property->discounted_price * $request->quantity;
+        // }else{
+        //     $total_price += $property->price * $request->quantity;
+        // }
+
         DB::beginTransaction();
         
         try {
-            // $cartItem = $cart->cartItems()->where('property_id', $property->id)->first();
-            // if ($cartItem) {
-            //     $newQuantity = $cartItem->quantity += $request->quantity;
-            //     if ($newQuantity < 0) {
-            //         return response()->json(['error' => '.مقدار نمی‌تواند منفی باشد'], 400);
-            //     }
-            //     $cartItem->save();
-            // } else {
+            $cartItem = $cart->cartItems()->where('property_id', $property->id)->first();
+            if ($cartItem) {
+                $newQuantity = $cartItem->quantity += $request->quantity;
+                if ($newQuantity < 0) {
+                    return response()->json(['error' => '.مقدار نمی‌تواند منفی باشد'], 400);
+                }
+                $cartItem->save();
+            } else {
             $cart->cartItems()->create([
-                'product_id' => $property->id,
+                'property_id' => $property->id,
+                'product_id' => $property->product_id,
                 'quantity' => $request->quantity,
-                'cart_id' => $cart_id 
-                // 'price' => $property->pricediscounted_price ? $property->pricediscounted_price : $property->price,
+                'cart_id' => $cart_id,
+                // 'total_price' => $total_price,
+                // 'discounted_price' => $discounted_price,
             ]);
-
-            // }
+        }
 
             DB::commit();
         } catch (\Throwable $th) {
