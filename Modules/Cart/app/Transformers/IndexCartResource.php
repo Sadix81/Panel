@@ -13,7 +13,14 @@ class IndexCartResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            $this->id,  
+            'id' => $this->id,
+            'uuid' => $this->uuid,
+            'total_price' => $this->total_price,
+            'discounted_price' => $this->discounted_price,
+            'cart_id' => $this->cartItems->pluck('cart_id')->unique()->values(),
+            'product_id' => $this->cartItems->pluck('product_id'),
+            'quantity' => $this->cartItems->pluck('quantity'),
         ];
     }
+
 }

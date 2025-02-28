@@ -37,14 +37,6 @@ class CartController extends Controller
 
     public function index()
     {
-
-        // $user = Auth::id();
-
-        // if (! $user) {
-        //     return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
-        // }
-
-
         return IndexCartResource::collection($this->cartRepo->index());
     }
 
