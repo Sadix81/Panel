@@ -4,6 +4,7 @@ namespace Modules\Property\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Modules\Cart\Models\CartItem;
 use Modules\Category\Models\Category;
 use Modules\Color\Models\Color;
 use Modules\Product\Models\Product;
@@ -52,6 +53,12 @@ class Property extends Model
     }
 
     public function discountPromotions(){
+
         return $this->belongsTo(Promotion::class);
+    }
+
+    public function cartitem()
+    {
+        return $this->belongsTo(CartItem::class);
     }
 }
