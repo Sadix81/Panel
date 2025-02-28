@@ -5,6 +5,7 @@ namespace Modules\Auth\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Modules\Auth\Http\Requests\loginRequest;
 use Modules\Auth\Http\Requests\RegisterRequest;
 use Modules\Auth\Jobs\RegisterJob as JobsRegisterJob;
@@ -85,5 +86,21 @@ class AuthController extends Controller
         }
 
         return response()->json(['message' => __('messages.Code.Resend.failed')], 404);
+    }
+
+    public function logout()
+    {
+        $user = Auth::user();
+
+        if (! $user) {
+            return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
+        }
+
+        $error = $this->authRepo->logout();
+        if ($error === null) {
+            return response()->json(['message' => __('messages.user.auth.logout.success')], 200);
+        }
+
+        return response()->json(['message' => __('messages.user.auth.logout.failed')], 403);
     }
 }
