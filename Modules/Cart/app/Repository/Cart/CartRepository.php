@@ -122,13 +122,12 @@ class CartRepository implements CartRepositoryInterface
                     $property = Property::find($item->property_id);
                     if ($property->discounted_price) {
                         $discounted_price += $property->discounted_price * $item->quantity;
-                        $total_price += $property->price * $item->quantity;
-                        $final_price = $total_price - $discounted_price;
                     } else {
                         $total_price += $property->price * $item->quantity;
-                        $final_price += $total_price;
                     }
                 }
+                $final_price += $total_price;
+
 
                 $cart->update([
                     'total_price' => $total_price,
