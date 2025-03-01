@@ -17,6 +17,7 @@ class IndexCartResource extends JsonResource
             'uuid' => $this->uuid,
             'total_price' => $this->total_price,
             'discounted_price' => $this->discounted_price,
+            'final_price' => $this->final_price,
             'cart_id' => $this->cartItems->pluck('cart_id')->unique()->values(),
             'product_id' => $this->cartItems->pluck('product_id'),
             'quantity' => $this->cartItems->pluck('quantity'),
