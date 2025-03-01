@@ -126,8 +126,7 @@ class CartRepository implements CartRepositoryInterface
                         $total_price += $property->price * $item->quantity;
                     }
                 }
-                $final_price += $total_price;
-
+                $final_price = $total_price - $discounted_price;
 
                 $cart->update([
                     'total_price' => $total_price,
