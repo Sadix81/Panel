@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->decimal('total_price', 10, 2)->default(0)->nullable();
             $table->decimal('discounted_price', 10, 2)->default(0)->nullable();
+            $table->decimal('final_price', 10, 2)->default(0)->nullable();
             $table->string('uuid', 36)->nullable(); // فیلد برای ذخیره UUID
             $table->timestamps();
         });

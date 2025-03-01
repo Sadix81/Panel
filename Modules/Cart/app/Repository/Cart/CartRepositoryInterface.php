@@ -8,11 +8,9 @@ interface CartRepositoryInterface
 
     public function addToCart($request);
 
-    public function removeProduct($request);
+    // public function removeProduct($request);
 
-    public function updateQuantity($request);
+    // public function updateQuantity($request);
 
-    public function calculateTotal();
-
-    public function clearCart($cart);
+    // public function clearCart($cart);
 }
