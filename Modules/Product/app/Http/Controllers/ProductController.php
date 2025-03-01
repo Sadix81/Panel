@@ -39,31 +39,31 @@ class ProductController extends Controller
             return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
         }
 
-        if($request->price <= 0){
+        if ($request->price <= 0) {
             return response()->json(['message' => 'قیمت محصول باید بزرگتر از صفر باشد']);
         }
 
-        if($request->quantity <= 0){
+        if ($request->quantity <= 0) {
             return response()->json(['message' => 'مقدار موجودی باید بزرگتر از صفر باشد']);
         }
 
-        if(! $request->category_id){
+        if (! $request->category_id) {
             return response()->json(['message' => 'انتخاب حداقل یک دسته بندی الزامیست']);
         }
 
-        if($request->type && ! $request->amount){
+        if ($request->type && ! $request->amount) {
             return response()->json(['message' => 'وارد کردن مقدار تخفیف الزامیست']);
         }
 
-        if($request->type && $request->amount && $request->amount <= 0){
+        if ($request->type && $request->amount && $request->amount <= 0) {
             return response()->json(['message' => 'مفدار تخفیف باید بزرگتر از صفر باشد']);
         }
 
-        if($request->type == 'percentage' && $request->amount >= '100'){
+        if ($request->type == 'percentage' && $request->amount >= '100') {
             return response()->json(['message' => 'نمیتوان صددرصد تخفیف اعمال کرد']);
         }
 
-        if($request->type == 'fixed' && $request->amount >= $request->price){
+        if ($request->type == 'fixed' && $request->amount >= $request->price) {
             return response()->json(['message' => 'نمیتوان صددرصد تخفیف اعمال کرد']);
         }
 
@@ -95,31 +95,31 @@ class ProductController extends Controller
             return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
         }
 
-        if($request->price <= 0){
+        if ($request->price <= 0) {
             return response()->json(['message' => 'قیمت محصول باید بزرگتر از صفر باشد']);
         }
 
-        if($request->quantity <= 0){
+        if ($request->quantity <= 0) {
             return response()->json(['message' => 'مقدار موجودی باید بزرگتر از صفر باشد']);
         }
 
-        if(! $request->category_id){
+        if (! $request->category_id) {
             return response()->json(['message' => 'انتخاب حداقل یک دسته بندی الزامیست']);
         }
 
-        if($request->type && ! $request->amount){
+        if ($request->type && ! $request->amount) {
             return response()->json(['message' => 'وارد کردن مقدار تخفیف الزامیست']);
         }
 
-        if($request->type && $request->amount && $request->amount <= 0){
+        if ($request->type && $request->amount && $request->amount <= 0) {
             return response()->json(['message' => 'مفدار تخفیف باید بزرگتر از صفر باشد']);
         }
 
-        if($request->type == 'percentage' && $request->amount >= '100'){
+        if ($request->type == 'percentage' && $request->amount >= '100') {
             return response()->json(['message' => 'نمیتوان صددرصد تخفیف اعمال کرد']);
         }
 
-        if($request->type == 'fixed' && $request->amount >= $request->price){
+        if ($request->type == 'fixed' && $request->amount >= $request->price) {
             return response()->json(['message' => 'نمیتوان صددرصد تخفیف اعمال کرد']);
         }
 

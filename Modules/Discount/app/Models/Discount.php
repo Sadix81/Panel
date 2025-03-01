@@ -2,8 +2,8 @@
 
 namespace Modules\Discount\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Modules\Product\Models\Product;
 
 // use Modules\Discount\Database\Factories\DiscountFactory;
@@ -23,11 +23,11 @@ class Discount extends Model
         'usage_limit',
         'used_count',
         'status',
-        'allprductsdiscount'
+        'allprductsdiscount',
     ];
 
-    public function product(){
+    public function product()
+    {
         return $this->belongsTo(Product::class);
     }
-
 }

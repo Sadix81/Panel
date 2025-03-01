@@ -14,11 +14,10 @@ class DiscountAllProductsrequest extends FormRequest
         return [
             'type' => ['nullable', 'in:percentage,fixed'],
             'amount' => ['nullable', 'numeric', 'gt:0'],
-            'status' => ['required', 'in:0,1']
+            'status' => ['required', 'in:0,1'],
         ];
     }
 
-    
     public function messages()
     {
         return [

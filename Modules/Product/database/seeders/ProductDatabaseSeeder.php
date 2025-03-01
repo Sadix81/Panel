@@ -15,10 +15,10 @@ class ProductDatabaseSeeder extends Seeder
     {
         for ($i = 1; $i <= 6; $i++) {
             $product = Product::create([
-                'name' => 'Product ' . $i,
-                'description' => 'Description for product ' . $i,
+                'name' => 'Product '.$i,
+                'description' => 'Description for product '.$i,
                 'status' => '1',
-                'thumbnail' => 'thumbnail_' . $i . '.jpg', // فرض کنید تصاویر در public/images وجود دارند
+                'thumbnail' => 'thumbnail_'.$i.'.jpg', // فرض کنید تصاویر در public/images وجود دارند
             ]);
 
             $typeOptions = ['fixed', 'percentage'];
@@ -31,7 +31,7 @@ class ProductDatabaseSeeder extends Seeder
                 'color_id' => rand(1, 5),
                 'size_id' => rand(1, 5),
                 'category_id' => rand(1, 5),
-                'type' =>$type,
+                'type' => $type,
                 'amount' => rand(50, 100),
                 'discounted_price' => rand(50, 300),
             ]);

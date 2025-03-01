@@ -4,10 +4,9 @@ namespace Modules\Discount\Repository;
 
 use Carbon\Carbon;
 use Modules\Discount\Models\Discount;
-use Modules\Property\Models\Property;
 
-class DiscountRepository implements DiscountRepositoryInterface{
-
+class DiscountRepository implements DiscountRepositoryInterface
+{
     public function index()
     {
         $req = [
@@ -26,16 +25,16 @@ class DiscountRepository implements DiscountRepositoryInterface{
                 $query->where('name', 'like', '%'.$req['search'].'%');
             }
             if ($req['type']) {
-                $query->where('type' , $req['type']);
+                $query->where('type', $req['type']);
             }
             if ($req['amount']) {
-                $query->where('amount' , '>=' , $req['amount']);
+                $query->where('amount', '>=', $req['amount']);
             }
             if ($req['start_date']) {
-                $query->where('start_date' , $req['start_date']);
+                $query->where('start_date', $req['start_date']);
             }
             if ($req['status']) {
-                $query->where('status' , 1);
+                $query->where('status', 1);
             }
         })
             ->orderBy($req['sort'], $req['order'])
@@ -56,12 +55,12 @@ class DiscountRepository implements DiscountRepositoryInterface{
             'conditions' => $request->conditions,
             'usage_limit' => $request->usage_limit,
             'used_count' => $request->used_count,
-            'status' => $request->status !== null ? $request->status : 1
+            'status' => $request->status !== null ? $request->status : 1,
         ]);
         // dd($request->all());
     }
 
-    public function update($discount , $request)
+    public function update($discount, $request)
     {
         $discount->update([
             'name' => $request->name ? $request->name : $discount->name,
@@ -73,7 +72,7 @@ class DiscountRepository implements DiscountRepositoryInterface{
             'conditions' => $request->conditions ? $request->conditions : $discount->conditions,
             'usage_limit' => $request->usage_limit ? $request->usage_limit : $discount->usage_limit,
             'used_count' => $request->used_count ? $request->used_count : $discount->used_count,
-            'status' => $request->status !== null ? $request->status : $discount->status
+            'status' => $request->status !== null ? $request->status : $discount->status,
         ]);
     }
 

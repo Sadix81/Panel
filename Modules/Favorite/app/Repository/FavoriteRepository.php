@@ -6,10 +6,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Modules\Favorite\Models\Favorite;
-use Modules\Product\Models\Product;
 
-class FavoriteRepository implements FavoriteRepositoryInterface{
-
+class FavoriteRepository implements FavoriteRepositoryInterface
+{
     public function index()
     {
         $user_id = Auth::id();
@@ -20,10 +19,9 @@ class FavoriteRepository implements FavoriteRepositoryInterface{
             'search' => request()->has('search') ? request('search') : null,
         ];
 
-        $favorite = Favorite::where('user_id' , $user_id)
-        ->orderBy($req['sort'], $req['order'])
-        ->paginate($req['limit']);
-
+        $favorite = Favorite::where('user_id', $user_id)
+            ->orderBy($req['sort'], $req['order'])
+            ->paginate($req['limit']);
 
         return $favorite;
     }
@@ -32,9 +30,9 @@ class FavoriteRepository implements FavoriteRepositoryInterface{
     {
         $user_id = Auth::id();
 
-        $favorite = Favorite::where('user_id' , $user_id)
-        ->where('product_id' , $request->product_id)->first();
-        if($favorite){
+        $favorite = Favorite::where('user_id', $user_id)
+            ->where('product_id', $request->product_id)->first();
+        if ($favorite) {
             return 'exist';
         }
 
@@ -47,7 +45,7 @@ class FavoriteRepository implements FavoriteRepositoryInterface{
             ]);
             DB::commit();
         } catch (\Throwable $th) {
-            Log::error('Error adding product to favorites: ' . $th->getMessage());
+            Log::error('Error adding product to favorites: '.$th->getMessage());
         }
     }
 
@@ -63,4 +61,4 @@ class FavoriteRepository implements FavoriteRepositoryInterface{
             throw $th;
         }
     }
-} 
+}

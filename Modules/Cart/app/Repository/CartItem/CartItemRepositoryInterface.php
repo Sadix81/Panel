@@ -2,10 +2,4 @@
 
 namespace Modules\Cart\Repository\CartItem;
 
-interface CartItemRepositoryInterface {
-
-    
-
-
-
-}
+interface CartItemRepositoryInterface {}

@@ -16,7 +16,7 @@ class UpdateProductrequest extends FormRequest
             'description' => ['nullable', 'string', 'max:255'],
             'status' => ['required', 'integer', 'in:0,1'],
             'thumbnail' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
-            
+
             'price' => ['required', 'numeric', 'gt:0'],
             'quantity' => ['required', 'integer', 'min:1'],
             'color_id' => ['nullable', 'array', 'min:1'],
@@ -32,7 +32,6 @@ class UpdateProductrequest extends FormRequest
         ];
     }
 
-   
     public function messages()
     {
         return [

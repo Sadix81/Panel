@@ -22,7 +22,7 @@ return new class extends Migration
             $table->text('conditions')->nullable();
             $table->integer('usage_limit')->nullable();
             $table->integer('used_count')->default(0);
-            $table->boolean('status')->nullable(); //فعال و عیر فعال کردن تخقیق
+            $table->boolean('status')->nullable(); // فعال و عیر فعال کردن تخقیق
             $table->timestamps();
         });
     }

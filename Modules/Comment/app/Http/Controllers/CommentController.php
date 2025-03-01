@@ -63,7 +63,7 @@ class CommentController extends Controller
             return response()->json(['message' => 'product not found'], 404);
         }
 
-        if($comment->status == 0){
+        if ($comment->status == 0) {
             return response()->json(['message' => 'امکان ثبت نظر وجود ندارد']);
         }
 
@@ -87,7 +87,7 @@ class CommentController extends Controller
             return response()->json(['message' => __('messages.comment.update.parent_id.failed')], 400);
         }
 
-        if($comment->id < (int)$request->parent_id){
+        if ($comment->id < (int) $request->parent_id) {
             return response()->json(['message' => __('messages.comment.update.parent_id.failed')], 400);
         }
 

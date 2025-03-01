@@ -12,10 +12,10 @@ class FavoriteDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        for($i = 0 ; $i <=6 ; $i++){
+        for ($i = 0; $i <= 6; $i++) {
             Favorite::create([
-                'user_id' => rand(1,2),
-                'product_id' => rand(1,6),
+                'user_id' => rand(1, 2),
+                'product_id' => rand(1, 6),
             ]);
         }
     }

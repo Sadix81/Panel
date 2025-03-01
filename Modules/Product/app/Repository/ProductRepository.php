@@ -41,7 +41,7 @@ class ProductRepository implements ProductRepositoryInterface
                     $query->where('category_id', $req['category_id']);
                 }
                 if (! empty($req['is_sale'])) {
-                    $query->where('discounted_price', '>' , 0);
+                    $query->where('discounted_price', '>', 0);
                 }
             });
 
@@ -80,7 +80,7 @@ class ProductRepository implements ProductRepositoryInterface
                         $mimeType = $file->getMimeType();
                         $image_name = time().'-'.$file->getClientOriginalName();
                         $image_size = $file->getSize(); // دریافت سایز تصویر
-            
+
                         // بارگذاری تصویر با توجه به نوع MIME
                         switch ($mimeType) {
                             case 'image/jpeg':
@@ -99,10 +99,10 @@ class ProductRepository implements ProductRepositoryInterface
                             default:
                                 return response()->json(['message' => 'فرمت فایل پشتیبانی نمی‌شود.'], 400);
                         }
-            
+
                         // آزاد کردن منابع تصویر
                         imagedestroy($image);
-            
+
                         // ذخیره آدرس تصویر و اطلاعات اضافی در جدول تصاویر
                         $product->images()->create([
                             'image_url' => asset('images/'.$image_name),
@@ -158,11 +158,11 @@ class ProductRepository implements ProductRepositoryInterface
                 }
             }
 
-            if($request->type && $request->amount && $request->type == 'fixed'){
+            if ($request->type && $request->amount && $request->type == 'fixed') {
                 $final_price = $request->price - $request->amount;
             }
 
-            if($request->type && $request->amount && $request->type == 'percentage'){
+            if ($request->type && $request->amount && $request->type == 'percentage') {
                 $price = ($request->price * $request->amount) / 100;
                 $final_price = $request->price - $price;
             }
@@ -262,11 +262,11 @@ class ProductRepository implements ProductRepositoryInterface
                 }
             }
 
-            if($request->type && $request->amount && $request->type == 'fixed'){
+            if ($request->type && $request->amount && $request->type == 'fixed') {
                 $final_price = $request->price - $request->amount;
             }
 
-            if($request->type && $request->amount && $request->type == 'percentage'){
+            if ($request->type && $request->amount && $request->type == 'percentage') {
                 $price = ($request->price * $request->amount) / 100;
                 $final_price = $request->price - $price;
             }
