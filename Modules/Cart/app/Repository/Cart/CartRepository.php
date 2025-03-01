@@ -117,6 +117,7 @@ class CartRepository implements CartRepositoryInterface
                     'quantity' => $request->quantity,
                     'cart_id' => $cart_id,
                 ]);
+                
 
                 foreach ($cart->cartItems as $item) {
                     $property = Property::find($item->property_id);
