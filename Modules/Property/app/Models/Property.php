@@ -52,7 +52,8 @@ class Property extends Model
         return $this->belongsTo(Size::class);
     }
 
-    public function discountPromotions(){
+    public function discountPromotions()
+    {
 
         return $this->belongsTo(Promotion::class);
     }

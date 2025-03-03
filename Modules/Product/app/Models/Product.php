@@ -43,7 +43,8 @@ class Product extends Model
         return $this->hasMany(Image::class);
     }
 
-    public function favorite(){
+    public function favorite()
+    {
         return $this->hasMany(Favorite::class);
     }
 }

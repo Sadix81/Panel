@@ -2,8 +2,8 @@
 
 namespace Modules\Favorite\Repository;
 
-interface FavoriteRepositoryInterface{
-
+interface FavoriteRepositoryInterface
+{
     public function index();
 
     public function store($request);

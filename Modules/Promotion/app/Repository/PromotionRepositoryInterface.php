@@ -2,6 +2,7 @@
 
 namespace Modules\Promotion\Repository;
 
-interface PromotionRepositoryInterface {
+interface PromotionRepositoryInterface
+{
     public function allprductsdiscount($request);
 }

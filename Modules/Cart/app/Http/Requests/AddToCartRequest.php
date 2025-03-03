@@ -20,7 +20,6 @@ class AddToCartRequest extends FormRequest
             // 'discounted_price' => ['nullable', 'numeric', 'gte:0'],
             // 'uuid' => ['nullable', 'string', 'size:36'],
 
-
         ];
     }
 

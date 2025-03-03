@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Discount\Http\Controllers\DiscountController;
 
-
 Route::prefix('/v1/discount')->middleware('auth:api')->group(function () {
     Route::get('/index', [DiscountController::class, 'index']);
     Route::post('/store', [DiscountController::class, 'store']);

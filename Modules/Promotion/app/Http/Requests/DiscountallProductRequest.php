@@ -18,7 +18,6 @@ class DiscountallProductRequest extends FormRequest
         ];
     }
 
-
     public function messages()
     {
         return [

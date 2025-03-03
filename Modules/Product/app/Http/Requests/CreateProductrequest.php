@@ -19,11 +19,11 @@ class CreateProductrequest extends FormRequest
 
             'price' => ['required', 'numeric', 'gt:0'],
             'quantity' => ['required', 'integer', 'min:1'],
-            'color_id' => ['nullable', 'array' , 'min:1'],
+            'color_id' => ['nullable', 'array', 'min:1'],
             'color_id.*' => ['nullable', 'exists:colors,id', 'integer', 'min:1'],
-            'size_id' => ['nullable', 'array' , 'min:1'],
+            'size_id' => ['nullable', 'array', 'min:1'],
             'size_id.*' => ['nullable', 'exists:sizes,id', 'integer', 'min:1'],
-            'category_id' => ['required', 'array' , 'min:1'],
+            'category_id' => ['required', 'array', 'min:1'],
             'category_id.*' => ['required', 'exists:categories,id', 'integer', 'gt:0'],
             'type' => ['nullable', 'in:percentage,fixed'],
             'amount' => ['nullable', 'numeric', 'gt:0'],
@@ -33,7 +33,6 @@ class CreateProductrequest extends FormRequest
         ];
     }
 
-   
     public function messages()
     {
         return [

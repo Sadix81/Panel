@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('promotions', function (Blueprint $table) {
             $table->id();
-            $table->boolean('status')->default(0); //ایحاد تخفیف برای همه محصولات
+            $table->boolean('status')->default(0); // ایحاد تخفیف برای همه محصولات
             $table->enum('type', ['percentage', 'fixed'])->default('fixed')->nullable();
-            $table->decimal('amount', 9, 2)->default(0)->nullable(); 
+            $table->decimal('amount', 9, 2)->default(0)->nullable();
             $table->timestamps();
         });
     }

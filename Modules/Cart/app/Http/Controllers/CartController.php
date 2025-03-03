@@ -3,7 +3,6 @@
 namespace Modules\Cart\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\Cart\Http\Requests\AddToCartRequest;
 use Modules\Cart\Repository\Cart\CartRepository;
@@ -11,7 +10,6 @@ use Modules\Cart\Transformers\IndexCartResource;
 
 class CartController extends Controller
 {
-
     private $cartRepo;
 
     public function __construct(CartRepository $cartRepo)
@@ -32,6 +30,7 @@ class CartController extends Controller
         if ($error === null) {
             return response()->json(['message' => 'cart created successfully'], 201);
         }
+
         return response()->json(['message' => 'cart created failed'], 500);
     }
 
@@ -48,9 +47,10 @@ class CartController extends Controller
         if ($error === null) {
             return response()->json(['messages' => 'cart.AddToCart.success'], 200);
         }
+
         return response()->json([
             'messages' => 'cart.AddToCart.failed',
-            'error' => $error->original['error']
+            'error' => $error->original['error'],
         ], 500);
     }
 }

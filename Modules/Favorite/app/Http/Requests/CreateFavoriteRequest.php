@@ -12,10 +12,9 @@ class CreateFavoriteRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'product_id' => ['required', 'exists:products,id', 'integer', 'gt:0'], //get(more than) zero
+            'product_id' => ['required', 'exists:products,id', 'integer', 'gt:0'], // get(more than) zero
         ];
     }
-
 
     public function messages()
     {

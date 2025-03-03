@@ -23,5 +23,4 @@ class IndexCartResource extends JsonResource
             'quantity' => $this->cartItems->pluck('quantity'),
         ];
     }
-
 }

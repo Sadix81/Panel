@@ -21,7 +21,7 @@ class Comment extends Model
         'product_id',
         'parent_id',
         'user_id',
-        'status'
+        'status',
     ];
 
     public function user()

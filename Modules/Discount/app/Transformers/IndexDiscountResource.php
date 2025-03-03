@@ -23,7 +23,7 @@ class IndexDiscountResource extends JsonResource
             // 'conditions' => $this->conditions,
             // 'usage_limit' => $this->usage_limit,
             // 'used_count' => $this->used_count,
-            'status' => $this->status,  
+            'status' => $this->status,
         ];
     }
 }

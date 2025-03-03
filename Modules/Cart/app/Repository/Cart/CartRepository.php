@@ -5,15 +5,12 @@ namespace Modules\Cart\Repository\Cart;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Modules\Cart\Models\Cart;
-use Modules\Cart\Models\CartItem;
-use Modules\Product\Models\Product;
 use Illuminate\Support\Str;
+use Modules\Cart\Models\Cart;
 use Modules\Property\Models\Property;
 
 class CartRepository implements CartRepositoryInterface
 {
-
     public function create_cart()
     {
         $auth = Auth::id();
@@ -24,7 +21,7 @@ class CartRepository implements CartRepositoryInterface
         }
 
         Cart::create([
-            'user_id' => $auth
+            'user_id' => $auth,
         ]);
     }
 
@@ -57,11 +54,10 @@ class CartRepository implements CartRepositoryInterface
         $discounted_price = 0;
         $final_price = 0;
 
-
-        if (!$auth) {
-            if (!isset($_COOKIE['uuid'])) {
+        if (! $auth) {
+            if (! isset($_COOKIE['uuid'])) {
                 $guestCartId = Str::uuid()->toString();
-                setcookie('uuid', $guestCartId, time() + (86400 * 30), "/"); //30 days
+                setcookie('uuid', $guestCartId, time() + (86400 * 30), '/'); // 30 days
             } else {
                 $guestCartId = $_COOKIE['uuid'];
             }
@@ -69,12 +65,11 @@ class CartRepository implements CartRepositoryInterface
             $cart = Cart::where('uuid', $guestCartId)->first();
         }
 
-        if ($auth)
-        {
+        if ($auth) {
             $cart = Cart::where('user_id', $auth)->first();
         }
 
-        if (!$cart) {
+        if (! $cart) {
             $cart = Cart::create([
                 'user_id' => $auth,
                 'uuid' => $guestCartId ?? null, // ذخیره uuid در صورت مهمان
@@ -88,7 +83,7 @@ class CartRepository implements CartRepositoryInterface
             ->where('size_id', $request->size_id)
             ->first();
 
-        if (!$property) {
+        if (! $property) {
             return response()->json(['error' => '.محصول مورد نظر یافت نشد'], 404);
         }
 
@@ -117,7 +112,6 @@ class CartRepository implements CartRepositoryInterface
                     'quantity' => $request->quantity,
                     'cart_id' => $cart_id,
                 ]);
-                
 
                 foreach ($cart->cartItems as $item) {
                     $property = Property::find($item->property_id);
@@ -132,17 +126,16 @@ class CartRepository implements CartRepositoryInterface
                 $cart->update([
                     'total_price' => $total_price,
                     'discounted_price' => $discounted_price,
-                    'final_price' => $final_price
+                    'final_price' => $final_price,
                 ]);
             }
 
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack(); // Rollback the transaction if there's an error
-            Log::error('Error adding product to cart: ' . $th->getMessage());
-            return response()->json(['error' =>  $th->getMessage()], 500);
+            Log::error('Error adding product to cart: '.$th->getMessage());
+
+            return response()->json(['error' => $th->getMessage()], 500);
         }
     }
-
-
 }

@@ -2,8 +2,8 @@
 
 namespace Modules\Cart\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Modules\Property\Models\Property;
 
 // use Modules\Cart\Database\Factories\CartItemFactory;
@@ -12,7 +12,6 @@ class CartItem extends Model
 {
     use HasFactory;
 
-
     protected $fillable = [
         'cart_id',
         'product_id',
@@ -20,7 +19,8 @@ class CartItem extends Model
         'quantity',
     ];
 
-    public function cart(){
+    public function cart()
+    {
         return $this->belongsTo(Cart::class);
     }
 
@@ -28,5 +28,4 @@ class CartItem extends Model
     {
         return $this->belongsTo(Property::class);
     }
-
 }

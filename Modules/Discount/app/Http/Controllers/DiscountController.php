@@ -3,7 +3,6 @@
 namespace Modules\Discount\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\Discount\Http\Requests\CreateDiscountRequest;
 use Modules\Discount\Http\Requests\UpdateDiscountRequest;
@@ -40,11 +39,11 @@ class DiscountController extends Controller
             return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
         }
 
-        if($request->type == 'percentage' && $request->amount >= 100){
+        if ($request->type == 'percentage' && $request->amount >= 100) {
             return response()->json(['message' => 'نمیتوان صد در صد تخفیف اعمال کرد']);
         }
 
-        if($request->start_date < $request->end_date){
+        if ($request->start_date < $request->end_date) {
             return response()->json(['message' => 'تاریخ انقضای کد نادرست است']);
         }
 
@@ -77,14 +76,13 @@ class DiscountController extends Controller
             return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
         }
 
-        if($request->type == 'percentage' && $request->amount >= 100){
+        if ($request->type == 'percentage' && $request->amount >= 100) {
             return response()->json(['message' => 'نمیتوان صد در صد تخفیف اعمال کرد']);
         }
 
-        if($request->start_date < $request->end_date){
+        if ($request->start_date < $request->end_date) {
             return response()->json(['message' => 'تاریخ انقضای کد نادرست است']);
         }
-
 
         $error = $this->discountRepository->update($discount, $request);
         if ($error === null) {

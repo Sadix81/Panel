@@ -22,7 +22,7 @@ class CreateDiscountRequest extends FormRequest
             'usage_limit' => ['nullable', 'integer', 'min:1'], // محدودیت استفاده (اختیاری و عدد صحیح مثبت)
             'used_count' => ['nullable', 'integer', 'min:0'], // تعداد استفاده (اختیاری و عدد صحیح غیر منفی)
             'status' => ['nullable', 'in:0,1'],
-            'allprductsdiscount' => ['nullable' , 'in:0,1']
+            'allprductsdiscount' => ['nullable', 'in:0,1'],
         ];
     }
 
