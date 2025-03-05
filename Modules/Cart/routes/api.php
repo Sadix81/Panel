@@ -10,4 +10,5 @@ Route::prefix('/v1/cart/')->group(function () {
     Route::post('/add/product', [CartController::class, 'addToCart']);
     Route::put('/update/quantity', [CartController::class, 'updateCartQuantity']);
     Route::delete('/remove/product', [CartController::class, 'removeProduct']);
+    Route::delete('/item/clear', [CartController::class, 'clearCart']);
 });
