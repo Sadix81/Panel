@@ -10,7 +10,7 @@ interface CartRepositoryInterface
 
     public function updateCartQuantity($request);
     
-    // public function removeProduct($request);
+    public function removeProduct($request);
 
     // public function clearCart($cart);
 }
