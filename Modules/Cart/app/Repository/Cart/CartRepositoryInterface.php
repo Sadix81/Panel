@@ -12,5 +12,5 @@ interface CartRepositoryInterface
     
     public function removeProduct($request);
 
-    // public function clearCart($cart);
+    public function clearCart();
 }
