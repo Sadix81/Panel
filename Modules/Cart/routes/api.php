@@ -9,4 +9,5 @@ Route::prefix('/v1/cart/')->group(function () {
     Route::get('/index', [CartController::class, 'index']);
     Route::post('/add/product', [CartController::class, 'addToCart']);
     Route::put('/update/quantity', [CartController::class, 'updateCartQuantity']);
+    Route::delete('/remove/product', [CartController::class, 'removeProduct']);
 });
