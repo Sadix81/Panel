@@ -5,6 +5,7 @@ namespace Modules\Cart\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Modules\Cart\Http\Requests\AddToCartRequest;
+use Modules\Cart\Http\Requests\UpdatecartQuantityRequest;
 use Modules\Cart\Repository\Cart\CartRepository;
 use Modules\Cart\Transformers\IndexCartResource;
 
@@ -50,6 +51,17 @@ class CartController extends Controller
 
         return response()->json([
             'messages' => 'cart.AddToCart.failed',
+            'error' => $error->original['error'],
+        ], 500);
+    }
+
+    public function updateCartQuantity(UpdatecartQuantityRequest $request){
+        $error = $this->cartRepo->updateCartQuantity($request);
+        if($error === null){
+            return response()->json(['messages' => 'cart.updateCart.success'], 200);
+        }
+        return response()->json([
+            'messages' => 'cart.updateCart.failed',
             'error' => $error->original['error'],
         ], 500);
     }
