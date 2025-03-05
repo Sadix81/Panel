@@ -34,8 +34,14 @@ class CartRepository implements CartRepositoryInterface
             $auth = $user->id;
         }
 
+        $guestCartId = null;
+        if (! $auth) {
+            $guestCartId = $_COOKIE['uuid'];
+        }
+
         $carts = Cart::where('user_id', $auth)
-            // ->whereHas('cartItems') // فقط سبد خریدهایی را که آیتم دارند برمی‌گرداند
+        ->orWhere('uuid', $guestCartId)
+            ->whereHas('cartItems')
             ->get();
 
         return $carts;
