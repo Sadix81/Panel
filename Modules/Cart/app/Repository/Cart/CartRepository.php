@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Modules\Cart\Models\Cart;
+use Modules\Cart\Models\CartItem;
 use Modules\Property\Models\Property;
 
 class CartRepository implements CartRepositoryInterface
@@ -131,7 +132,6 @@ class CartRepository implements CartRepositoryInterface
         } catch (\Throwable $th) {
             DB::rollBack(); // Rollback the transaction if there's an error
             Log::error('Error adding product to cart: ' . $th->getMessage());
-
             return response()->json(['error' => $th->getMessage()], 500);
         }
     }
@@ -144,14 +144,15 @@ class CartRepository implements CartRepositoryInterface
             $auth = $user->id;
         }
 
-        // $guestCartId = $_COOKIE['uuid'];
+        $guestCartId = null;
         $discounted_price = 0;
         $total_price = 0;
 
         if (! $auth) {
-            // if($guestCartId){
-            //     $cart = Cart::where('uuid' , $guestCartId)->first();
-            // }
+            $guestCartId = $_COOKIE['uuid'];
+            if ($guestCartId) {
+                $cart = Cart::where('uuid', $guestCartId)->first();
+            }
         } else {
             $cart = Cart::where('user_id', $auth)->first();
         }
@@ -190,7 +191,7 @@ class CartRepository implements CartRepositoryInterface
                 $total_price += $property->price * $item->quantity;
             }
             $final_price = $total_price - $discounted_price;
-            
+
             $cart->update([
                 'total_price' => $total_price,
                 'discounted_price' => $discounted_price,
@@ -199,7 +200,57 @@ class CartRepository implements CartRepositoryInterface
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error('Error adding product to cart: ' . $th->getMessage());
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+    }
 
+    public function removeProduct($request)
+    {
+        $auth = null;
+        $user = Auth::guard('api')->user();
+        if ($user) {
+            $auth = $user->id;
+        }
+
+        $guestCartId = null;
+        $discounted_price = 0;
+        $total_price = 0;
+
+        if (! $auth) {
+            $guestCartId = $_COOKIE['uuid'];
+            if ($guestCartId) {
+                $cart = Cart::where('uuid', $guestCartId)->first();
+            }
+        } else {
+            $cart = Cart::where('user_id', $auth)->first();
+        }
+
+        $properties = $cart->cartItems()->pluck('property_id')->toArray();
+        
+        try {
+            $item = $request->property_id;
+            if(in_array($item , $properties)){
+                
+                $cart->cartItems()->where('property_id' , $item)->delete();
+
+                foreach ($cart->cartItems as $item) {
+                    $property = Property::find($item->property_id);
+                    if ($property->discounted_price) {
+                        $discounted_price += $property->discounted_price * $item->quantity;
+                    }
+                    $total_price += $property->price * $item->quantity;
+                }
+                $final_price = $total_price - $discounted_price;
+    
+                $cart->update([
+                    'total_price' => $total_price,
+                    'discounted_price' => $discounted_price,
+                    'final_price' => $final_price,
+                ]);
+            }
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error('Error adding product to cart: ' . $th->getMessage());
             return response()->json(['error' => $th->getMessage()], 500);
         }
     }
