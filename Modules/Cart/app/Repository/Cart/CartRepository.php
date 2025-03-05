@@ -226,12 +226,12 @@ class CartRepository implements CartRepositoryInterface
         }
 
         $properties = $cart->cartItems()->pluck('property_id')->toArray();
-        
+
         try {
             $item = $request->property_id;
-            if(in_array($item , $properties)){
-                
-                $cart->cartItems()->where('property_id' , $item)->delete();
+            if (in_array($item, $properties)) {
+
+                $cart->cartItems()->where('property_id', $item)->delete();
 
                 foreach ($cart->cartItems as $item) {
                     $property = Property::find($item->property_id);
@@ -241,11 +241,48 @@ class CartRepository implements CartRepositoryInterface
                     $total_price += $property->price * $item->quantity;
                 }
                 $final_price = $total_price - $discounted_price;
-    
+
                 $cart->update([
                     'total_price' => $total_price,
                     'discounted_price' => $discounted_price,
                     'final_price' => $final_price,
+                ]);
+            }
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error('Error adding product to cart: ' . $th->getMessage());
+            return response()->json(['error' => $th->getMessage()], 500);
+        }
+    }
+
+    public function clearCart()
+    {
+        $auth = null;
+        $user = Auth::guard('api')->user();
+        if ($user) {
+            $auth = $user->id;
+        }
+
+        $guestCartId = null;
+
+        if (! $auth) {
+            $guestCartId = $_COOKIE['uuid'];
+            if ($guestCartId) {
+                $cart = Cart::where('uuid', $guestCartId)->first();
+            }
+        } else {
+            $cart = Cart::where('user_id', $auth)->first();
+        }
+
+        $items = $cart->cartItems()->get();
+        try {
+            if($items){
+                $cart->cartItems()->delete();
+    
+                $cart->update([
+                    'total_price' => 0,
+                    'discounted_price' => 0,
+                    'final_price' => 0,
                 ]);
             }
         } catch (\Throwable $th) {
