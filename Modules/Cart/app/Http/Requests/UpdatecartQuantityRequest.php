@@ -4,7 +4,7 @@ namespace Modules\Cart\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AddToCartRequest extends FormRequest
+class UpdatecartQuantityRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -16,6 +16,7 @@ class AddToCartRequest extends FormRequest
             'color_id' => ['nullable',  'exists:colors,id', 'integer', 'min:1'],
             'size_id' => ['nullable',  'exists:sizes,id', 'integer', 'min:1'],
             'quantity' => ['required','integer', 'min:1'],
+
         ];
     }
 
