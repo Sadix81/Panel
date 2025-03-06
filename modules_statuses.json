@@ -12,5 +12,6 @@
     "Discount": true,
     "Promotion": true,
     "Favorite": true,
-    "Cart": true
+    "Cart": true,
+    "Faq": true
 }
