@@ -13,5 +13,6 @@
     "Promotion": true,
     "Favorite": true,
     "Cart": true,
-    "Faq": true
+    "Faq": true,
+    "ForgotPassword": true
 }

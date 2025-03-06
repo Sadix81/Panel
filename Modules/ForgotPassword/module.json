@@ -1,0 +1,11 @@
+{
+    "name": "ForgotPassword",
+    "alias": "forgotpassword",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\ForgotPassword\\Providers\\ForgotPasswordServiceProvider"
+    ],
+    "files": []
+}
