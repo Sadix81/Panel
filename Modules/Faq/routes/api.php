@@ -3,17 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Faq\Http\Controllers\FaqController;
 
-/*
- *--------------------------------------------------------------------------
- * API Routes
- *--------------------------------------------------------------------------
- *
- * Here is where you can register API routes for your application. These
- * routes are loaded by the RouteServiceProvider within a group which
- * is assigned the "api" middleware group. Enjoy building your API!
- *
-*/
-
-Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
-    Route::apiResource('faq', FaqController::class)->names('faq');
+Route::prefix('/v1/faq/')->middleware('auth:api')->group(function () {
+    Route::get('/index', [FaqController::class , 'index']);
+    Route::post('/store', [FaqController::class , 'store']);
+    Route::get('/show/{faq}', [FaqController::class , 'show']);
+    Route::put('/update/{faq}', [FaqController::class , 'update']);
+    Route::delete('/destroy/{faq}', [FaqController::class , 'destroy']);
 });

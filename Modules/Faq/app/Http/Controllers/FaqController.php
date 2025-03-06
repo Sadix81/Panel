@@ -4,62 +4,92 @@ namespace Modules\Faq\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Modules\Faq\app\Repository\FaqRepository;
+use Modules\Faq\Http\Requests\FaqRequest;
+use Modules\Faq\Models\Faq;
+use Modules\Faq\Transformers\IndexFaqResource;
+use Modules\Faq\Transformers\ShowFaqResource;
 
 class FaqController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
+    private $faqRepo;
+
+    public function __construct(FaqRepository $faqRepo)
+    {
+        $this->faqRepo = $faqRepo;
+    }
+
     public function index()
     {
-        return view('faq::index');
+        $user = Auth::user();
+
+        if (! $user) {
+            return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
+        }
+
+        return IndexFaqResource::collection($this->faqRepo->index());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(FaqRequest $request)
     {
-        return view('faq::create');
+        $user = Auth::user();
+
+        if (! $user) {
+            return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
+        }
+
+        $error = $this->faqRepo->store($request);
+
+        if ($error === null) {
+            return response()->json(['message' => __('messages.faq.store.success', ['question' => $request->question])], 201);
+        }
+
+        return response()->json(['message' => __('messages.faq.store.failed', ['question' => $request->question])], 500);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function show(Faq $faq)
     {
-        //
+        $user = Auth::user();
+
+        if (! $user) {
+            return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
+        }
+
+        return new ShowFaqResource($faq);
+
     }
 
-    /**
-     * Show the specified resource.
-     */
-    public function show($id)
+    public function update(Faq $faq, FaqRequest $request)
     {
-        return view('faq::show');
+        $user = Auth::user();
+
+        if (! $user) {
+            return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
+        }
+
+        $error = $this->faqRepo->update($faq, $request);
+        if ($error === null) {
+            return response()->json(['message' => __('messages.faq.update.success', ['question' => $faq->question])], 200);
+        }
+
+        return response()->json(['message' => __('messages.faq.update.failed', ['question' => $faq->question])], 500);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
+    public function destroy($faq)
     {
-        return view('faq::edit');
-    }
+        $user = Auth::user();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+        if (! $user) {
+            return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
-    {
-        //
+        $error = $this->faqRepo->delete($faq);
+        if ($error === null) {
+            return response()->json(['message' => __('messages.faq.delete.success')], 200);
+        }
+
+        return response()->json(['message' => __('messages.faq.delete.failed')], 500);
     }
 }
