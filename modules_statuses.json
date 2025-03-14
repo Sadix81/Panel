@@ -14,5 +14,7 @@
     "Favorite": true,
     "Cart": true,
     "Faq": true,
-    "ForgotPassword": true
+    "ForgotPassword": true,
+    "Invoice": true,
+    "Payment": true
 }
