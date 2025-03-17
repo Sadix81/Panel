@@ -7,9 +7,11 @@ use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Modules\Auth\Http\Requests\loginRequest;
 use Modules\Auth\Http\Requests\RegisterRequest;
-use Modules\Auth\Jobs\RegisterJob as JobsRegisterJob;
+use Modules\Auth\Jobs\LoginJob;
+use Modules\Auth\Jobs\RegisterJob;
 use Modules\Auth\Repository\Authrepository;
 use Modules\Otp\Http\Requests\RegisterVerificationOtpRequest;
 use Modules\Otp\Http\Requests\ResendOtpRequest;
@@ -18,6 +20,7 @@ use Modules\Otp\Models\Otp;
 class AuthController extends Controller
 {
     private $authRepo;
+    // php artisan queue:work
 
     public function __construct(Authrepository $authRepo)
     {
@@ -29,7 +32,7 @@ class AuthController extends Controller
 
         $user = $this->authRepo->register($request);
         if ($user) {
-            JobsRegisterJob::dispatch($user);
+            RegisterJob::dispatch($user);
 
             return response()->json(['message' => 'Registration successful, please check your email for verification code.'], 201);
         }
@@ -37,7 +40,7 @@ class AuthController extends Controller
         return response()->json(['message' => __('messages.user.auth.register.failed')], 404);
     }
 
-    public function verify_otp_code(Otp $otp, RegisterVerificationOtpRequest $request)
+    public function verify_otp_code(RegisterVerificationOtpRequest $request)
     {
         $code = $request->code;
         $otpRecord = Otp::where('otp', $code)->first();
@@ -51,7 +54,6 @@ class AuthController extends Controller
         }
 
         $user = User::find($otpRecord->user_id);
-        //    dd($user);
 
         if (! $user) {
             return response()->json(['error' => 'User not found.'], 404);
@@ -76,10 +78,18 @@ class AuthController extends Controller
             return response()->json('.کاربر یافت نشد');
         }
 
-        if ($user->twofacor == false) {
+        if ($user->twofactor == false) {
             return $this->authRepo->login($request);
-        } else {
-            return $this->authRepo->TwoFactorLogin($request);
+        }
+
+        if ($user->twofactor == 1) {
+            $twoFactorResponse = $this->authRepo->TwoFactorLogin($request);
+            if ($twoFactorResponse) {
+                LoginJob::dispatch($user);
+                return response()->json(['message' => 'Login successful, please check your email for verification code.'], 201);
+            } else {
+                return response()->json(['message' => 'Failed to initiate two-factor authentication.'], 500);
+            }
         }
     }
 
@@ -89,18 +99,14 @@ class AuthController extends Controller
         if ($accessToken) {
             return response()->json([
                 'message' => __('messages.user.auth.login.success'),
-                // 'token_name' => $accessToken['token_name'], // Include token name in the response
-                '__token__' => $accessToken['__token__'], // Include the actual token
+                // 'token_name' => $accessToken['token_name'],
+                '__token__' => $accessToken['__token__'],
             ], 200);
         }
 
         return response()->json(['message' => __('messages.user.auth.login.failed')], 403);
     }
 
-    public function TwoFactorLogin()
-    {
-        //
-    }
     public function ResendCode(ResendOtpRequest $request)
     {
 

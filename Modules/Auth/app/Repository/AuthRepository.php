@@ -66,6 +66,18 @@ class Authrepository implements AuthrepositoryInterface
         return null;
     }
 
+    public function TwoFactorLogin($request)
+    {
+        $user = User::where('username', $request->username)
+            ->orWhere('email', $request->email)->first();
+
+        if (! $user) {
+            return response()->json('.کاربر یافت نشد');
+        }
+         return $user;
+
+    }
+
     public function ResendCode($request)
     {
         DB::beginTransaction();

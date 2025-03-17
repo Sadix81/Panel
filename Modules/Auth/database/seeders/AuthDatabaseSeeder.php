@@ -28,6 +28,7 @@ class AuthDatabaseSeeder extends Seeder
             'email' => 'zsadra3@gmail.com',
             'mobile' => '09031111111',
             'password' => password_hash('@Dmin123', PASSWORD_DEFAULT),
+            'twofactor' => true,
             'email_verified_at' => Carbon::now(),
         ]);
 
