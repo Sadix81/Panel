@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use Modules\Auth\Http\Requests\loginRequest;
 use Modules\Auth\Http\Requests\RegisterRequest;
 use Modules\Auth\Jobs\RegisterJob as JobsRegisterJob;
@@ -66,16 +67,40 @@ class AuthController extends Controller
         return response()->json(['message' => 'کد نامعتبراست'], 404);
     }
 
+    public function verifyTwoFactorLogin(Request $request)
+    {
+        $user = User::where('username', $request->username)
+            ->orWhere('email', $request->email)->first();
+
+        if (! $user) {
+            return response()->json('.کاربر یافت نشد');
+        }
+
+        if ($user->twofacor == false) {
+            return $this->authRepo->login($request);
+        } else {
+            return $this->authRepo->TwoFactorLogin($request);
+        }
+    }
+
     public function login(LoginRequest $request)
     {
         $accessToken = $this->authRepo->login($request);
         if ($accessToken) {
-            return response()->json(['message' => __('messages.user.auth.login.success'), '__token__' => $accessToken], 200);
+            return response()->json([
+                'message' => __('messages.user.auth.login.success'),
+                // 'token_name' => $accessToken['token_name'], // Include token name in the response
+                '__token__' => $accessToken['__token__'], // Include the actual token
+            ], 200);
         }
 
         return response()->json(['message' => __('messages.user.auth.login.failed')], 403);
     }
 
+    public function TwoFactorLogin()
+    {
+        //
+    }
     public function ResendCode(ResendOtpRequest $request)
     {
 
