@@ -40,6 +40,79 @@ class AuthController extends Controller
         return response()->json(['message' => __('messages.user.auth.register.failed')], 404);
     }
 
+    public function checkingTwoFactorLogin(Request $request)
+    {
+        $user = User::where('username', $request->username)
+            ->orWhere('email', $request->email)->first();
+
+        if (! $user) {
+            return response()->json('.کاربر یافت نشد');
+        }
+
+        if ($user->twofactor == false) {
+            return $this->authRepo->login($request);
+        }
+
+        if ($user->twofactor == 1) {
+            $twoFactorResponse = $this->authRepo->TwoFactorLoginEamil($request);
+            if ($twoFactorResponse) {
+                LoginJob::dispatch($user);
+                return response()->json(['message' => 'Login successful, please check your email for verification code.'], 201);
+            } else {
+                return response()->json(['message' => 'Failed to initiate two-factor authentication.'], 500);
+            }
+        }
+    }
+
+    public function login(LoginRequest $request)
+    {
+        $accessToken = $this->authRepo->login($request);
+        if ($accessToken) {
+            return response()->json([
+                'message' => __('messages.user.auth.login.success'),
+                // 'token_name' => $accessToken['token_name'],
+                '__token__' => $accessToken['__token__'],
+            ], 200);
+        }
+
+        return response()->json(['message' => __('messages.user.auth.login.failed')], 403);
+    }
+
+    public function verify_twofactor_code(RegisterVerificationOtpRequest $request)
+    {
+        $code = $request->code;
+        $otpRecord = Otp::where('otp', $code)->first();
+
+        if (! $otpRecord) {
+            return response()->json(['message' => 'User not found.'], 404);
+        }
+
+        if ($otpRecord->expire_time < Carbon::now()) {
+            return response()->json(['message' => 'کد منقضی شده است. لطفاً کد جدید درخواست کنید.'], 410);
+        }
+
+        $user = User::find($otpRecord->user_id);
+
+        if (! $user) {
+            return response()->json(['error' => 'User not found.'], 404);
+        }
+
+        if ($code != $otpRecord->otp) {
+            return response()->json(['error' => 'code is incorrect.'], 404);
+
+        }
+        $accessToken = $this->authRepo->TwoFactorLogin($request);
+        if ($accessToken) {
+            return response()->json([
+                'message' => __('messages.user.auth.login.success'),
+                // 'token_name' => $accessToken['token_name'],
+                '__token__' => $accessToken['__token__'],
+            ], 200);
+        }
+
+        return response()->json(['message' => 'کد نامعتبراست'], 404);
+    }
+
     public function verify_otp_code(RegisterVerificationOtpRequest $request)
     {
         $code = $request->code;
@@ -67,44 +140,6 @@ class AuthController extends Controller
         }
 
         return response()->json(['message' => 'کد نامعتبراست'], 404);
-    }
-
-    public function verifyTwoFactorLogin(Request $request)
-    {
-        $user = User::where('username', $request->username)
-            ->orWhere('email', $request->email)->first();
-
-        if (! $user) {
-            return response()->json('.کاربر یافت نشد');
-        }
-
-        if ($user->twofactor == false) {
-            return $this->authRepo->login($request);
-        }
-
-        if ($user->twofactor == 1) {
-            $twoFactorResponse = $this->authRepo->TwoFactorLogin($request);
-            if ($twoFactorResponse) {
-                LoginJob::dispatch($user);
-                return response()->json(['message' => 'Login successful, please check your email for verification code.'], 201);
-            } else {
-                return response()->json(['message' => 'Failed to initiate two-factor authentication.'], 500);
-            }
-        }
-    }
-
-    public function login(LoginRequest $request)
-    {
-        $accessToken = $this->authRepo->login($request);
-        if ($accessToken) {
-            return response()->json([
-                'message' => __('messages.user.auth.login.success'),
-                // 'token_name' => $accessToken['token_name'],
-                '__token__' => $accessToken['__token__'],
-            ], 200);
-        }
-
-        return response()->json(['message' => __('messages.user.auth.login.failed')], 403);
     }
 
     public function ResendCode(ResendOtpRequest $request)

@@ -66,7 +66,7 @@ class Authrepository implements AuthrepositoryInterface
         return null;
     }
 
-    public function TwoFactorLogin($request)
+    public function TwoFactorLoginEamil($request)
     {
         $user = User::where('username', $request->username)
             ->orWhere('email', $request->email)->first();
@@ -74,8 +74,29 @@ class Authrepository implements AuthrepositoryInterface
         if (! $user) {
             return response()->json('.کاربر یافت نشد');
         }
-         return $user;
+        return $user;
+    }
 
+    public function TwoFactorLogin($request)
+    {
+        $code = $request->code;
+        $otpRecord = Otp::where('otp', $code)->first();
+        $user = User::find($otpRecord->user_id);
+
+        if (! $user) {
+            return response()->json(['error' => 'User not found.'], 404);
+        }
+
+        $token = $user->createToken('__Token__')->accessToken;
+
+        $otpRecord->delete();
+        return [
+            // 'token_name' => '__Token__', // Specify the name of the token
+            '__token__' => $token, // The actual token
+        ];
+
+
+        return null;
     }
 
     public function ResendCode($request)

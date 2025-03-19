@@ -22,7 +22,7 @@ class LoginJob implements ShouldQueue
     {
         $this->user = $user;
     }
-    
+
 
     public function handle(): void
     {
