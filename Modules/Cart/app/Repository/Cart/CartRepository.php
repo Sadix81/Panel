@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Modules\Cart\Models\Cart;
-use Modules\Cart\Models\CartItem;
 use Modules\Property\Models\Property;
 
 class CartRepository implements CartRepositoryInterface
@@ -40,7 +39,7 @@ class CartRepository implements CartRepositoryInterface
         }
 
         $carts = Cart::where('user_id', $auth)
-        ->orWhere('uuid', $guestCartId)
+            ->orWhere('uuid', $guestCartId)
             ->whereHas('cartItems')
             ->get();
 
@@ -137,7 +136,8 @@ class CartRepository implements CartRepositoryInterface
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack(); // Rollback the transaction if there's an error
-            Log::error('Error adding product to cart: ' . $th->getMessage());
+            Log::error('Error adding product to cart: '.$th->getMessage());
+
             return response()->json(['error' => $th->getMessage()], 500);
         }
     }
@@ -205,7 +205,8 @@ class CartRepository implements CartRepositoryInterface
             ]);
         } catch (\Throwable $th) {
             DB::rollBack();
-            Log::error('Error adding product to cart: ' . $th->getMessage());
+            Log::error('Error adding product to cart: '.$th->getMessage());
+
             return response()->json(['error' => $th->getMessage()], 500);
         }
     }
@@ -256,7 +257,8 @@ class CartRepository implements CartRepositoryInterface
             }
         } catch (\Throwable $th) {
             DB::rollBack();
-            Log::error('Error adding product to cart: ' . $th->getMessage());
+            Log::error('Error adding product to cart: '.$th->getMessage());
+
             return response()->json(['error' => $th->getMessage()], 500);
         }
     }
@@ -282,9 +284,9 @@ class CartRepository implements CartRepositoryInterface
 
         $items = $cart->cartItems()->get();
         try {
-            if($items){
+            if ($items) {
                 $cart->cartItems()->delete();
-    
+
                 $cart->update([
                     'total_price' => 0,
                     'discounted_price' => 0,
@@ -293,7 +295,8 @@ class CartRepository implements CartRepositoryInterface
             }
         } catch (\Throwable $th) {
             DB::rollBack();
-            Log::error('Error adding product to cart: ' . $th->getMessage());
+            Log::error('Error adding product to cart: '.$th->getMessage());
+
             return response()->json(['error' => $th->getMessage()], 500);
         }
     }

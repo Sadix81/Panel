@@ -23,7 +23,6 @@ class LoginJob implements ShouldQueue
         $this->user = $user;
     }
 
-
     public function handle(): void
     {
         $otp = rand(11111, 99999);
@@ -36,7 +35,7 @@ class LoginJob implements ShouldQueue
             Log::info("The Email Twofactor Code for {$this->user->username} (ID: {$this->user->id}): is $otp");
             Mail::to($this->user->email)->send(new LoginMail($this->user->username, $otp));
         } catch (\Exception $e) {
-            Log::error("Email sending failed: " . $e->getMessage());
+            Log::error('Email sending failed: '.$e->getMessage());
         }
     }
 }

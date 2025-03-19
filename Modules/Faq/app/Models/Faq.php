@@ -2,8 +2,9 @@
 
 namespace Modules\Faq\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
 // use Modules\Faq\Database\Factories\FaqFactory;
 
 class Faq extends Model
@@ -12,6 +13,6 @@ class Faq extends Model
 
     protected $fillable = [
         'question',
-        'answer'
+        'answer',
     ];
 }

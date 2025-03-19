@@ -35,7 +35,7 @@ class RegisterJob implements ShouldQueue
             Log::info("The Email validation Code for {$this->user->username} (ID: {$this->user->id}): is $otp");
             Mail::to($this->user->email)->send(new RegisterMail($this->user->username, $otp));
         } catch (\Exception $e) {
-            Log::error("Email sending failed: " . $e->getMessage());
+            Log::error('Email sending failed: '.$e->getMessage());
         }
     }
 }

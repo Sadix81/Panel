@@ -56,33 +56,39 @@ class CartController extends Controller
         ], 500);
     }
 
-    public function updateCartQuantity(UpdatecartQuantityRequest $request){
+    public function updateCartQuantity(UpdatecartQuantityRequest $request)
+    {
         $error = $this->cartRepo->updateCartQuantity($request);
-        if($error === null){
+        if ($error === null) {
             return response()->json(['messages' => 'cart.updateCart.success'], 200);
         }
+
         return response()->json([
             'messages' => 'cart.updateCart.failed',
             'error' => $error->original['error'],
         ], 500);
     }
 
-    public function removeProduct(RemoveCartItemRequest $request){
+    public function removeProduct(RemoveCartItemRequest $request)
+    {
         $error = $this->cartRepo->removeProduct($request);
-        if($error === null){
+        if ($error === null) {
             return response()->json(['messages' => 'cart.removeitem.success'], 200);
         }
+
         return response()->json([
             'messages' => 'cart.removeitem.failed',
             'error' => $error->original['error'],
         ], 500);
     }
 
-    public function clearCart(){
+    public function clearCart()
+    {
         $error = $this->cartRepo->clearCart();
-        if($error === null){
+        if ($error === null) {
             return response()->json(['messages' => 'cart.removeitem.success'], 200);
         }
+
         return response()->json([
             'messages' => 'cart.removeitem.failed',
             'error' => $error->original['error'],

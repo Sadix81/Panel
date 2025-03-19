@@ -9,6 +9,7 @@ class FaqRepository implements FaqRepositorynterface
     public function index()
     {
         $faqs = Faq::all();
+
         return $faqs;
     }
 
@@ -16,7 +17,7 @@ class FaqRepository implements FaqRepositorynterface
     {
         Faq::create([
             'question' => $request->question,
-            'answer' => $request->answer
+            'answer' => $request->answer,
         ]);
     }
 
@@ -24,13 +25,13 @@ class FaqRepository implements FaqRepositorynterface
     {
         $faq->update([
             'question' => $request->question ? $request->question : $faq->question,
-            'answer' => $request->answer ? $request->answer : $faq->answer
+            'answer' => $request->answer ? $request->answer : $faq->answer,
         ]);
     }
 
     public function delete($faq)
     {
-        $item = Faq::where('id' , $faq)->first();
+        $item = Faq::where('id', $faq)->first();
         $item->delete();
     }
 }

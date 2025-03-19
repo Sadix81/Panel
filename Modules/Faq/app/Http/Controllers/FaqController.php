@@ -3,7 +3,6 @@
 namespace Modules\Faq\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\Faq\app\Repository\FaqRepository;
 use Modules\Faq\Http\Requests\FaqRequest;
@@ -13,7 +12,6 @@ use Modules\Faq\Transformers\ShowFaqResource;
 
 class FaqController extends Controller
 {
-
     private $faqRepo;
 
     public function __construct(FaqRepository $faqRepo)

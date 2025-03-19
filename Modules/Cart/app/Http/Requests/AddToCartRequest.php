@@ -15,7 +15,7 @@ class AddToCartRequest extends FormRequest
             'product_id' => ['required',  'exists:products,id', 'integer', 'min:1'],
             'color_id' => ['nullable',  'exists:colors,id', 'integer', 'min:1'],
             'size_id' => ['nullable',  'exists:sizes,id', 'integer', 'min:1'],
-            'quantity' => ['required','integer', 'min:1'],
+            'quantity' => ['required', 'integer', 'min:1'],
         ];
     }
 

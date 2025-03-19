@@ -4,9 +4,9 @@ namespace Modules\Auth\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 use Modules\Auth\Http\Requests\loginRequest;
 use Modules\Auth\Http\Requests\RegisterRequest;
 use Modules\Auth\Jobs\LoginJob;
@@ -56,6 +56,7 @@ class AuthController extends Controller
             $twoFactorResponse = $this->authRepo->TwoFactorLoginEamil($request);
             if ($twoFactorResponse) {
                 LoginJob::dispatch($user);
+
                 return response()->json(['message' => 'Login successful, please check your email for verification code.'], 201);
             } else {
                 return response()->json(['message' => 'Failed to initiate two-factor authentication.'], 500);
