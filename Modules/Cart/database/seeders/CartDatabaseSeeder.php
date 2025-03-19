@@ -9,7 +9,7 @@ use Modules\Property\Models\Property;
 class CartDatabaseSeeder extends Seeder
 {
     public function run(): void
-    {        
+    {
         $userIds = [1, 2];
 
         $properties = Property::take(6)->get();
