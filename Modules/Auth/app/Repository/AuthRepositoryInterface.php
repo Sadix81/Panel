@@ -5,6 +5,10 @@ namespace Modules\Auth\Repository;
 interface AuthrepositoryInterface
 {
     public function register($request);
+    
+    public function TwoFactorLoginEamil($request);
+    
+    public function TwoFactorLogin($request);
 
     public function login($request);
 

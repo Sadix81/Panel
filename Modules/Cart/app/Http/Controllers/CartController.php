@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Auth;
 use Modules\Cart\Http\Requests\AddToCartRequest;
 use Modules\Cart\Http\Requests\RemoveCartItemRequest;
 use Modules\Cart\Http\Requests\UpdatecartQuantityRequest;
-use Modules\Cart\Models\Cart;
 use Modules\Cart\Repository\Cart\CartRepository;
 use Modules\Cart\Transformers\IndexCartResource;
 

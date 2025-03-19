@@ -43,7 +43,6 @@ class Authrepository implements AuthrepositoryInterface
         ]);
 
         return $user;
-
     }
 
     public function login($request)
@@ -58,8 +57,44 @@ class Authrepository implements AuthrepositoryInterface
         if ($user && password_verify($request->password, $user->password)) {
             $token = $user->createToken('__Token__')->accessToken;
 
-            return $token;
+            return [
+                // 'token_name' => '__Token__', // Specify the name of the token
+                '__token__' => $token, // The actual token
+            ];
         }
+
+        return null;
+    }
+
+    public function TwoFactorLoginEamil($request)
+    {
+        $user = User::where('username', $request->username)
+            ->orWhere('email', $request->email)->first();
+
+        if (! $user) {
+            return response()->json('.کاربر یافت نشد');
+        }
+        return $user;
+    }
+
+    public function TwoFactorLogin($request)
+    {
+        $code = $request->code;
+        $otpRecord = Otp::where('otp', $code)->first();
+        $user = User::find($otpRecord->user_id);
+
+        if (! $user) {
+            return response()->json(['error' => 'User not found.'], 404);
+        }
+
+        $token = $user->createToken('__Token__')->accessToken;
+
+        $otpRecord->delete();
+        return [
+            // 'token_name' => '__Token__', // Specify the name of the token
+            '__token__' => $token, // The actual token
+        ];
+
 
         return null;
     }
@@ -87,7 +122,7 @@ class Authrepository implements AuthrepositoryInterface
                 'expire_time' => Carbon::now()->addMinutes(120),
             ]);
 
-            Log::info('Email validation Code for '.$user->id.': '.$otp);
+            Log::info('Email validation Code for ' . $user->id . ': ' . $otp);
             Mail::to($user->email)->send(new RegisterMail($user->username, $otp));
             DB::commit();
         } catch (\Throwable $th) {
