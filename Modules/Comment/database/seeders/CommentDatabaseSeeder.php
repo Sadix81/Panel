@@ -28,7 +28,7 @@ class CommentDatabaseSeeder extends Seeder
                 'product_id' => $products[array_rand($products)],
                 'parent_id' => $parentId,
                 'user_id' => rand(1, 2),
-                'status' => rand(0,1),
+                'status' => rand(0, 1),
             ]);
         }
     }

@@ -4,7 +4,6 @@ namespace Modules\ForgotPassword\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Modules\ForgotPassword\Http\Requests\ChangePasswordRequest;
 use Modules\ForgotPassword\Http\Requests\ForgotPasswordRequest;
@@ -39,18 +38,19 @@ class ForgotPasswordController extends Controller
 
         $otp = Otp::where('otp', $code)->first();
 
-        if(! $otp){
+        if (! $otp) {
             return response()->json(['error' => 'code not found.'], 404);
         }
 
-        if($otp->expire_time < Carbon::now()){
+        if ($otp->expire_time < Carbon::now()) {
             $otp->delete();
+
             return response()->json(['message' => 'کد منقضی شده است. لطفاً کد جدید درخواست کنید.'], 410); // 410 Gone
         }
 
         $user = User::find($otp->user_id);
-    
-        if (!$user) {
+
+        if (! $user) {
             return response()->json(['message' => 'User not found.'], 404);
         }
 
