@@ -28,6 +28,7 @@ class User extends Authenticatable
         'password',
         'mobile',
         'email',
+        'twofactor',
         'avatar',
         'email_verified_at',
     ];

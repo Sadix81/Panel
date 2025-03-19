@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('mobile');
             $table->string('avatar')->nullable();
             $table->string('email')->unique();
+            $table->boolean('twofactor')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
