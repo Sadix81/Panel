@@ -11,7 +11,7 @@ use Modules\Auth\Http\Requests\loginRequest;
 use Modules\Auth\Http\Requests\RegisterRequest;
 use Modules\Auth\Jobs\LoginJob;
 use Modules\Auth\Jobs\RegisterJob;
-use Modules\Auth\Repository\Authrepository;
+use Modules\Auth\Repository\AuthRepository;
 use Modules\Otp\Http\Requests\RegisterVerificationOtpRequest;
 use Modules\Otp\Http\Requests\ResendOtpRequest;
 use Modules\Otp\Models\Otp;

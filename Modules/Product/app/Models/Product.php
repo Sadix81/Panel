@@ -9,6 +9,7 @@ use Modules\Comment\Models\Comment;
 use Modules\Favorite\Models\Favorite;
 use Modules\Image\Models\Image;
 use Modules\Property\Models\Property;
+use Modules\Rating\Models\Rate;
 
 // use Modules\Product\Database\Factories\ProductFactory;
 
@@ -46,5 +47,9 @@ class Product extends Model
     public function favorite()
     {
         return $this->hasMany(Favorite::class);
+    }
+
+    public function rates(){
+        return $this->hasMany(Rate::class);
     }
 }

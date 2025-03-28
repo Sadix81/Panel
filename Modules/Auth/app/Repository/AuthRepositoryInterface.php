@@ -2,7 +2,7 @@
 
 namespace Modules\Auth\Repository;
 
-interface AuthrepositoryInterface
+interface AuthRepositoryInterface
 {
     public function register($request);
 
