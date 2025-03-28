@@ -4,9 +4,9 @@ use Illuminate\Support\Facades\Route;
 use Modules\Faq\Http\Controllers\FaqController;
 
 Route::prefix('/v1/faq/')->middleware('auth:api')->group(function () {
-    Route::get('/index', [FaqController::class, 'index']);
-    Route::post('/store', [FaqController::class, 'store']);
-    Route::get('/show/{faq}', [FaqController::class, 'show']);
-    Route::put('/update/{faq}', [FaqController::class, 'update']);
-    Route::delete('/destroy/{faq}', [FaqController::class, 'destroy']);
+    Route::get('/', [FaqController::class, 'index']);
+    Route::post('/', [FaqController::class, 'store']);
+    Route::get('/{faq}', [FaqController::class, 'show']);
+    Route::put('/{faq}', [FaqController::class, 'update']);
+    Route::delete('/{faq}', [FaqController::class, 'destroy']);
 });
