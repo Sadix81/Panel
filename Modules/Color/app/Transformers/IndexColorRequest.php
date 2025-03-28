@@ -15,6 +15,7 @@ class IndexColorRequest extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'code' => $this->code,
         ];
     }
 }

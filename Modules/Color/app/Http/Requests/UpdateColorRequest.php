@@ -13,6 +13,7 @@ class UpdateColorRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:50', 'unique:colors'],
+            'code' => ['required', 'string', 'max:50', 'unique:colors,code'],
         ];
     }
 
