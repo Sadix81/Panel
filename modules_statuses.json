@@ -16,5 +16,6 @@
     "Faq": true,
     "ForgotPassword": true,
     "Invoice": true,
-    "Payment": true
+    "Payment": true,
+    "Rating": true
 }
