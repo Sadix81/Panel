@@ -14,12 +14,19 @@ class CommentRepository implements CommentRepositoryInterface
             'order' => request()->has('order') ? request('order') : 'desc',
             'limit' => request()->has('limit') ? request('limit') : '25',
             'search' => request()->has('search') ? request('search') : null,
+            'product_id' => request()->has('product_id') ? request('product_id') : null,
+            'status' => request()->has('status') ? request('status') : null,
         ];
 
-        $comment = Comment::where('status', 1)
-            ->where(function ($query) use ($req) {
+        $comment = Comment::where(function ($query) use ($req) {
                 if ($req['search']) {
                     $query->where('text', 'like', '%'.$req['search'].'%');
+                }
+                if ($req['product_id']) {
+                    $query->where('product_id', $req['product_id']);
+                }
+                if ($req['status'] !== null) {
+                    $query->where('status', $req['status']);
                 }
             })
             ->orderBy($req['sort'], $req['order'])
@@ -29,13 +36,13 @@ class CommentRepository implements CommentRepositoryInterface
 
     }
 
-    public function store($product, $request)
+    public function store($request)
     {
         $auth = Auth::id();
 
         Comment::create([
             'text' => $request->text,
-            'product_id' => $product->id,
+            'product_id' => $request->product_id,
             'parent_id' => null,
             'user_id' => $auth,
             'status' => 0,

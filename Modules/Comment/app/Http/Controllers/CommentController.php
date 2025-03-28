@@ -26,7 +26,7 @@ class CommentController extends Controller
         return IndexCommentResource::collection($this->commentRepo->index());
     }
 
-    public function store(Product $product, CreateCommentRequest $request)
+    public function store(CreateCommentRequest $request)
     {
         $user = Auth::id();
 
@@ -34,11 +34,7 @@ class CommentController extends Controller
             return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
         }
 
-        if (! $product) {
-            return response()->json(['message' => 'product not found'], 404);
-        }
-
-        $error = $this->commentRepo->store($product, $request);
+        $error = $this->commentRepo->store($request);
         if ($error === null) {
             return response()->json(['message' => __('messages.comment.store.success')], 201);
         }
@@ -67,6 +63,10 @@ class CommentController extends Controller
             return response()->json(['message' => 'امکان ثبت نظر وجود ندارد']);
         }
 
+        if ((int) $comment->parent_id > $comment->id) {
+            return response()->json(['message' => __('messages.comment.update.parent_id.failed')], 400);
+        }
+
         $error = $this->commentRepo->replay($comment, $request);
         if ($error === null) {
             return response()->json(['message' => __('messages.comment.replay.store.success')], 201);
@@ -83,11 +83,7 @@ class CommentController extends Controller
             return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
         }
 
-        if ((int) $request->parent_id === $comment->id) {
-            return response()->json(['message' => __('messages.comment.update.parent_id.failed')], 400);
-        }
-
-        if ($comment->id < (int) $request->parent_id) {
+        if ((int) $comment->parent_id > $comment->id) {
             return response()->json(['message' => __('messages.comment.update.parent_id.failed')], 400);
         }
 
