@@ -13,11 +13,15 @@ class ColorRepository implements ColorRepositoryInterface
             'order' => request()->has('order') ? request('order') : 'desc',
             'limit' => request()->has('limit') ? request('limit') : '25',
             'search' => request()->has('search') ? request('search') : null,
+            'code' => request()->has('code') ? request('code') : null,
         ];
 
         $color = Color::where(function ($query) use ($req) {
             if ($req['search']) {
                 $query->where('name', 'like', '%'.$req['search'].'%');
+            }
+            if ($req['code']) {
+                $query->where('code', 'like', '%'.$req['code'].'%');
             }
         })
             ->orderBy($req['sort'], $req['order'])
@@ -30,6 +34,7 @@ class ColorRepository implements ColorRepositoryInterface
     {
         Color::create([
             'name' => $request->name,
+            'code' => $request->code,
         ]);
     }
 
@@ -37,6 +42,7 @@ class ColorRepository implements ColorRepositoryInterface
     {
         $color->update([
             'name' => $request->name,
+            'code' => $request->code,
         ]);
     }
 
