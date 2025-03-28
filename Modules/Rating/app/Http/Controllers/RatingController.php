@@ -3,15 +3,15 @@
 namespace Modules\Rating\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Modules\Product\Models\Product;
+use Modules\Rating\Console\ProductRating;
 use Modules\Rating\Http\Requests\RatingRequest;
-use Modules\Rating\Http\Requests\StoreRatingRequest;
-use Modules\Rating\Http\Requests\UpdateRatingRequest;
 use Modules\Rating\Models\Rate;
 use Modules\Rating\Repository\RatingRepository;
 use Modules\Rating\Transformers\IndexRatingResource;
+use Modules\Rating\Transformers\ProductRatingResource;
 use Modules\Rating\Transformers\ShowRatingResource;
 
 class RatingController extends Controller
@@ -48,15 +48,28 @@ class RatingController extends Controller
         return response()->json(['message' => 'امتیاز محصول ثبت نشد'], 500);
     }
 
-    public function show(Rate $rate)
+    public function show(Product $product)
     {
         $user = Auth::user();
-
-        if (! $user) {
+    
+        if (!$user) {
             return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
         }
-
-        return new ShowRatingResource($rate);
+    
+        $ratings = Rate::where('product_id', $product->id)
+            ->select('id', 'rating', 'user_id', 'product_id')
+            ->get();
+    
+        $finalAverageRating = $ratings->avg('rating');
+        $userIds = $ratings->pluck('user_id')->toArray();
+    
+        $ratingResources = ShowRatingResource::collection($ratings);
+    
+        return response()->json([
+            'average_rating' => $finalAverageRating,
+            'ratings' => $ratingResources,
+            'users_id' => $userIds,
+        ]);
     }
 
     public function update(RatingRequest $request)
@@ -80,5 +93,19 @@ class RatingController extends Controller
             return response()->json(['message' => 'امتیاز محصول با موفقیت ویرایش شد'], 200);
         }
         return response()->json(['message' => 'امتیاز محصول ویرتیش نشد'], 500);
+    }
+
+    public function rateCalculate()
+    {
+        $user = Auth::user();
+
+        if (! $user) {
+            return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
+        }
+        ProductRating::dispatch();
+
+        $ratings = DB::table('rate_products')->get();
+
+        return ProductRatingResource::collection($ratings);
     }
 }

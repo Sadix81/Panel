@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Mail;
 use Modules\Auth\Emails\RegisterMail;
 use Modules\Otp\Models\Otp;
 
-class Authrepository implements AuthrepositoryInterface
+class AuthRepository implements AuthRepositoryInterface
 {
     public function register($request)
     {

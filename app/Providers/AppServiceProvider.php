@@ -4,8 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Laravel\Passport\Passport;
-use Modules\Auth\Repository\Authrepository;
-use Modules\Auth\Repository\AuthrepositoryInterface;
+use Modules\Auth\Repository\AuthRepository;
+use Modules\Auth\Repository\AuthRepositoryInterface;
 use Modules\Promotion\Repository\PromotionRepository;
 use Modules\Promotion\Repository\PromotionRepositoryInterface;
 
@@ -16,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(AuthrepositoryInterface::class, Authrepository::class);
+        $this->app->bind(AuthRepositoryInterface::class, AuthRepository::class);
         $this->app->bind(PromotionRepositoryInterface::class, PromotionRepository::class);
     }
 

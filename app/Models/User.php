@@ -11,6 +11,7 @@ use Modules\Cart\Models\Cart;
 use Modules\Comment\Models\Comment;
 use Modules\Favorite\Models\Favorite;
 use Modules\Otp\Models\Otp;
+use Modules\Rating\Models\Rate;
 
 class User extends Authenticatable
 {
@@ -74,5 +75,9 @@ class User extends Authenticatable
     public function cart()
     {
         return $this->hasOne(Cart::class);
+    }
+
+    public function rates(){
+        return $this->hasMany(Rate::class);
     }
 }

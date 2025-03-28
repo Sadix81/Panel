@@ -16,14 +16,14 @@ class RatingRepository implements RatingRepositoryInterface
             'order' => request()->has('order') ? request('order') : 'desc',
             'limit' => request()->has('limit') ? request('limit') : '25',
             'product_id' => request()->has('product_id') ? request('product_id') : null,
-            'rating' => request()->has('rate') ? request('rate') : null,
+            'rate' => request()->has('rate') ? request('rate') : null,
         ];
         $rate = Rate::where(function ($query) use ($req) {
             if ($req['product_id']) {
                 $query->where('product_id', $req['product_id']);
             }
-            if ($req['rating']) {
-                $query->where('rate', $req['rating']);
+            if ($req['rate']) {
+                $query->where('rating', $req['rate']);
             }
         })
             ->orderBy($req['sort'], $req['order'])
