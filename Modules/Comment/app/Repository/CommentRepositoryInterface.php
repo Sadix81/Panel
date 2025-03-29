@@ -6,7 +6,7 @@ interface CommentRepositoryInterface
 {
     public function index();
 
-    public function store($product, $request);
+    public function store($request);
 
     public function replay($comment, $request);
 

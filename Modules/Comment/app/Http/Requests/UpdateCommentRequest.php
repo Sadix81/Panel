@@ -13,8 +13,9 @@ class UpdateCommentRequest extends FormRequest
     {
         return [
             'text' => ['required', 'string', 'max:255'],
-            'status' => ['nullable', 'integer', 'in:0,1'],
+            'product_id' => ['required', 'integer', 'exists:products,id'],
             'parent_id' => ['nullable', 'integer', 'exists:comments,id'],
+            'status' => ['nullable', 'integer', 'in:0,1'],
         ];
     }
 
