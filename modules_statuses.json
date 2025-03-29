@@ -17,5 +17,6 @@
     "ForgotPassword": true,
     "Invoice": true,
     "Payment": true,
-    "Rating": true
+    "Rating": true,
+    "Permission": true
 }
