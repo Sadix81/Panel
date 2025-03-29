@@ -17,14 +17,13 @@ class CategoryRepository implements CategoryRepositoryInterface
 
         $category = Category::where(function ($query) use ($req) {
             if ($req['search']) {
-                $query->where('name', 'like', '%'.$req['search'].'%');
+                $query->where('name', 'like', '%' . $req['search'] . '%');
             }
         })
             ->orderBy($req['sort'], $req['order'])
             ->paginate($req['limit']);
 
         return $category;
-
     }
 
     public function store($request)
@@ -34,7 +33,8 @@ class CategoryRepository implements CategoryRepositoryInterface
             $mimeType = $file->getMimeType();
 
             // ایجاد نام یونیک برای تصویر
-            $image_name = time().'-'.$file->getClientOriginalName();
+            $image_name = time() . '-' . $file->getClientOriginalName();
+            $relative_path = 'images/' . $image_name;
 
             // بارگذاری تصویر با توجه به نوع MIME
             switch ($mimeType) {
@@ -54,20 +54,18 @@ class CategoryRepository implements CategoryRepositoryInterface
 
             // JPEG
             if ($mimeType === 'image/jpeg' || $mimeType === 'image/pjpeg') {
-                imagejpeg($image, public_path('images/'.$image_name), 50); // 30 درصد کیفیت
-            } else {
-                // PNG(0 / 9) هرچی عدد بیشتر شود فشرده ساری بیشتر میشود
-                if ($mimeType === 'image/png') {
-                    imagepng($image, public_path('images/'.$image_name), 4);
-                } elseif ($mimeType === 'image/gif') {
-                    imagegif($image, public_path('images/'.$image_name));
-                }
+                imagejpeg($image, public_path($relative_path), 50); // 50% quality
+            } elseif ($mimeType === 'image/png') {
+                imagepng($image, public_path($relative_path), 4); // Compression level 4
+            } elseif ($mimeType === 'image/gif') {
+                imagegif($image, public_path($relative_path));
             }
 
             // آزاد کردن منابع تصویر
             imagedestroy($image);
 
-            $image_url = asset('images/'.$image_name);
+            // Save the relative path in the database
+            $image_url = $relative_path;
         }
 
         $category = Category::create([
@@ -85,7 +83,8 @@ class CategoryRepository implements CategoryRepositoryInterface
             $mimeType = $file->getMimeType();
 
             // ایجاد نام یونیک برای تصویر
-            $image_name = time().'-'.$file->getClientOriginalName();
+            $image_name = time() . '-' . $file->getClientOriginalName();
+            $relative_path = 'images/' . $image_name;
 
             // بارگذاری تصویر با توجه به نوع MIME
             switch ($mimeType) {
@@ -103,25 +102,23 @@ class CategoryRepository implements CategoryRepositoryInterface
                     return response()->json(['message' => 'فرمت فایل پشتیبانی نمی‌شود.'], 400);
             }
 
-            // JPEG
+            // Save the image to the public directory
             if ($mimeType === 'image/jpeg' || $mimeType === 'image/pjpeg') {
-                imagejpeg($image, public_path('images/'.$image_name), 50); // 30 درصد کیفیت
-            } else {
-                // PNG(0 / 9) هرچی عدد بیشتر شود فشرده ساری بیشتر میشود
-                if ($mimeType === 'image/png') {
-                    imagepng($image, public_path('images/'.$image_name), 4);
-                } elseif ($mimeType === 'image/gif') {
-                    imagegif($image, public_path('images/'.$image_name));
-                }
+                imagejpeg($image, public_path($relative_path), 50); // 50% quality
+            } elseif ($mimeType === 'image/png') {
+                imagepng($image, public_path($relative_path), 4); // Compression level 4
+            } elseif ($mimeType === 'image/gif') {
+                imagegif($image, public_path($relative_path));
             }
 
-            // آزاد کردن منابع تصویر
+            // Free up memory
             imagedestroy($image);
 
-            $image_url = asset('images/'.$image_name);
+            // Save the relative path in the database
+            $image_url = $relative_path;
         } else {
             // اگر تصویری آپلود نشده، URL قبلی را حفظ کنید
-            $image_url = $category->avatar;
+            $image_url = $category->image;
         }
 
         $category->update([
