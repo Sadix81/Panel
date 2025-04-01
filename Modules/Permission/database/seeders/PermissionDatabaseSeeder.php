@@ -2,19 +2,24 @@
 
 namespace Modules\Permission\Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+
 
 class PermissionDatabaseSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // Permission::create(['name' => 'edit articles']);
-        // Permission::create(['name' => 'delete articles']);
-        // Permission::create(['name' => 'publish articles']);
-        // Permission::create(['name' => 'unpublish articles']);
+        $role = Role::firstOrCreate([
+            'name' => 'SuperAdmin',
+            'guard_name' => 'api',
+        ]);
+
+        $user = User::find(1);
+        if ($user && !$user->hasRole('SuperAdmin')) {
+            $user->assignRole($role);
+        }
     }
 }
