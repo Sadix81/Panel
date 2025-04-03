@@ -3,6 +3,7 @@
 namespace Modules\Color\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateColorRequest extends FormRequest
 {
@@ -12,8 +13,9 @@ class UpdateColorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:50', 'unique:colors'],
-            'code' => ['required', 'string', 'max:50', 'unique:colors,code'],
+            'name' => ['required', 'string', 'max:50',Rule::unique('colors', 'name')->ignore($this->route('color'))],
+
+            'code' => ['required', 'string', 'max:50',Rule::unique('colors', 'code')->ignore($this->route('color'))],
         ];
     }
 

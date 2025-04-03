@@ -3,6 +3,7 @@
 namespace Modules\Size\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateSizeRequest extends FormRequest
 {
@@ -12,7 +13,7 @@ class UpdateSizeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string', 'max:20', 'unique:sizes'],
+            'title' => ['required', 'string', 'max:20',Rule::unique('sizes' , 'title')->ignore($this->size)],
         ];
     }
 
