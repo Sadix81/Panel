@@ -23,7 +23,13 @@ class ShowProductResource extends JsonResource
             'description' => $this->description,
             'status' => $this->status,
             'thumbnail' => $this->thumbnail,
-            'image_url' => $this->images->pluck('image_url'),
+            'images' => $this->images->map(function ($image) {
+                return [
+                    'image_url' => $image->image_url,
+                    'image_type' => $image->image_type,
+                    'image_size' => $image->image_size,
+                ];
+            })->unique()->values(),
             'type' => $this->properties->pluck('type')->unique()->values(),
             'amount' => $this->properties->pluck('amount')->unique()->values(),
             'discounted_price' => $this->properties->pluck('discounted_price')->unique()->values(),
