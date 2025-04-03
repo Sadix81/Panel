@@ -11,6 +11,7 @@ use Modules\Category\Database\Seeders\CategoryDatabaseSeeder;
 use Modules\Color\Database\Seeders\ColorDatabaseSeeder;
 use Modules\Comment\Database\Seeders\CommentDatabaseSeeder;
 use Modules\Favorite\Database\Seeders\FavoriteDatabaseSeeder;
+use Modules\Permission\Database\Seeders\PermissionDatabaseSeeder;
 use Modules\Product\Database\Seeders\ProductDatabaseSeeder;
 use Modules\Rating\Database\Seeders\RatingDatabaseSeeder;
 use Modules\Size\Database\Seeders\SizeDatabaseSeeder;
@@ -37,7 +38,8 @@ class DatabaseSeeder extends Seeder
             CommentDatabaseSeeder::class,
             FavoriteDatabaseSeeder::class,
             CartDatabaseSeeder::class,
-            RatingDatabaseSeeder::class
+            RatingDatabaseSeeder::class,
+            PermissionDatabaseSeeder::class,
         ]);
     }
 }

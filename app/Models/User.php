@@ -12,11 +12,13 @@ use Modules\Comment\Models\Comment;
 use Modules\Favorite\Models\Favorite;
 use Modules\Otp\Models\Otp;
 use Modules\Rating\Models\Rate;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    //  HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -77,7 +79,8 @@ class User extends Authenticatable
         return $this->hasOne(Cart::class);
     }
 
-    public function rates(){
+    public function rates()
+    {
         return $this->hasMany(Rate::class);
     }
 }
