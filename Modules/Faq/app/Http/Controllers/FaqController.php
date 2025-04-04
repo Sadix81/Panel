@@ -38,6 +38,10 @@ class FaqController extends Controller
             return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
         }
 
+        if (! $user->hasRole('SuperAdmin')) {
+            return response()->json(['message' => 'عدم دسترسی'], 403);
+        }
+
         $error = $this->faqRepo->store($request);
 
         if ($error === null) {
@@ -67,6 +71,10 @@ class FaqController extends Controller
             return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
         }
 
+        if (! $user->hasRole('SuperAdmin')) {
+            return response()->json(['message' => 'عدم دسترسی'], 403);
+        }
+        
         $error = $this->faqRepo->update($faq, $request);
         if ($error === null) {
             return response()->json(['message' => __('messages.faq.update.success', ['question' => $faq->question])], 200);
