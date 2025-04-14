@@ -18,5 +18,6 @@
     "Invoice": true,
     "Payment": true,
     "Rating": true,
-    "Permission": true
+    "Permission": true,
+    "Slider": true
 }
