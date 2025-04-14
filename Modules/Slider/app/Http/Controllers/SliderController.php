@@ -65,19 +65,12 @@ class SliderController extends Controller
 
     public function update(Slider $slider , Request $request)
     {
-
         $user = Auth::user();
-        $slider = Slider::find($slider);
 
         if (! $user) {
             return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
         }
-
-        if (!$slider) {
-            return response()->json(['message' => 'اسلاید یافت نشد.'], 404);
-        }
     
-
         $error = $this->sliderRepo->update($slider , $request);
         if ($error === null) {
             return response()->json(['message' => __('messages.slider.update.success')], 200);
