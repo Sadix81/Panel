@@ -11,8 +11,8 @@ class Slider extends Model
     use HasFactory;
 
     protected $fillable = [
-        // 'image_url',
-        // 'image_type',
-        // 'image_size',
+        'slider_image_url',
+        'slider_image_type',
+        'slider_image_size',
     ];
 }

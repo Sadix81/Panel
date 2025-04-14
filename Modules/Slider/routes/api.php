@@ -3,17 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Slider\Http\Controllers\SliderController;
 
-/*
- *--------------------------------------------------------------------------
- * API Routes
- *--------------------------------------------------------------------------
- *
- * Here is where you can register API routes for your application. These
- * routes are loaded by the RouteServiceProvider within a group which
- * is assigned the "api" middleware group. Enjoy building your API!
- *
-*/
 
-Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
-    Route::apiResource('slider', SliderController::class)->names('slider');
+Route::prefix('v1/slider')->middleware('auth:api')->group(function () {
+    Route::get('/', [SliderController::class, 'index']);
+    Route::post('/', [SliderController::class, 'store']);
+    Route::get('/{slider}', [SliderController::class, 'show']);
+    Route::put('/{slider}', [SliderController::class, 'update']);
+    Route::delete('/{slider}', [SliderController::class, 'destroy']);
 });

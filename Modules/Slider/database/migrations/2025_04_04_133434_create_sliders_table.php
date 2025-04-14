@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('sliders', function (Blueprint $table) {
             $table->id();
-            
+            $table->string('slider_image_url')->nullable();
+            $table->string('slider_image_type')->nullable(); // فیلد جدید برای نوع تصویر
+            $table->integer('slider_image_size')->nullable(); // فیلد جدید برای سایز تصویر
             $table->timestamps();
         });
     }
