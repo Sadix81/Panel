@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\Slider\Http\Requests\CreateSliderRequest;
-use Modules\Slider\Http\Requests\UpdateSliderRequest;
 use Modules\Slider\Models\Slider;
 use Modules\Slider\Repository\SliderRepository;
 use Modules\Slider\Transformers\IndexSliderResource;
@@ -14,13 +13,13 @@ use Modules\Slider\Transformers\ShowSliderResource;
 
 class SliderController extends Controller
 {
-
     private $sliderRepo;
 
     public function __construct(SliderRepository $sliderRepository)
     {
         $this->sliderRepo = $sliderRepository;
     }
+
     public function index()
     {
         $user = Auth::user();
@@ -60,18 +59,19 @@ class SliderController extends Controller
         if (! $user) {
             return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
         }
+
         return new ShowSliderResource($slider);
     }
 
-    public function update(Slider $slider , Request $request)
+    public function update(Slider $slider, Request $request)
     {
         $user = Auth::user();
 
         if (! $user) {
             return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
         }
-    
-        $error = $this->sliderRepo->update($slider , $request);
+
+        $error = $this->sliderRepo->update($slider, $request);
         if ($error === null) {
             return response()->json(['message' => __('messages.slider.update.success')], 200);
         } else {

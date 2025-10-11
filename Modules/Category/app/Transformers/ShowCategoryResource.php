@@ -18,9 +18,9 @@ class ShowCategoryResource extends JsonResource
             'image' => $this->image,
             'parent_id' => $this->parent_id,
             'parent_id_name' => $this->parent->name,
-            //Null-Safe Operator (?->) => 
-            // If $this->parent is null, the ?-> operator will prevent the code from trying to access the name property, 
-            //and parent_id_name will simply be null.
+            // Null-Safe Operator (?->) =>
+            // If $this->parent is null, the ?-> operator will prevent the code from trying to access the name property,
+            // and parent_id_name will simply be null.
         ];
     }
 }

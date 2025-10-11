@@ -3,8 +3,6 @@
 namespace Modules\Rating\Console;
 
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
 use Illuminate\Support\Facades\DB;
 use Modules\Product\Models\Product;
 use Modules\Rating\Models\Rate;
@@ -44,7 +42,7 @@ class ProductRating extends Command
                 $rateProductChart = Rate::where('product_id', $productId)->get();
                 $totalRatings = $rateProductChart->count();
                 $firstAverageRating = $totalRatings > 0 ? $rateProductChart->sum('rating') / $totalRatings : 0;
-                $finalAverageRating = floor($firstAverageRating); //حدف اعشار
+                $finalAverageRating = floor($firstAverageRating); // حدف اعشار
 
                 DB::table('rate_products')
                     ->updateOrInsert(
@@ -57,7 +55,7 @@ class ProductRating extends Command
             $this->info('Product ratings calculated and updated successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
-            $this->error('An error occurred while calculating product ratings: ' . $th->getMessage());
+            $this->error('An error occurred while calculating product ratings: '.$th->getMessage());
             throw $th;
         }
     }

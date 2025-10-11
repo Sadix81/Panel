@@ -4,9 +4,7 @@ namespace Modules\Permission\Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
-
 
 class PermissionDatabaseSeeder extends Seeder
 {
@@ -18,7 +16,7 @@ class PermissionDatabaseSeeder extends Seeder
         ]);
 
         $user = User::find(1);
-        if ($user && !$user->hasRole('SuperAdmin')) {
+        if ($user && ! $user->hasRole('SuperAdmin')) {
             $user->assignRole($role);
         }
     }
