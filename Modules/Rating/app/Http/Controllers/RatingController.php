@@ -33,6 +33,7 @@ class RatingController extends Controller
 
         return IndexRatingResource::collection($this->rateRepo->index());
     }
+
     public function store(RatingRequest $request)
     {
         $user = Auth::user();
@@ -45,26 +46,27 @@ class RatingController extends Controller
         if ($error === null) {
             return response()->json(['message' => 'امتیاز محصول با موفقیت ثبت شد'], 201);
         }
+
         return response()->json(['message' => 'امتیاز محصول ثبت نشد'], 500);
     }
 
     public function show(Product $product)
     {
         $user = Auth::user();
-    
-        if (!$user) {
+
+        if (! $user) {
             return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
         }
-    
+
         $ratings = Rate::where('product_id', $product->id)
             ->select('id', 'rating', 'user_id', 'product_id')
             ->get();
-    
+
         $finalAverageRating = $ratings->avg('rating');
         $userIds = $ratings->pluck('user_id')->toArray();
-    
+
         $ratingResources = ShowRatingResource::collection($ratings);
-    
+
         return response()->json([
             'average_rating' => $finalAverageRating,
             'ratings' => $ratingResources,
@@ -84,7 +86,7 @@ class RatingController extends Controller
             ->where('product_id', $request->product_id)
             ->first();
 
-        if (!$rate) {
+        if (! $rate) {
             return $this->store($request);
         }
 
@@ -92,6 +94,7 @@ class RatingController extends Controller
         if ($error === null) {
             return response()->json(['message' => 'امتیاز محصول با موفقیت ویرایش شد'], 200);
         }
+
         return response()->json(['message' => 'امتیاز محصول ویرتیش نشد'], 500);
     }
 

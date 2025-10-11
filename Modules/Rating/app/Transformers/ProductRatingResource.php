@@ -12,10 +12,10 @@ class ProductRatingResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return[
-          'id' => $this->id,  
-          'product_id' => $this->product_id,  
-          'totalrating' => $this->totalrating,  
+        return [
+            'id' => $this->id,
+            'product_id' => $this->product_id,
+            'totalrating' => $this->totalrating,
         ];
     }
 }

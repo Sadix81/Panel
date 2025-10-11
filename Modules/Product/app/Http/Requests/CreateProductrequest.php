@@ -27,7 +27,7 @@ class CreateProductrequest extends FormRequest
             'category_id.*' => ['required', 'exists:categories,id', 'integer', 'gt:0'],
             'type' => ['nullable', 'in:percentage,fixed'],
             'amount' => ['nullable', 'numeric', 'gt:0'],
-            'image_url' => ['nullable', 'array'],
+            'image_url' => ['nullable', 'array', 'max:4'], // حداکثر 4 تصویر
             'image_url.*' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:10240'], // Max size 10MB
         ];
     }
@@ -65,9 +65,11 @@ class CreateProductrequest extends FormRequest
             'amount.numeric' => 'مقدار تخفیف باید یک عدد باشد.',
             'amount.gt' => 'مقدار تخفیف باید بزرگ‌تر از صفر باشد.',
             'image_url.array' => 'تصاویر باید به صورت آرایه ارسال شوند.',
+            'image_url.max' => 'حداکثر تعداد تصاویر انتخابی باید ۴ عدد باشد.',
             'image_url.*.image' => 'تصویر باید از نوع jpeg، png، jpg یا gif باشد.',
             'image_url.*.mimes' => 'تصویر باید از نوع jpeg، png، jpg یا gif باشد.',
             'image_url.*.max' => 'حجم تصویر نباید از 10MB بیشتر باشد.',
+
         ];
     }
 }

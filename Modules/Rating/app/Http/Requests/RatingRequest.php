@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class RatingRequest extends FormRequest
 {
-
     public function rules(): array
     {
         return [
@@ -15,7 +14,6 @@ class RatingRequest extends FormRequest
             // 'user_id' => ['required' , 'string' , 'exists:products,id' , 'gt:0'],
         ];
     }
-
 
     public function authorize(): bool
     {

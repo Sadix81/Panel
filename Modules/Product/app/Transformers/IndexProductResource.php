@@ -15,7 +15,7 @@ class IndexProductResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'price' => $this->properties->pluck('price')->unique()->values(),
+            'price' => json_decode($this->properties->pluck('price')->unique()->values()->toJson()),
             'thumbnail' => $this->thumbnail,
             'quantity' => $this->properties->pluck('quantity')->unique()->values(),
             'status' => $this->status,

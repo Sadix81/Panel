@@ -23,7 +23,6 @@ class Discount extends Model
         'usage_limit',
         'used_count',
         'status',
-        'allprductsdiscount',
     ];
 
     public function product()

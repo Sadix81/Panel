@@ -27,7 +27,7 @@ class UpdateProductrequest extends FormRequest
             'category_id.*' => ['required', 'exists:categories,id', 'integer', 'gt:0'],
             'type' => ['nullable', 'in:percentage,fixed'],
             'amount' => ['nullable', 'numeric', 'gt:0'],
-            'image_url' => ['nullable', 'array'],
+            'image_url' => ['nullable', 'array', 'max:4'], // حداکثر 4 تصویر
             'image_url.*' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:10240'], // Max size 10MB
         ];
     }

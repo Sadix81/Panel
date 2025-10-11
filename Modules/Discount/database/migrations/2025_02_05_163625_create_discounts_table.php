@@ -21,7 +21,7 @@ return new class extends Migration
             $table->date('end_date')->nullable();
             $table->text('conditions')->nullable();
             $table->integer('usage_limit')->nullable();
-            $table->integer('used_count')->default(0);
+            $table->integer('used_count')->default(0)->nullable();
             $table->boolean('status')->nullable(); // فعال و عیر فعال کردن تخقیق
             $table->timestamps();
         });

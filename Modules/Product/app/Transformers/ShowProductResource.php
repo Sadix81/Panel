@@ -16,7 +16,7 @@ class ShowProductResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'category_id' => $this->properties->pluck('category_id')->unique()->values(),
-            'price' => $this->properties->pluck('price')->unique()->values(),
+            'price' => json_decode($this->properties->pluck('price')->unique()->values()->toJson()),
             'quantity' => $this->properties->pluck('quantity')->unique()->values(),
             'color' => $this->properties->pluck('color'),
             'size' => $this->properties->pluck('size'),
