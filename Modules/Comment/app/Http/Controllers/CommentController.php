@@ -10,7 +10,6 @@ use Modules\Comment\Models\Comment;
 use Modules\Comment\Repository\CommentRepository;
 use Modules\Comment\Transformers\IndexCommentResource;
 use Modules\Comment\Transformers\ShowCommentResource;
-use Modules\Product\Models\Product;
 
 class CommentController extends Controller
 {

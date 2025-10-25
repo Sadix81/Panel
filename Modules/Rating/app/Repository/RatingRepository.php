@@ -8,7 +8,6 @@ use Modules\Rating\Models\Rate;
 
 class RatingRepository implements RatingRepositoryInterface
 {
-
     public function index()
     {
         $req = [
@@ -41,7 +40,7 @@ class RatingRepository implements RatingRepositoryInterface
             ->first();
 
         if ($rate) {
-            return $this->update($rate,$request);
+            return $this->update($rate, $request);
         }
 
         DB::beginTransaction();
@@ -65,7 +64,6 @@ class RatingRepository implements RatingRepositoryInterface
         $rate = Rate::where('user_id', $auth)
             ->where('product_id', $request->product_id)
             ->first();
-
 
         DB::beginTransaction();
         try {

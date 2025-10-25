@@ -13,7 +13,7 @@ class UpdateSizeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string', 'max:20',Rule::unique('sizes' , 'title')->ignore($this->size)],
+            'title' => ['required', 'string', 'max:20', Rule::unique('sizes', 'title')->ignore($this->size)],
         ];
     }
 

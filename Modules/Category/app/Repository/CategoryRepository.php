@@ -17,7 +17,7 @@ class CategoryRepository implements CategoryRepositoryInterface
 
         $category = Category::where(function ($query) use ($req) {
             if ($req['search']) {
-                $query->where('name', 'like', '%' . $req['search'] . '%');
+                $query->where('name', 'like', '%'.$req['search'].'%');
             }
         })
             ->orderBy($req['sort'], $req['order'])
@@ -33,8 +33,8 @@ class CategoryRepository implements CategoryRepositoryInterface
             $mimeType = $file->getMimeType();
 
             // ایجاد نام یونیک برای تصویر
-            $image_name = time() . '-' . $file->getClientOriginalName();
-            $relative_path = 'images/' . $image_name;
+            $image_name = time().'-'.$file->getClientOriginalName();
+            $relative_path = 'images/'.$image_name;
 
             // بارگذاری تصویر با توجه به نوع MIME
             switch ($mimeType) {
@@ -83,8 +83,8 @@ class CategoryRepository implements CategoryRepositoryInterface
             $mimeType = $file->getMimeType();
 
             // ایجاد نام یونیک برای تصویر
-            $image_name = time() . '-' . $file->getClientOriginalName();
-            $relative_path = 'images/' . $image_name;
+            $image_name = time().'-'.$file->getClientOriginalName();
+            $relative_path = 'images/'.$image_name;
 
             // بارگذاری تصویر با توجه به نوع MIME
             switch ($mimeType) {

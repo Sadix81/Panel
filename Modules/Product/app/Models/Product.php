@@ -49,7 +49,8 @@ class Product extends Model
         return $this->hasMany(Favorite::class);
     }
 
-    public function rates(){
+    public function rates()
+    {
         return $this->hasMany(Rate::class);
     }
 }

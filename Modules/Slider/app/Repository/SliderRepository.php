@@ -2,7 +2,6 @@
 
 namespace Modules\Slider\Repository;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Modules\Slider\Models\Slider;
@@ -12,6 +11,7 @@ class SliderRepository implements SliderRepositoryInterface
     public function index()
     {
         $sliders = Slider::all();
+
         return $sliders;
     }
 
@@ -29,7 +29,6 @@ class SliderRepository implements SliderRepositoryInterface
             }
         }
     }
-
 
     public function update($slider, $request)
     {
@@ -55,9 +54,11 @@ class SliderRepository implements SliderRepositoryInterface
 
         try {
             $slider->update($data);
+
             return null;
         } catch (\Exception $e) {
-            Log::error('Error updating slider: ' . $e->getMessage());
+            Log::error('Error updating slider: '.$e->getMessage());
+
             return 'Update failed';
         }
     }

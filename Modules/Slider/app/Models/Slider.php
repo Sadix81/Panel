@@ -2,8 +2,9 @@
 
 namespace Modules\Slider\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
 // use Modules\Slider\Database\Factories\SliderFactory;
 
 class Slider extends Model
