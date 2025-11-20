@@ -43,7 +43,7 @@ class DiscountController extends Controller
             return response()->json(['message' => 'نمیتوان صد در صد تخفیف اعمال کرد']);
         }
 
-        if ($request->start_date < $request->end_date) {
+        if ($request->start_date > $request->end_date) {
             return response()->json(['message' => 'تاریخ انقضای کد نادرست است']);
         }
 
