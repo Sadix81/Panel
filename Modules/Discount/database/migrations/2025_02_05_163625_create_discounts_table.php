@@ -17,8 +17,8 @@ return new class extends Migration
             $table->enum('type', ['percentage', 'fixed']);
             $table->decimal('amount', 9, 2); // مقدار تخفیف
             $table->decimal('minimum_purchase', 9, 2)->nullable(); // حداقل مبلغ خرید
-            $table->date('start_date')->nullable();
-            $table->date('end_date')->nullable();
+            $table->timestamp('start_date')->nullable();
+            $table->timestamp('end_date')->nullable();
             $table->text('conditions')->nullable();
             $table->integer('usage_limit')->nullable();
             $table->integer('used_count')->default(0)->nullable();
