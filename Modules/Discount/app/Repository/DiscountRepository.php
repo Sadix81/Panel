@@ -57,7 +57,6 @@ class DiscountRepository implements DiscountRepositoryInterface
             'used_count' => $request->used_count,
             'status' => $request->status !== null ? $request->status : 1,
         ]);
-        // dd($request->all());
     }
 
     public function update($discount, $request)
