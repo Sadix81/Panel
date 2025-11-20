@@ -44,9 +44,21 @@ class AuthController extends Controller
         $user = User::where('username', $request->username)
             ->orWhere('email', $request->email)->first();
 
-        if (! $user) {
-            return response()->json('.کاربر یافت نشد');
-        }
+            if (is_null($request->username) && is_null($request->password)) {
+                return response()->json(['message' => 'نام کاربری و رمز عبور وارد نشده است'], 400);
+            }
+
+            if (is_null($request->username)) {
+                return response()->json(['message' => 'نام کاربری وارد نشده است'], 400);
+            }
+
+            if (is_null($request->password)) {
+                return response()->json(['message' => 'رمز عبور وارد نشده است'], 400);
+            }
+
+            if (! $user) {
+                return response()->json('کاربر یافت نشد');
+            }
 
         if ($user->twofactor == false) {
             return $this->authRepo->login($request);
@@ -66,6 +78,7 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
+        dd('69');
         $accessToken = $this->authRepo->login($request);
         if ($accessToken) {
             return response()->json([
@@ -74,7 +87,6 @@ class AuthController extends Controller
                 '__token__' => $accessToken['__token__'],
             ], 200);
         }
-
         return response()->json(['message' => __('messages.user.auth.login.failed')], 403);
     }
 
