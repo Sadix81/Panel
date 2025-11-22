@@ -12,6 +12,7 @@ use Modules\Auth\Http\Requests\RegisterRequest;
 use Modules\Auth\Jobs\LoginJob;
 use Modules\Auth\Jobs\RegisterJob;
 use Modules\Auth\Repository\AuthRepository;
+use Modules\Auth\Transformers\UserInfoResource;
 use Modules\Otp\Http\Requests\RegisterVerificationOtpRequest;
 use Modules\Otp\Http\Requests\ResendOtpRequest;
 use Modules\Otp\Models\Otp;
@@ -180,5 +181,15 @@ class AuthController extends Controller
         }
 
         return response()->json(['message' => __('messages.user.auth.logout.failed')], 403);
+    }
+
+    public function user() {
+        $user = Auth::user();
+
+        if (! $user) {
+            return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
+        }
+        return new UserInfoResource($user);
+
     }
 }
