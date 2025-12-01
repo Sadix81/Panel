@@ -45,7 +45,7 @@ class AuthController extends Controller
             ->orWhere('email', $request->email)->first();
 
         if (! $user) {
-            return response()->json('.کاربر یافت نشد');
+            return response()->json(['message' => '.کاربر یافت نشد'] , 404);
         }
 
         if ($user->twofactor == false) {
