@@ -58,7 +58,7 @@ class AuthController extends Controller
             }
 
             if (! $user) {
-                return response()->json('کاربر یافت نشد');
+                return response()->json(['message' => 'کاربر یافت نشد'], 404);
             }
 
         if ($user->twofactor == false) {
@@ -79,7 +79,6 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        dd('69');
         $accessToken = $this->authRepo->login($request);
         if ($accessToken) {
             return response()->json([
