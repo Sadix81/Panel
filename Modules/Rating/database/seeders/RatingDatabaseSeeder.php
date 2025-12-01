@@ -15,8 +15,8 @@ class RatingDatabaseSeeder extends Seeder
         for ($i = 1; $i < 30; $i++) {
             Rate::create([
                 'user_id' => rand(1, 2),
-                'product_id' => rand(1,6),
-                'rating' => rand(1,5),
+                'product_id' => rand(1, 6),
+                'rating' => rand(1, 5),
             ]);
         }
     }

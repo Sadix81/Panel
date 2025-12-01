@@ -74,7 +74,7 @@ class FaqController extends Controller
         if (! $user->hasRole('SuperAdmin')) {
             return response()->json(['message' => 'عدم دسترسی'], 403);
         }
-        
+
         $error = $this->faqRepo->update($faq, $request);
         if ($error === null) {
             return response()->json(['message' => __('messages.faq.update.success', ['question' => $faq->question])], 200);

@@ -19,16 +19,16 @@ class CommentRepository implements CommentRepositoryInterface
         ];
 
         $comment = Comment::where(function ($query) use ($req) {
-                if ($req['search']) {
-                    $query->where('text', 'like', '%'.$req['search'].'%');
-                }
-                if ($req['product_id']) {
-                    $query->where('product_id', $req['product_id']);
-                }
-                if ($req['status'] !== null) {
-                    $query->where('status', $req['status']);
-                }
-            })
+            if ($req['search']) {
+                $query->where('text', 'like', '%'.$req['search'].'%');
+            }
+            if ($req['product_id']) {
+                $query->where('product_id', $req['product_id']);
+            }
+            if ($req['status'] !== null) {
+                $query->where('status', $req['status']);
+            }
+        })
             ->orderBy($req['sort'], $req['order'])
             ->paginate($req['limit']);
 

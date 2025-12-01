@@ -2,7 +2,6 @@
 
 namespace Modules\Slider\Repository;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Modules\Slider\Models\Slider;
@@ -12,6 +11,7 @@ class SliderRepository implements SliderRepositoryInterface
     public function index()
     {
         $sliders = Slider::all();
+
         return $sliders;
     }
 
@@ -37,7 +37,6 @@ class SliderRepository implements SliderRepositoryInterface
         }
     }
 
-
     public function update($slider, $request)
     {
         $oldImagePath = $slider->slider_image_url;
@@ -57,10 +56,14 @@ class SliderRepository implements SliderRepositoryInterface
         // انتقال تصویر به مسیر مورد نظر
         $newSliderImage->move(public_path('images/sliders'), $image_name);
 
-        // حذف تصویر قدیمی
-        if ($oldImagePath) {
-            Storage::disk('public')->delete($oldImagePath); // این خط را می‌توانید حذف کنید
-            @unlink(public_path($oldImagePath)); // حذف تصویر قدیمی از مسیر public
+        try {
+            $slider->update($data);
+
+            return null;
+        } catch (\Exception $e) {
+            Log::error('Error updating slider: '.$e->getMessage());
+
+            return 'Update failed';
         }
     }
         try {

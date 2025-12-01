@@ -30,7 +30,7 @@ class ProductRepository implements ProductRepositoryInterface
             }
 
             if (! empty($req['search'])) {
-                $query->where('name', 'like', '%' . $req['search'] . '%');
+                $query->where('name', 'like', '%'.$req['search'].'%');
             }
 
             // Filter by properties
@@ -78,7 +78,7 @@ class ProductRepository implements ProductRepositoryInterface
                     // بررسی اینکه آیا فایل معتبر است
                     if ($file instanceof \Illuminate\Http\UploadedFile) {
                         $mimeType = $file->getMimeType();
-                        $image_name = time() . '-' . $file->getClientOriginalName();
+                        $image_name = time().'-'.$file->getClientOriginalName();
                         $image_size = $file->getSize(); // دریافت سایز تصویر
 
                         // بارگذاری تصویر با توجه به نوع MIME
@@ -86,15 +86,15 @@ class ProductRepository implements ProductRepositoryInterface
                             case 'image/jpeg':
                             case 'image/pjpeg':
                                 $image = imagecreatefromjpeg($file->getRealPath());
-                                imagejpeg($image, public_path('images/' . $image_name), 50);
+                                imagejpeg($image, public_path('images/'.$image_name), 50);
                                 break;
                             case 'image/png':
                                 $image = imagecreatefrompng($file->getRealPath());
-                                imagepng($image, public_path('images/' . $image_name), 4);
+                                imagepng($image, public_path('images/'.$image_name), 4);
                                 break;
                             case 'image/gif':
                                 $image = imagecreatefromgif($file->getRealPath());
-                                imagegif($image, public_path('images/' . $image_name));
+                                imagegif($image, public_path('images/'.$image_name));
                                 break;
                             default:
                                 return response()->json(['message' => 'فرمت فایل پشتیبانی نمی‌شود.'], 400);
@@ -105,12 +105,12 @@ class ProductRepository implements ProductRepositoryInterface
                         try {
                             // ذخیره آدرس تصویر و اطلاعات اضافی در جدول تصاویر
                             $product->images()->create([
-                                'image_url' => asset('images/' . $image_name),
+                                'image_url' => asset('images/'.$image_name),
                                 'image_type' => $mimeType, // ذخیره نوع تصویر
                                 'image_size' => $image_size, // ذخیره سایز تصویر
                             ]);
                         } catch (\Throwable $th) {
-                            Log::error('Error saving image: ' . $th->getMessage());
+                            Log::error('Error saving image: '.$th->getMessage());
                         }
                     }
                 }
@@ -293,7 +293,7 @@ class ProductRepository implements ProductRepositoryInterface
                 if ($product->images()->count() > 0) {
                     foreach ($product->images as $image) {
                         // حذف فایل تصویر از سرور
-                        $imagePath = public_path('images/' . basename($image->image_url)); // اطمینان از اینکه فقط نام فایل گرفته می‌شود
+                        $imagePath = public_path('images/'.basename($image->image_url)); // اطمینان از اینکه فقط نام فایل گرفته می‌شود
                         if (file_exists($imagePath) && is_file($imagePath)) { // بررسی اینکه آیا واقعاً یک فایل است
                             unlink($imagePath);
                         }
@@ -306,21 +306,21 @@ class ProductRepository implements ProductRepositoryInterface
                     if ($file instanceof \Illuminate\Http\UploadedFile) {
                         $mimeType = $file->getMimeType();
                         $image_size = $file->getSize();
-                        $image_name = time() . '-' . $file->getClientOriginalName();
+                        $image_name = time().'-'.$file->getClientOriginalName();
 
                         switch ($mimeType) {
                             case 'image/jpeg':
                             case 'image/pjpeg':
                                 $image = imagecreatefromjpeg($file->getRealPath());
-                                imagejpeg($image, public_path('images/' . $image_name), 50);
+                                imagejpeg($image, public_path('images/'.$image_name), 50);
                                 break;
                             case 'image/png':
                                 $image = imagecreatefrompng($file->getRealPath());
-                                imagepng($image, public_path('images/' . $image_name), 4);
+                                imagepng($image, public_path('images/'.$image_name), 4);
                                 break;
                             case 'image/gif':
                                 $image = imagecreatefromgif($file->getRealPath());
-                                imagegif($image, public_path('images/' . $image_name));
+                                imagegif($image, public_path('images/'.$image_name));
                                 break;
                             default:
                                 return response()->json(['message' => 'فرمت فایل پشتیبانی نمی‌شود.'], 400);
@@ -330,12 +330,12 @@ class ProductRepository implements ProductRepositoryInterface
                         try {
                             // ذخیره آدرس تصویر و اطلاعات اضافی در جدول تصاویر
                             $product->images()->create([
-                                'image_url' => asset('images/' . $image_name),
+                                'image_url' => asset('images/'.$image_name),
                                 'image_type' => $mimeType, // ذخیره نوع تصویر
                                 'image_size' => $image_size, // ذخیره سایز تصویر
                             ]);
                         } catch (\Throwable $th) {
-                            Log::error('Error saving image: ' . $th->getMessage());
+                            Log::error('Error saving image: '.$th->getMessage());
                         }
                     }
                 }
@@ -366,8 +366,8 @@ class ProductRepository implements ProductRepositoryInterface
         if ($product_images && $product_images->images) {
             foreach ($product_images->images as $image) {
                 // حذف فایل تصویر از سرور
-                if (file_exists(public_path('images/' . basename($image->image_url)))) {
-                    unlink(public_path('images/' . basename($image->image_url))); // حذف فایل تصویر
+                if (file_exists(public_path('images/'.basename($image->image_url)))) {
+                    unlink(public_path('images/'.basename($image->image_url))); // حذف فایل تصویر
                 }
                 $image->delete();
             }

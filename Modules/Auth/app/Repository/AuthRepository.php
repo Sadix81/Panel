@@ -47,6 +47,19 @@ class AuthRepository implements AuthRepositoryInterface
 
     public function login($request)
     {
+
+        if (is_null($request->username) && is_null($request->password)) {
+            return response()->json(['message' => 'نام کاربری و رمز عبور وارد نشده است'], 400);
+        }
+
+        if (is_null($request->username)) {
+            return response()->json(['message' => 'نام کاربری وارد نشده است'], 400);
+        }
+
+        if (is_null($request->password)) {
+            return response()->json(['message' => 'رمز عبور وارد نشده است'], 400);
+        }
+
         $user = User::where('username', $request->username)
             ->orWhere('email', $request->email)->first();
 

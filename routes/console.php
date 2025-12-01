@@ -14,7 +14,7 @@ class Kernel extends ConsoleKernel
         // Schedule the ProductRating command to run every three minutes
         $schedule->command('rating:calculate')->everyThreeMinutes();
     }
-    
+
     protected function commands()
     {
         $this->load(__DIR__.'/Commands');
