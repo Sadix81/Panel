@@ -17,7 +17,7 @@ class CreateDiscountRequest extends FormRequest
             'amount' => ['required', 'numeric', 'min:0'], // مقدار تخفیف (عدد مثبت)
             'minimum_purchase' => ['nullable', 'numeric', 'min:0'], // حداقل مبلغ خرید (اختیاری و عدد مثبت)
             'start_date' => ['nullable', 'date', 'after_or_equal:today'], // تاریخ شروع (باید تاریخ معتبری باشد و از امروز بعدی باشد)
-            'end_date' => ['nullable', 'date', 'after:start_date'], // تاریخ پایان (باید بعد از تاریخ شروع باشد)
+            'end_date' => ['nullable', 'date', 'after_or_equal:start_date'], // تاریخ پایان (باید بعد از تاریخ شروع باشد)
             'conditions' => ['nullable', 'string'], // شرایط استفاده (اختیاری)
             'usage_limit' => ['nullable', 'integer', 'min:1'], // محدودیت استفاده (اختیاری و عدد صحیح مثبت)
             'used_count' => ['nullable', 'integer', 'min:0'], // تعداد استفاده (اختیاری و عدد صحیح غیر منفی)
