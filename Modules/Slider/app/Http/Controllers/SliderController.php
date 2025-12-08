@@ -3,7 +3,6 @@
 namespace Modules\Slider\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\Slider\Http\Requests\CreateSliderRequest;
 use Modules\Slider\Http\Requests\UpdateSliderRequest;

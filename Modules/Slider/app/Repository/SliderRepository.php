@@ -3,7 +3,6 @@
 namespace Modules\Slider\Repository;
 
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use Modules\Slider\Models\Slider;
 
 class SliderRepository implements SliderRepositoryInterface
@@ -23,8 +22,8 @@ class SliderRepository implements SliderRepositoryInterface
                 $mimeType = $slider->getClientMimeType();
                 $size = $slider->getSize(); // اندازه فایل
 
-                $image_name = time() . '-' . $slider->getClientOriginalName();
-                $relative_path = 'images/sliders/' . $image_name;
+                $image_name = time().'-'.$slider->getClientOriginalName();
+                $relative_path = 'images/sliders/'.$image_name;
 
                 $slider->move(public_path('images/sliders'), $image_name);
 
@@ -55,8 +54,8 @@ class SliderRepository implements SliderRepositoryInterface
 
                 $newSliderImage = $request->file('slider_image_url');
                 $mimeType = $newSliderImage->getClientMimeType();
-                $image_name = time() . '-' . $newSliderImage->getClientOriginalName();
-                $relative_path = 'images/sliders/' . $image_name;
+                $image_name = time().'-'.$newSliderImage->getClientOriginalName();
+                $relative_path = 'images/sliders/'.$image_name;
 
                 // ذخیره تصویر جدید
                 $newSliderImage->move(public_path('images/sliders'), $image_name);
@@ -70,7 +69,8 @@ class SliderRepository implements SliderRepositoryInterface
 
             return null;
         } catch (\Exception $e) {
-            Log::error('Error updating slider: ' . $e->getMessage());
+            Log::error('Error updating slider: '.$e->getMessage());
+
             return 'Update failed';
         }
     }
