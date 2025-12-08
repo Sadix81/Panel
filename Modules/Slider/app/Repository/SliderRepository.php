@@ -39,40 +39,40 @@ class SliderRepository implements SliderRepositoryInterface
 
     public function update($slider, $request)
     {
-        $oldImagePath = $slider->slider_image_url;
-        $data = [
-            'slider_image_url' => $oldImagePath,
-            'slider_image_type' => $slider->slider_image_type,
-            'slider_image_size' => $slider->slider_image_size,
-        ];
-
-        if ($request->hasFile('slider_image_url')) {
-            $newSliderImage = $request->file('slider_image_url');
-
-        // ایجاد نام یونیک برای تصویر
-        $image_name = time() . '-' . $newSliderImage->getClientOriginalName();
-        $data['slider_image_url'] = 'images/sliders/' . $image_name;
-
-        // انتقال تصویر به مسیر مورد نظر
-        $newSliderImage->move(public_path('images/sliders'), $image_name);
-
         try {
+            $data = [
+                'slider_image_type' => $slider->slider_image_type,
+                'slider_image_size' => $slider->slider_image_size,
+            ];
+
+            if ($request->hasFile('slider_image_url')) {
+                if ($slider->slider_image_url) {
+                    $oldImagePath = public_path($slider->slider_image_url);
+                    if (file_exists($oldImagePath)) {
+                        unlink($oldImagePath);
+                    }
+                }
+
+                $newSliderImage = $request->file('slider_image_url');
+                $mimeType = $newSliderImage->getClientMimeType();
+                $image_name = time() . '-' . $newSliderImage->getClientOriginalName();
+                $relative_path = 'images/sliders/' . $image_name;
+
+                // ذخیره تصویر جدید
+                $newSliderImage->move(public_path('images/sliders'), $image_name);
+
+                $data['slider_image_url'] = $relative_path;
+                $data['slider_image_type'] = $mimeType;
+                $data['slider_image_size'] = filesize(public_path($relative_path)); // استفاده از filesize برای به دست آوردن اندازه
+            }
+
             $slider->update($data);
 
             return null;
         } catch (\Exception $e) {
-            Log::error('Error updating slider: '.$e->getMessage());
-
+            Log::error('Error updating slider: ' . $e->getMessage());
             return 'Update failed';
         }
-    }
-        try {
-        $slider->update($data);
-        return null;
-    } catch (\Exception $e) {
-        Log::error('Error updating slider: ' . $e->getMessage());
-        return 'Update failed';
-    }
     }
 
     public function delete($slider)

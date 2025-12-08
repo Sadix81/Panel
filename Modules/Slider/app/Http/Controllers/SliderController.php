@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\Slider\Http\Requests\CreateSliderRequest;
+use Modules\Slider\Http\Requests\UpdateSliderRequest;
 use Modules\Slider\Models\Slider;
 use Modules\Slider\Repository\SliderRepository;
 use Modules\Slider\Transformers\IndexSliderResource;
@@ -63,7 +64,7 @@ class SliderController extends Controller
         return new ShowSliderResource($slider);
     }
 
-    public function update(Slider $slider, Request $request)
+    public function update(Slider $slider, UpdateSliderRequest $request)
     {
         $user = Auth::user();
 
