@@ -15,7 +15,7 @@ class ShowCategoryResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'image' => $this->image,
+            'image' => $this->image ? asset('/' . $this->image) : null, // تولید آدرس کامل عکس
             'parent_id' => $this->parent_id,
             'parent_id_name' => $this->parent?->name,
             // Null-Safe Operator (?->) =>

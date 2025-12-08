@@ -39,20 +39,20 @@ class ProfileRepository implements ProfileRepositoryInterface
 
             // JPEG
             if ($mimeType === 'image/jpeg' || $mimeType === 'image/pjpeg') {
-                imagejpeg($image, public_path('images/'.$image_name), 50); // 30 درصد کیفیت
+                imagejpeg($image, public_path('images/profile/'.$image_name), 50); // 30 درصد کیفیت
             } else {
                 // PNG(0 / 9) هرچی عدد بیشتر شود فشرده ساری بیشتر میشود
                 if ($mimeType === 'image/png') {
-                    imagepng($image, public_path('images/'.$image_name), 4);
+                    imagepng($image, public_path('images/profile/'.$image_name), 4);
                 } elseif ($mimeType === 'image/gif') {
-                    imagegif($image, public_path('images/'.$image_name));
+                    imagegif($image, public_path('images/profile/'.$image_name));
                 }
             }
 
             // آزاد کردن منابع تصویر
             imagedestroy($image);
 
-            $image_url = asset('images/'.$image_name);
+            $image_url = asset('images/profile/'.$image_name); // تولید آدرس کامل
         } else {
             // اگر تصویری آپلود نشده، URL قبلی را حفظ کنید
             $image_url = $user->avatar;
