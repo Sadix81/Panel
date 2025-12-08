@@ -17,7 +17,7 @@ class CategoryRepository implements CategoryRepositoryInterface
 
         $category = Category::where(function ($query) use ($req) {
             if ($req['search']) {
-                $query->where('name', 'like', '%' . $req['search'] . '%');
+                $query->where('name', 'like', '%'.$req['search'].'%');
             }
         })
             ->orderBy($req['sort'], $req['order'])
@@ -33,8 +33,8 @@ class CategoryRepository implements CategoryRepositoryInterface
             $file = $request->file('image');
             $mimeType = $file->getMimeType();
 
-            $image_name = time() . '-' . $file->getClientOriginalName();
-            $relative_path = 'images/categories/' . $image_name;
+            $image_name = time().'-'.$file->getClientOriginalName();
+            $relative_path = 'images/categories/'.$image_name;
 
             switch ($mimeType) {
                 case 'image/jpeg':
@@ -82,8 +82,8 @@ class CategoryRepository implements CategoryRepositoryInterface
             if ($request->hasFile('image')) {
                 $file = $request->file('image');
                 $mimeType = $file->getMimeType();
-                $image_name = time() . '-' . $file->getClientOriginalName();
-                $relative_path = 'images/categories/' . $image_name;
+                $image_name = time().'-'.$file->getClientOriginalName();
+                $relative_path = 'images/categories/'.$image_name;
 
                 switch ($mimeType) {
                     case 'image/jpeg':
@@ -111,7 +111,7 @@ class CategoryRepository implements CategoryRepositoryInterface
 
             $category->update($data);
         } catch (\Exception $e) {
-            throw new \Exception('خطا در به‌روزرسانی دسته‌بندی: ' . $e->getMessage());
+            throw new \Exception('خطا در به‌روزرسانی دسته‌بندی: '.$e->getMessage());
         }
     }
 
