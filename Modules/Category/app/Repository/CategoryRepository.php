@@ -17,7 +17,7 @@ class CategoryRepository implements CategoryRepositoryInterface
 
         $category = Category::where(function ($query) use ($req) {
             if ($req['search']) {
-                $query->where('name', 'like', '%'.$req['search'].'%');
+                $query->where('name', 'like', '%' . $req['search'] . '%');
             }
         })
             ->orderBy($req['sort'], $req['order'])
@@ -28,15 +28,14 @@ class CategoryRepository implements CategoryRepositoryInterface
 
     public function store($request)
     {
-        if (request()->hasFile('image')) {
+        $image_url = null;
+        if ($request->hasFile('image')) {
             $file = $request->file('image');
             $mimeType = $file->getMimeType();
 
-            // ایجاد نام یونیک برای تصویر
-            $image_name = time().'-'.$file->getClientOriginalName();
-            $relative_path = 'images/'.$image_name;
+            $image_name = time() . '-' . $file->getClientOriginalName();
+            $relative_path = 'images/categories/' . $image_name;
 
-            // بارگذاری تصویر با توجه به نوع MIME
             switch ($mimeType) {
                 case 'image/jpeg':
                 case 'image/pjpeg':
@@ -52,11 +51,9 @@ class CategoryRepository implements CategoryRepositoryInterface
                     return response()->json(['message' => 'فرمت فایل پشتیبانی نمی‌شود.'], 400);
             }
 
-            // JPEG
-            if ($mimeType === 'image/jpeg' || $mimeType === 'image/pjpeg') {
-                imagejpeg($image, public_path($relative_path), 50); // 50% quality
-            } elseif ($mimeType === 'image/png') {
-                imagepng($image, public_path($relative_path), 4); // Compression level 4
+            imagejpeg($image, public_path($relative_path), 50);
+            if ($mimeType === 'image/png') {
+                imagepng($image, public_path($relative_path), 4);
             } elseif ($mimeType === 'image/gif') {
                 imagegif($image, public_path($relative_path));
             }
@@ -64,68 +61,58 @@ class CategoryRepository implements CategoryRepositoryInterface
             // آزاد کردن منابع تصویر
             imagedestroy($image);
 
-            // Save the relative path in the database
-            $image_url = $relative_path;
+            $image_url = $relative_path; // آدرس تصویر
         }
 
-        $category = Category::create([
+        Category::create([
             'name' => $request->name,
-            'image' => $request->image ? $image_url : null,
+            'image' => $image_url, // استفاده از متغیر $image_url
             'parent_id' => $request->parent_id,
         ]);
-        $category->save();
     }
 
     public function update($category, $request)
     {
-        if (request()->hasFile('image')) {
-            $file = $request->file('image');
-            $mimeType = $file->getMimeType();
+        try {
+            $data = [
+                'name' => $request->name ?: $category->name,
+                'parent_id' => $request->parent_id,
+            ];
 
-            // ایجاد نام یونیک برای تصویر
-            $image_name = time().'-'.$file->getClientOriginalName();
-            $relative_path = 'images/'.$image_name;
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                $mimeType = $file->getMimeType();
+                $image_name = time() . '-' . $file->getClientOriginalName();
+                $relative_path = 'images/categories/' . $image_name;
 
-            // بارگذاری تصویر با توجه به نوع MIME
-            switch ($mimeType) {
-                case 'image/jpeg':
-                case 'image/pjpeg':
-                    $image = imagecreatefromjpeg($file->getRealPath());
-                    break;
-                case 'image/png':
-                    $image = imagecreatefrompng($file->getRealPath());
-                    break;
-                case 'image/gif':
-                    $image = imagecreatefromgif($file->getRealPath());
-                    break;
-                default:
-                    return response()->json(['message' => 'فرمت فایل پشتیبانی نمی‌شود.'], 400);
+                switch ($mimeType) {
+                    case 'image/jpeg':
+                    case 'image/pjpeg':
+                        $image = imagecreatefromjpeg($file->getRealPath());
+                        imagejpeg($image, public_path($relative_path), 50);
+                        break;
+                    case 'image/png':
+                        $image = imagecreatefrompng($file->getRealPath());
+                        imagepng($image, public_path($relative_path), 4);
+                        break;
+                    case 'image/gif':
+                        $image = imagecreatefromgif($file->getRealPath());
+                        imagegif($image, public_path($relative_path));
+                        break;
+                }
+
+                // آزاد کردن منابع تصویر
+                imagedestroy($image);
+
+                $data['image'] = $relative_path;
+            } else {
+                $data['image'] = $category->image;
             }
 
-            // Save the image to the public directory
-            if ($mimeType === 'image/jpeg' || $mimeType === 'image/pjpeg') {
-                imagejpeg($image, public_path($relative_path), 50); // 50% quality
-            } elseif ($mimeType === 'image/png') {
-                imagepng($image, public_path($relative_path), 4); // Compression level 4
-            } elseif ($mimeType === 'image/gif') {
-                imagegif($image, public_path($relative_path));
-            }
-
-            // Free up memory
-            imagedestroy($image);
-
-            // Save the relative path in the database
-            $image_url = $relative_path;
-        } else {
-            // اگر تصویری آپلود نشده، URL قبلی را حفظ کنید
-            $image_url = $category->image;
+            $category->update($data);
+        } catch (\Exception $e) {
+            throw new \Exception('خطا در به‌روزرسانی دسته‌بندی: ' . $e->getMessage());
         }
-
-        $category->update([
-            'name' => $request->name ? $request->name : $category->name,
-            'image' => $request->image ? $image_url : $category->image,
-            'parent_id' => $request->parent_id,
-        ]);
     }
 
     public function remove_category_image($category)

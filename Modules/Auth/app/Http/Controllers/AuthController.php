@@ -49,9 +49,9 @@ class AuthController extends Controller
                 return response()->json(['message' => 'نام کاربری و رمز عبور وارد نشده است'], 400);
             }
 
-            if (is_null($request->username)) {
-                return response()->json(['message' => 'نام کاربری وارد نشده است'], 400);
-            }
+            // if (is_null($request->username)) {
+            //     return response()->json(['message' => 'نام کاربری وارد نشده است'], 400);
+            // }
 
             if (is_null($request->password)) {
                 return response()->json(['message' => 'رمز عبور وارد نشده است'], 400);

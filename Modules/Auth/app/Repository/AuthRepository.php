@@ -52,7 +52,7 @@ class AuthRepository implements AuthRepositoryInterface
             return response()->json(['message' => 'نام کاربری و رمز عبور وارد نشده است'], 400);
         }
 
-        if (is_null($request->username)) {
+        if (is_null($request->email)) {
             return response()->json(['message' => 'نام کاربری وارد نشده است'], 400);
         }
 
