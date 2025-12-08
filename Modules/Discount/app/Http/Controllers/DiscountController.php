@@ -77,11 +77,11 @@ class DiscountController extends Controller
         }
 
         if ($request->type == 'percentage' && $request->amount >= 100) {
-            return response()->json(['message' => 'نمیتوان صد در صد تخفیف اعمال کرد'] , 400);
+            return response()->json(['message' => 'نمیتوان صد در صد تخفیف اعمال کرد'], 400);
         }
 
         if ($request->end_date && $request->end_date < $discount->start_date) {
-            return response()->json(['message' => 'تاریخ انقضای کد نادرست است'] , 400);
+            return response()->json(['message' => 'تاریخ انقضای کد نادرست است'], 400);
         }
 
         $error = $this->discountRepository->update($discount, $request);

@@ -64,7 +64,7 @@ class ProfileRepository implements ProfileRepositoryInterface
             'mobile' => $request->mobile ? $request->mobile : $user->mobile,
             'email' => $request->email ? $request->email : $user->email,
             'avatar' => $request->avatar ? $image_url : $user->avatar,
-            'twofactor' => $request->twofactor !== null ? $request->twofactor : $user-> twofactor,
+            'twofactor' => $request->twofactor !== null ? $request->twofactor : $user->twofactor,
 
         ]);
     }

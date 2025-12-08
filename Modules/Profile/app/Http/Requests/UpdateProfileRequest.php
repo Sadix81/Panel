@@ -15,7 +15,7 @@ class UpdateProfileRequest extends FormRequest
             'mobile' => ['nullable', 'regex:/[0-9]{10}/', 'digits:11', Rule::unique('users')->ignore($this->user()->id)],
             'email' => ['nullable', 'email', Rule::unique('users')->ignore($this->user()->id)],
             'avatar' => ['nullable', 'image', 'mimes:jpg,jpeg,png,bmp,gif,svg,webp', 'max:10240'], // Max size 10MB
-            'twofactor' => ['nullable', 'integer' ,  'in:0,1'],
+            'twofactor' => ['nullable', 'integer','in:0,1'],
         ];
     }
 
