@@ -12,7 +12,7 @@ interface ProductRepositoryInterface
 
     public function thumbnail($product);
 
-    public function product_iamge($product);
+    public function product_image($product);
 
     public function delete($product);
 }
