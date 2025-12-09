@@ -66,13 +66,45 @@ class ProductRepository implements ProductRepositoryInterface
                 'name' => $request->name,
                 'description' => $request->description,
                 'status' => $request->status,
-                'thumbnail' => $request->thumbnail,
+                'thumbnail' => null,
             ]);
 
             if ($request->has('category_id')) {
                 $product->categories()->attach($request->category_id);
             }
 
+            if ($request->hasFile('thumbnail')) {
+                $thumbnailFile = $request->file('thumbnail');
+                $thumbnailMimeType = $thumbnailFile->getMimeType();
+                $thumbnailName = time().'-'.$thumbnailFile->getClientOriginalName();
+                $thumbnailPath = public_path('images/products/thumbnail/'.$thumbnailName);
+
+                if (in_array($thumbnailMimeType, ['image/jpeg', 'image/png', 'image/gif'])) {
+                    switch ($thumbnailMimeType) {
+                        case 'image/jpeg':
+                        case 'image/pjpeg':
+                            $image = imagecreatefromjpeg($thumbnailFile->getRealPath());
+                            imagejpeg($image, $thumbnailPath, 50);
+                            break;
+                        case 'image/png':
+                            $image = imagecreatefrompng($thumbnailFile->getRealPath());
+                            imagepng($image, $thumbnailPath, 4);
+                            break;
+                        case 'image/gif':
+                            $image = imagecreatefromgif($thumbnailFile->getRealPath());
+                            imagegif($image, $thumbnailPath);
+                            break;
+                    }
+
+                    // آزاد کردن منابع تصویر
+                    imagedestroy($image);
+
+                    $product->thumbnail = asset('images/products/thumbnail/'.$thumbnailName);
+                    $product->save();
+                } else {
+                    return response()->json(['message' => 'فرمت فایل thumbnail پشتیبانی نمی‌شود.'], 400);
+                }
+            }
             if ($request->hasFile('image_url')) {
                 foreach ($request->file('image_url') as $file) {
                     // بررسی اینکه آیا فایل معتبر است
@@ -86,15 +118,15 @@ class ProductRepository implements ProductRepositoryInterface
                             case 'image/jpeg':
                             case 'image/pjpeg':
                                 $image = imagecreatefromjpeg($file->getRealPath());
-                                imagejpeg($image, public_path('images/'.$image_name), 50);
+                                imagejpeg($image, public_path('images/products/'.$image_name), 50);
                                 break;
                             case 'image/png':
                                 $image = imagecreatefrompng($file->getRealPath());
-                                imagepng($image, public_path('images/'.$image_name), 4);
+                                imagepng($image, public_path('images/products/'.$image_name), 4);
                                 break;
                             case 'image/gif':
                                 $image = imagecreatefromgif($file->getRealPath());
-                                imagegif($image, public_path('images/'.$image_name));
+                                imagegif($image, public_path('images/products/'.$image_name));
                                 break;
                             default:
                                 return response()->json(['message' => 'فرمت فایل پشتیبانی نمی‌شود.'], 400);
@@ -105,7 +137,7 @@ class ProductRepository implements ProductRepositoryInterface
                         try {
                             // ذخیره آدرس تصویر و اطلاعات اضافی در جدول تصاویر
                             $product->images()->create([
-                                'image_url' => asset('images/'.$image_name),
+                                'image_url' => asset('images/products/'.$image_name),
                                 'image_type' => $mimeType, // ذخیره نوع تصویر
                                 'image_size' => $image_size, // ذخیره سایز تصویر
                             ]);
@@ -200,12 +232,12 @@ class ProductRepository implements ProductRepositoryInterface
                 'name' => $request->name ? $request->name : $product->name,
                 'description' => $request->description ? $request->description : $product->description,
                 'status' => $request->status ? $request->status : $product->status,
-                'thumbnail' => $request->thumbnail ? $request->thumbnail : $product->thumbnail,
             ]);
+
             if ($request->has('category_id')) {
                 if (is_array($request->category_id) && ! empty($request->category_id)) {
-                    $validCategoryIds = array_filter($request->category_id, function ($id) { // filter invalid data
-                        return is_numeric($id) && $id > 0;  // return valid data
+                    $validCategoryIds = array_filter($request->category_id, function ($id) {
+                        return is_numeric($id) && $id > 0; // فیلتر کردن داده‌های نامعتبر
                     });
 
                     if (! empty($validCategoryIds)) {
@@ -214,6 +246,75 @@ class ProductRepository implements ProductRepositoryInterface
                 }
             }
 
+            // ذخیره تصویر thumbnail جدید
+            if ($request->hasFile('thumbnail')) {
+                $thumbnailFile = $request->file('thumbnail');
+                $thumbnailMimeType = $thumbnailFile->getMimeType();
+                $thumbnailName = time().'-'.$thumbnailFile->getClientOriginalName();
+                $thumbnailPath = public_path('images/products/thumbnail/'.$thumbnailName);
+
+                if (in_array($thumbnailMimeType, ['image/jpeg', 'image/png', 'image/gif'])) {
+                    $newThumbnailUrl = asset('images/products/thumbnail/'.$thumbnailName);
+
+                    // Only update the thumbnail if the content is different
+                    $oldThumbnailPath = public_path('images/products/thumbnail/'.basename($product->thumbnail));
+
+                    if (file_exists($oldThumbnailPath)) {
+                        // Compare the two files
+                        if (md5_file($thumbnailFile->getRealPath()) !== md5_file($oldThumbnailPath)) {
+                            unlink($oldThumbnailPath); // حذف تصویر قدیمی
+
+                            switch ($thumbnailMimeType) {
+                                case 'image/jpeg':
+                                case 'image/pjpeg':
+                                    $image = imagecreatefromjpeg($thumbnailFile->getRealPath());
+                                    imagejpeg($image, $thumbnailPath, 50);
+                                    break;
+                                case 'image/png':
+                                    $image = imagecreatefrompng($thumbnailFile->getRealPath());
+                                    imagepng($image, $thumbnailPath, 4);
+                                    break;
+                                case 'image/gif':
+                                    $image = imagecreatefromgif($thumbnailFile->getRealPath());
+                                    imagegif($image, $thumbnailPath);
+                                    break;
+                            }
+
+                            imagedestroy($image);
+
+                            $product->thumbnail = $newThumbnailUrl;
+                        } else {
+                            Log::info('Thumbnail not updated because it is the same as the current one.');
+                        }
+                    } else {
+                        switch ($thumbnailMimeType) {
+                            case 'image/jpeg':
+                            case 'image/pjpeg':
+                                $image = imagecreatefromjpeg($thumbnailFile->getRealPath());
+                                imagejpeg($image, $thumbnailPath, 50);
+                                break;
+                            case 'image/png':
+                                $image = imagecreatefrompng($thumbnailFile->getRealPath());
+                                imagepng($image, $thumbnailPath, 4);
+                                break;
+                            case 'image/gif':
+                                $image = imagecreatefromgif($thumbnailFile->getRealPath());
+                                imagegif($image, $thumbnailPath);
+                                break;
+                        }
+
+                        imagedestroy($image);
+
+                        $product->thumbnail = $newThumbnailUrl; // URL جدید تصویر
+                    }
+                    $product->save(); // ذخیره تغییرات در دیتابیس
+                } else {
+                    return response()->json(['message' => 'فرمت فایل thumbnail پشتیبانی نمی‌شود.'], 400);
+                }
+            }
+
+            Property::where('product_id', $product->id)->delete();
+
             $categoryIds = $request->category_id; // آرایه‌ای از IDهای دسته‌بندی
             $colorIds = $request->color_id; // آرایه‌ای از IDهای رنگ، می‌تواند null باشد
             $sizeIds = $request->size_id; // آرایه‌ای از IDهای سایز، می‌تواند null باشد
@@ -221,13 +322,11 @@ class ProductRepository implements ProductRepositoryInterface
             if (! is_array($categoryIds)) {
                 return response()->json(['message' => 'Invalid input. category_id must be an array.'], 400);
             }
-
             Property::where('product_id', $product->id)->delete();
 
             $combinations = [];
             foreach ($categoryIds as $categoryId) {
                 if (is_array($colorIds) && is_array($sizeIds)) {
-                    // هر دو رنگ و سایز موجود است
                     foreach ($colorIds as $colorId) {
                         foreach ($sizeIds as $sizeId) {
                             $combinations[] = [
@@ -238,25 +337,22 @@ class ProductRepository implements ProductRepositoryInterface
                         }
                     }
                 } elseif (is_array($colorIds)) {
-                    // فقط رنگ موجود است
                     foreach ($colorIds as $colorId) {
                         $combinations[] = [
                             'category_id' => $categoryId,
                             'color_id' => $colorId,
-                            'size_id' => null, // سایز null است
+                            'size_id' => null,
                         ];
                     }
                 } elseif (is_array($sizeIds)) {
-                    // فقط سایز موجود است
                     foreach ($sizeIds as $sizeId) {
                         $combinations[] = [
                             'category_id' => $categoryId,
-                            'color_id' => null, // رنگ null است
+                            'color_id' => null,
                             'size_id' => $sizeId,
                         ];
                     }
                 } else {
-                    // هیچ‌کدام موجود نیستند
                     $combinations[] = [
                         'category_id' => $categoryId,
                         'color_id' => null,
@@ -289,12 +385,10 @@ class ProductRepository implements ProductRepositoryInterface
             }
 
             if ($request->hasFile('image_url')) {
-                // اگر محصول قبلاً عکسی داشت، آن را حذف کنید
                 if ($product->images()->count() > 0) {
                     foreach ($product->images as $image) {
-                        // حذف فایل تصویر از سرور
-                        $imagePath = public_path('images/'.basename($image->image_url)); // اطمینان از اینکه فقط نام فایل گرفته می‌شود
-                        if (file_exists($imagePath) && is_file($imagePath)) { // بررسی اینکه آیا واقعاً یک فایل است
+                        $imagePath = public_path('images/products/'.basename($image->image_url));
+                        if (file_exists($imagePath) && is_file($imagePath)) {
                             unlink($imagePath);
                         }
                         $image->delete();
@@ -312,15 +406,15 @@ class ProductRepository implements ProductRepositoryInterface
                             case 'image/jpeg':
                             case 'image/pjpeg':
                                 $image = imagecreatefromjpeg($file->getRealPath());
-                                imagejpeg($image, public_path('images/'.$image_name), 50);
+                                imagejpeg($image, public_path('images/products/'.$image_name), 50);
                                 break;
                             case 'image/png':
                                 $image = imagecreatefrompng($file->getRealPath());
-                                imagepng($image, public_path('images/'.$image_name), 4);
+                                imagepng($image, public_path('images/products/'.$image_name), 4);
                                 break;
                             case 'image/gif':
                                 $image = imagecreatefromgif($file->getRealPath());
-                                imagegif($image, public_path('images/'.$image_name));
+                                imagegif($image, public_path('images/products/'.$image_name));
                                 break;
                             default:
                                 return response()->json(['message' => 'فرمت فایل پشتیبانی نمی‌شود.'], 400);
@@ -328,11 +422,10 @@ class ProductRepository implements ProductRepositoryInterface
 
                         imagedestroy($image);
                         try {
-                            // ذخیره آدرس تصویر و اطلاعات اضافی در جدول تصاویر
                             $product->images()->create([
-                                'image_url' => asset('images/'.$image_name),
-                                'image_type' => $mimeType, // ذخیره نوع تصویر
-                                'image_size' => $image_size, // ذخیره سایز تصویر
+                                'image_url' => asset('images/products/'.$image_name),
+                                'image_type' => $mimeType,
+                                'image_size' => $image_size,
                             ]);
                         } catch (\Throwable $th) {
                             Log::error('Error saving image: '.$th->getMessage());
@@ -356,18 +449,16 @@ class ProductRepository implements ProductRepositoryInterface
         ]);
     }
 
-    public function product_iamge($product)
+    public function product_image($product)
     {
         $product_images = Product::whereHas('images', function ($query) use ($product) {
             $query->where('product_id', $product->id);
         })
-            ->with('images')->first(); // اطمینان از اینکه حتما تصاویر را بگیرد
-        // بررسی وجود تصاویر
+            ->with('images')->first();
         if ($product_images && $product_images->images) {
             foreach ($product_images->images as $image) {
-                // حذف فایل تصویر از سرور
                 if (file_exists(public_path('images/'.basename($image->image_url)))) {
-                    unlink(public_path('images/'.basename($image->image_url))); // حذف فایل تصویر
+                    unlink(public_path('images/'.basename($image->image_url)));
                 }
                 $image->delete();
             }

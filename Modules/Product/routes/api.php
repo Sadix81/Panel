@@ -9,6 +9,6 @@ Route::prefix('/v1/product/')->middleware('auth:api')->group(function () {
     Route::post('/', [ProductController::class, 'store']);
     Route::put('/{product}', [ProductController::class, 'update']);
     Route::patch('/thumbnail/{product}/delete', [ProductController::class, 'thumbnail']);
-    Route::patch('/image/{product}/delete', [ProductController::class, 'product_iamge']);
+    Route::patch('/image/{product}/delete', [ProductController::class, 'product_image']);
     Route::delete('/{product}', [ProductController::class, 'destroy']);
 });
