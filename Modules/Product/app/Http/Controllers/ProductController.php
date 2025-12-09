@@ -147,14 +147,14 @@ class ProductController extends Controller
         return response()->json(['message' => __('messages.product.thumbnail.delete.failed')], 500);
     }
 
-    public function product_iamge(Product $product)
+    public function product_image(Product $product)
     {
         $user = Auth::id();
 
         if (! $user) {
             return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
         }
-        $error = $this->productRepo->product_iamge($product);
+        $error = $this->productRepo->product_image($product);
         if ($error === null) {
             return response()->json(['message' => __('messages.product.thumbnail.delete.success')], 200);
         }
