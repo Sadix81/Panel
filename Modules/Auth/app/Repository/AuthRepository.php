@@ -71,6 +71,10 @@ class AuthRepository implements AuthRepositoryInterface
             return response()->json(['message' => 'کاربر یافت نشد'], 404);
         }
 
+        if (is_null($user->email_verified_at)) {
+            return response()->json(['message' => 'کاربر نا معتبر است'], 400);
+        }
+
         if ($user && password_verify($request->password, $user->password)) {
             $token = $user->createToken('__Token__')->accessToken;
 
@@ -83,7 +87,7 @@ class AuthRepository implements AuthRepositoryInterface
         return null;
     }
 
-    public function TwoFactorLoginEamil($request)
+    public function TwoFactorLoginEmail($request)
     {
         $user = User::where('username', $request->username)
             ->orWhere('email', $request->email)->first();

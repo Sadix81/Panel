@@ -6,7 +6,7 @@ interface AuthRepositoryInterface
 {
     public function register($request);
 
-    public function TwoFactorLoginEamil($request);
+    public function TwoFactorLoginEmail($request);
 
     public function TwoFactorLogin($request);
 
