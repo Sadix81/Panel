@@ -83,7 +83,7 @@ class AuthRepository implements AuthRepositoryInterface
         return null;
     }
 
-    public function TwoFactorLoginEamil($request)
+    public function TwoFactorLoginEmail($request)
     {
         $user = User::where('username', $request->username)
             ->orWhere('email', $request->email)->first();
