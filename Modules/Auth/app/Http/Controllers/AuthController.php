@@ -66,7 +66,7 @@ class AuthController extends Controller
         }
 
         if ($user->twofactor == 1) {
-            $twoFactorResponse = $this->authRepo->TwoFactorLoginEamil($request);
+            $twoFactorResponse = $this->authRepo->TwoFactorLoginEmail($request);
             if ($twoFactorResponse) {
                 LoginJob::dispatch($user);
 
