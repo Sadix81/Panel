@@ -71,6 +71,10 @@ class AuthRepository implements AuthRepositoryInterface
             return response()->json(['message' => 'کاربر یافت نشد'], 404);
         }
 
+        if (is_null($user->email_verified_at)) {
+            return response()->json(['message' => 'کاربر نا معتبر است'], 400);
+        }
+
         if ($user && password_verify($request->password, $user->password)) {
             $token = $user->createToken('__Token__')->accessToken;
 
