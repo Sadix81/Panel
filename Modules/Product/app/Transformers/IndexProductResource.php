@@ -15,7 +15,7 @@ class IndexProductResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'thumbnail' => $this->thumbnail ? asset('/'.$this->thumbnail) : null, // تولید آدرس کامل عکس
+            'thumbnail' => $this->thumbnail ?  $this->thumbnail : null, // تولید آدرس کامل عکس
             'status' => $this->status,
             'price' => json_decode($this->properties->pluck('price')->unique()->values()->toJson()),
             'quantity' => $this->properties->pluck('quantity')->unique()->values(),
