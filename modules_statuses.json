@@ -19,5 +19,6 @@
     "Payment": true,
     "Rating": true,
     "Permission": true,
-    "Slider": true
+    "Slider": true,
+    "Shop": true
 }

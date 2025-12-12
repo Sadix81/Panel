@@ -10,6 +10,8 @@ use Modules\Auth\Repository\AuthRepository;
 use Modules\Auth\Repository\AuthRepositoryInterface;
 use Modules\Promotion\Repository\PromotionRepository;
 use Modules\Promotion\Repository\PromotionRepositoryInterface;
+use Modules\Shop\Repository\ShopRepository;
+use Modules\Shop\Repository\ShopRepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(AuthRepositoryInterface::class, AuthRepository::class);
         $this->app->bind(PromotionRepositoryInterface::class, PromotionRepository::class);
+        $this->app->bind(ShopRepositoryInterface::class, ShopRepository::class);
     }
 
     /**

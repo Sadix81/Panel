@@ -14,6 +14,7 @@ use Modules\Favorite\Database\Seeders\FavoriteDatabaseSeeder;
 use Modules\Permission\Database\Seeders\PermissionDatabaseSeeder;
 use Modules\Product\Database\Seeders\ProductDatabaseSeeder;
 use Modules\Rating\Database\Seeders\RatingDatabaseSeeder;
+use Modules\Shop\Database\Seeders\ShopDatabaseSeeder;
 use Modules\Size\Database\Seeders\SizeDatabaseSeeder;
 
 class DatabaseSeeder extends Seeder
@@ -40,6 +41,7 @@ class DatabaseSeeder extends Seeder
             CartDatabaseSeeder::class,
             RatingDatabaseSeeder::class,
             PermissionDatabaseSeeder::class,
+            ShopDatabaseSeeder::class,
         ]);
     }
 }
