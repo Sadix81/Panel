@@ -14,6 +14,10 @@ class ProfileRepository implements ProfileRepositoryInterface
             return 'عدم دسترسی کاربر';
         }
 
+        if ($request->codepost == $user->codepost) {
+            return response()->json(['messages' => 'codepost has already selected'], 409);  // 409 for conflict
+        }
+
         if (request()->hasFile('avatar')) {
             $file = $request->file('avatar');
             $mimeType = $file->getMimeType();
@@ -64,6 +68,11 @@ class ProfileRepository implements ProfileRepositoryInterface
             'mobile' => $request->mobile ? $request->mobile : $user->mobile,
             'email' => $request->email ? $request->email : $user->email,
             'avatar' => $request->avatar ? $image_url : $user->avatar,
+            'country' => $request->country ? $request->country : $user->country,
+            'province' => $request->province ? $request->province : $user->province,
+            'city' => $request->city ? $request->city : $user->city,
+            'address' => $request->address ? $request->address : $user->address,
+            'codepost' => $request->codepost ? $request->codepost : $user->codepost,
             'twofactor' => $request->twofactor !== null ? $request->twofactor : $user->twofactor,
 
         ]);

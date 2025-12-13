@@ -20,6 +20,11 @@ class UserInfoResource extends JsonResource
             'email' => $this->email,
             'twofactor' => $this->twofactor,
             'avatar' => $this->avatar ? asset('/'.$this->avatar) : null, // تولید آدرس کامل عکس
+            'country' => $this->country,
+            'province' => $this->province,
+            'city' => $this->city,
+            'address' => $this->address,
+            'codepost' => $this->codepost,
         ];
     }
 }

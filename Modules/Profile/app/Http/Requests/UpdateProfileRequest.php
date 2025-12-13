@@ -16,6 +16,11 @@ class UpdateProfileRequest extends FormRequest
             'email' => ['nullable', 'email', Rule::unique('users')->ignore($this->user()->id)],
             'avatar' => ['nullable', 'image', 'mimes:jpg,jpeg,png,bmp,gif,svg,webp', 'max:10240'], // Max size 10MB
             'twofactor' => ['nullable', 'integer', 'in:0,1'],
+            'country' => ['required' , 'string' , 'max:100'],
+            'province' => ['required' , 'string' , 'max:50'],
+            'city' => ['required' , 'string'],
+            'address' => ['required' , 'string' , 'max:1000'],
+            'codepost' => ['nullable' , 'string'],
         ];
     }
 
