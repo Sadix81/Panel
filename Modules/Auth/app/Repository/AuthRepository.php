@@ -20,6 +20,7 @@ class AuthRepository implements AuthRepositoryInterface
         $usernames = array_column($allUsers, 'username');
         $mobiles = array_column($allUsers, 'mobile');
         $emails = array_column($allUsers, 'email');
+        $codepost = array_column($allUsers, 'codepost');
 
         if (in_array($request->username, $usernames)) {
             return response()->json(['messages' => 'username has already selected'], 409); // 409 for conflict
@@ -33,12 +34,21 @@ class AuthRepository implements AuthRepositoryInterface
             return response()->json(['messages' => 'email has already selected'], 409);  // 409 for conflict
         }
 
+        if (in_array($request->codepost, $codepost)) {
+            return response()->json(['messages' => 'codepost has already selected'], 409);  // 409 for conflict
+        }
+
         $user = User::create([
             'username' => $request->username,
             'lastname' => $request->lastname,
             'mobile' => $request->mobile,
             'email' => $request->email,
             'avatar' => $request->avatar,
+            'country' => $request->country,
+            'province' => $request->province,
+            'city' => $request->city,
+            'address' => $request->address,
+            'codepost' => $request->codepost,
             'password' => password_hash($request->password, PASSWORD_DEFAULT),
         ]);
 

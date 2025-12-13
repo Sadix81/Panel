@@ -19,6 +19,11 @@ class AuthDatabaseSeeder extends Seeder
             'email' => 'admin@gmail.com',
             'mobile' => '12345678901',
             'password' => password_hash('@Dmin123', PASSWORD_DEFAULT),
+            'country' => 'Iran',
+            'province' => 'Golestan',
+            'city' => 'Gorgan',
+            'address' => 'AAAAAAAAAAA',
+            'codepost' => '1234#232323',
             'email_verified_at' => Carbon::now(),
         ]);
 
@@ -29,6 +34,11 @@ class AuthDatabaseSeeder extends Seeder
             'mobile' => '09031111111',
             'password' => password_hash('@Dmin123', PASSWORD_DEFAULT),
             'twofactor' => true,
+            'country' => 'Iran',
+            'province' => 'Golestan',
+            'city' => 'Gorgan',
+            'address' => 'AAAAAAAAAAA',
+            'codepost' => '1234#232323',
             'email_verified_at' => Carbon::now(),
         ]);
 
