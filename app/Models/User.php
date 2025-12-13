@@ -34,6 +34,11 @@ class User extends Authenticatable
         'twofactor',
         'avatar',
         'email_verified_at',
+        'country',
+        'province', // استان
+        'city',
+        'address',
+        'codepost',
     ];
 
     /**

@@ -20,6 +20,11 @@ class RegisterRequest extends FormRequest
             'twofactor' => ['nullable'],
             'email_verified_at' => ['nullable'],
             'avatar' => ['nullable', 'image'],
+            'country' => ['required' , 'string' , 'max:100'],
+            'province' => ['required' , 'string' , 'max:50'],
+            'city' => ['required' , 'string'],
+            'address' => ['required' , 'string' , 'max:1000'],
+            'codepost' => ['nullable' , 'string'],
         ];
     }
 
