@@ -16,6 +16,7 @@ class ProductDatabaseSeeder extends Seeder
         for ($i = 1; $i <= 6; $i++) {
             $product = Product::create([
                 'name' => 'Product '.$i,
+                'code' => $i,
                 'description' => 'Description for product '.$i,
                 'status' => '1',
                 'thumbnail' => 'thumbnail_'.$i.'.jpg', // فرض کنید تصاویر در public/images وجود دارند

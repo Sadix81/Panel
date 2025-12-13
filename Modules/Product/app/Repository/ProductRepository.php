@@ -16,6 +16,7 @@ class ProductRepository implements ProductRepositoryInterface
             'order' => request()->has('order') ? request('order') : 'desc',
             'limit' => request()->has('limit') ? request('limit') : '25',
             'category_id' => request()->has('category_id') ? request('category_id') : null,
+            'code_num' => request()->has('code_num') ? request('code_num') : null,
             'search' => request()->has('search') ? request('search') : null,
             'price' => request()->has('price') ? request('price') : null,
             'status' => request()->has('status') ? 1 : null,
@@ -31,6 +32,10 @@ class ProductRepository implements ProductRepositoryInterface
 
             if (! empty($req['search'])) {
                 $query->where('name', 'like', '%'.$req['search'].'%');
+            }
+
+            if (! empty($req['code_num'])) {
+                $query->where('code', $req['code_num']); // Ensures exact match
             }
 
             // Filter by properties
@@ -64,6 +69,7 @@ class ProductRepository implements ProductRepositoryInterface
         try {
             $product = Product::create([
                 'name' => $request->name,
+                'code' => $request->code,
                 'description' => $request->description,
                 'status' => $request->status,
                 'thumbnail' => null,
@@ -230,6 +236,8 @@ class ProductRepository implements ProductRepositoryInterface
         try {
             $product->update([
                 'name' => $request->name ? $request->name : $product->name,
+                'code' => $request->code ? $request->code : $product->code,
+                'code' => $request->code ? $request->code : $product->code,
                 'description' => $request->description ? $request->description : $product->description,
                 'status' => $request->status ? $request->status : $product->status,
             ]);
