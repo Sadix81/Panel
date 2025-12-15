@@ -20,5 +20,6 @@
     "Rating": true,
     "Permission": true,
     "Slider": true,
-    "Shop": true
+    "Shop": true,
+    "Weight": true
 }

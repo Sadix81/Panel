@@ -1,0 +1,11 @@
+{
+    "name": "Weight",
+    "alias": "weight",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Weight\\Providers\\WeightServiceProvider"
+    ],
+    "files": []
+}
