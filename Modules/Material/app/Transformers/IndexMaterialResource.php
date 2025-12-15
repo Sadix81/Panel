@@ -1,0 +1,19 @@
+<?php
+
+namespace Modules\Material\Transformers;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class IndexMaterialResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     */
+    public function toArray(Request $request): array
+    {
+        return [
+            'title'=> $this->title
+        ];
+    }
+}

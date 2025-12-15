@@ -21,5 +21,6 @@
     "Permission": true,
     "Slider": true,
     "Shop": true,
-    "Weight": true
+    "Weight": true,
+    "Material": true
 }
