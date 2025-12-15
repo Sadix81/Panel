@@ -16,6 +16,7 @@ use Modules\Product\Database\Seeders\ProductDatabaseSeeder;
 use Modules\Rating\Database\Seeders\RatingDatabaseSeeder;
 use Modules\Shop\Database\Seeders\ShopDatabaseSeeder;
 use Modules\Size\Database\Seeders\SizeDatabaseSeeder;
+use Modules\Weight\Database\Seeders\WeightDatabaseSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -42,6 +43,7 @@ class DatabaseSeeder extends Seeder
             RatingDatabaseSeeder::class,
             PermissionDatabaseSeeder::class,
             ShopDatabaseSeeder::class,
+            WeightDatabaseSeeder::class,
         ]);
     }
 }

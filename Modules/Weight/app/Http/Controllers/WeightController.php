@@ -4,62 +4,92 @@ namespace Modules\Weight\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Modules\Weight\Http\Requests\CreateWeightRequest;
+use Modules\Weight\Http\Requests\UpdateWeightRequest;
+use Modules\Weight\Models\Weight;
+use Modules\Weight\Repository\WeightRepository;
+use Modules\Weight\Transformers\IndexWeightResource;
+use Modules\Weight\Transformers\ShowWeightResource;
 
 class WeightController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+      private $weightRepo;
+
+    public function __construct(WeightRepository $weightRepo)
+    {
+        $this->weightRepo = $weightRepo;
+    }
+
     public function index()
     {
-        return view('weight::index');
+
+        $user = Auth::id();
+
+        if (! $user) {
+            return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
+        }
+
+        return IndexWeightResource::collection($this->weightRepo->index());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(CreateWeightRequest $request)
     {
-        return view('weight::create');
+        $user = Auth::id();
+
+        if (! $user) {
+            return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
+        }
+
+        $error = $this->weightRepo->store($request);
+        if ($error === null) {
+            return response()->json(['message' => __('messages.weight.store.success', ['title' => $request->title])], 201);
+        }
+
+        return response()->json(['message' => __('messages.weight.store.failed', ['title' => $request->title])], 500);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function show(Weight $weight)
     {
-        //
+        $user = Auth::user();
+
+        if (! $user) {
+            return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
+        }
+
+        return new ShowWeightResource($weight);
+
     }
 
-    /**
-     * Show the specified resource.
-     */
-    public function show($id)
+    public function update(Weight $weight, UpdateWeightRequest $request)
     {
-        return view('weight::show');
+        $user = Auth::user();
+
+        if (! $user) {
+            return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
+        }
+
+        $error = $this->weightRepo->update($weight, $request);
+        if ($error === null) {
+            return response()->json(['message' => __('messages.weight.update.success', ['title' => $weight->title])], 200);
+        }
+
+        return response()->json(['message' => __('messages.weight.update.failed', ['title' => $weight->title])], 500);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
+    public function destroy($weight)
     {
-        return view('weight::edit');
-    }
+        $user = Auth::user();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+        if (! $user) {
+            return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
-    {
-        //
+        $error = $this->weightRepo->delete($weight);
+        if ($error === null) {
+            return response()->json(['message' => __('messages.weight.delete.success')], 200);
+        }
+
+        return response()->json(['message' => __('messages.weight.delete.failed')], 500);
     }
 }
