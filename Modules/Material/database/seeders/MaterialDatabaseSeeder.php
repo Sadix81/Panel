@@ -3,6 +3,7 @@
 namespace Modules\Material\Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Modules\Material\Models\Material;
 
 class MaterialDatabaseSeeder extends Seeder
 {
@@ -11,6 +12,16 @@ class MaterialDatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call([]);
+        $material = [
+            ['title' => 'طلا'],
+            ['title' => 'نقره'],
+            ['title' => 'برنز'],
+            ['title' => 'جیوه'],
+            ['title' => 'آهن'],
+            ['title' => 'پارچه'],
+            ['title' => 'ابریشم'],
+        ];
+
+        Material::insert($material);
     }
 }
