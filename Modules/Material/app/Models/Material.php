@@ -4,6 +4,8 @@ namespace Modules\Material\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Modules\Property\Models\Property;
+
 // use Modules\Material\Database\Factories\MaterialFactory;
 
 class Material extends Model
@@ -17,8 +19,8 @@ class Material extends Model
         'title'
     ];
 
-    // protected static function newFactory(): MaterialFactory
-    // {
-    //     // return MaterialFactory::new();
-    // }
+    public function property()
+    {
+        return $this->hasMany(Property::class);
+    }
 }

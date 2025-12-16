@@ -37,6 +37,8 @@ class DatabaseSeeder extends Seeder
             CategoryDatabaseSeeder::class,
             ColorDatabaseSeeder::class,
             SizeDatabaseSeeder::class,
+            WeightDatabaseSeeder::class,
+            MaterialDatabaseSeeder::class,
             ProductDatabaseSeeder::class,
             CommentDatabaseSeeder::class,
             FavoriteDatabaseSeeder::class,
@@ -44,8 +46,6 @@ class DatabaseSeeder extends Seeder
             RatingDatabaseSeeder::class,
             PermissionDatabaseSeeder::class,
             ShopDatabaseSeeder::class,
-            WeightDatabaseSeeder::class,
-            MaterialDatabaseSeeder::class,
         ]);
     }
 }
