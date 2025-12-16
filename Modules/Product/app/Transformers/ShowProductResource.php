@@ -19,13 +19,19 @@ class ShowProductResource extends JsonResource
             'thumbnail' => $this->thumbnail ?  $this->thumbnail : null, // تولید آدرس کامل عکس
             'description' => $this->description,
             'status' => $this->status,
-            'category_id' => $this->categories->unique('id')->pluck('name', 'id')->map(function ($name) {
-                return (object) ['name' => $name];
-            })->values(),
+            'category_id' => $this->categories->map(function ($category) {
+                return [
+                    'id' => $category->id,
+                    'name' => $category->name,
+                    'parent_id' => $category->parent_id,
+                ];
+            })->unique('id')->values(), // حذف مقادیر تکراری بر اساس 'id'
             'price' => json_decode($this->properties->pluck('price')->unique()->values()->toJson()),
             'quantity' => $this->properties->pluck('quantity')->unique()->values(),
             'color' => $this->properties->pluck('color')->unique()->values(),
             'size' => $this->properties->pluck('size')->unique()->values(),
+            'material' => $this->properties->pluck('material')->unique()->values(),
+            'weight' => $this->properties->pluck('weight')->unique()->values(),
             'images' => $this->images->map(function ($image) {
                 return [
                     'image_url' => $image->image_url,

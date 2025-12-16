@@ -154,21 +154,28 @@ class ProductRepository implements ProductRepositoryInterface
                 }
             }
 
-            $categoryIds = $request->category_id; // Array of category IDs
-            $colorIds = $request->color_id; // Array of color IDs
-            $sizeIds = $request->size_id; // Array of size IDs
+            $categoryIds = $request->category_id;
+            $colorIds = $request->color_id;
+            $sizeIds = $request->size_id;
+            $materialIds = $request->material_id;
+            $weightIds = $request->weight_id;
             $combinations = [];
 
             foreach ($categoryIds as $categoryId) {
-                if (is_array($colorIds) && is_array($sizeIds)) {
-                    // Both color and size are provided
+                if (is_array($colorIds) && is_array($sizeIds) && is_array($materialIds) && is_array($weightIds)) {
                     foreach ($colorIds as $colorId) {
                         foreach ($sizeIds as $sizeId) {
-                            $combinations[] = [
-                                'category_id' => $categoryId,
-                                'color_id' => $colorId,
-                                'size_id' => $sizeId,
-                            ];
+                            foreach($materialIds as $materialId){
+                                foreach($weightIds as $weightId){
+                                    $combinations[] = [
+                                        'category_id' => $categoryId,
+                                        'color_id' => $colorId,
+                                        'size_id' => $sizeId,
+                                        'material_id' => $materialId,
+                                        'weight_id' => $weightId,
+                                    ];
+                                }
+                            }
                         }
                     }
                 } elseif (is_array($colorIds)) {
@@ -178,6 +185,8 @@ class ProductRepository implements ProductRepositoryInterface
                             'category_id' => $categoryId,
                             'color_id' => $colorId,
                             'size_id' => null, // Size is null
+                            'material_id' => null,
+                            'weight_id' => null,
                         ];
                     }
                 } elseif (is_array($sizeIds)) {
@@ -187,14 +196,41 @@ class ProductRepository implements ProductRepositoryInterface
                             'category_id' => $categoryId,
                             'color_id' => null, // Color is null
                             'size_id' => $sizeId,
+                            'material_id' => null,
+                            'weight_id' => null,
                         ];
                     }
-                } else {
-                    // Neither color nor size is provided
+                } elseif (is_array($materialIds)) {
+                    // Only material is provided
+                    foreach ($materialIds as $materialId) {
+                        $combinations[] = [
+                            'category_id' => $categoryId,
+                            'color_id' => null, // Color is null
+                            'size_id' => null,
+                            'material_id' => $materialId,
+                            'weight_id' => null,
+                        ];
+                    }
+                }
+                 elseif (is_array($weightIds)) {
+                    // Only weight is provided
+                    foreach ($weightIds as $weightId) {
+                        $combinations[] = [
+                            'category_id' => $categoryId,
+                            'color_id' => null, // Color is null
+                            'size_id' => null,
+                            'material_id' => null,
+                            'weight_id' => $weightId,
+                        ];
+                    }
+                }else {
+                    // Nothing except category
                     $combinations[] = [
                         'category_id' => $categoryId,
                         'color_id' => null,
                         'size_id' => null,
+                        'material_id' => null,
+                        'weight_id' => null,
                     ];
                 }
             }
@@ -215,6 +251,8 @@ class ProductRepository implements ProductRepositoryInterface
                     'category_id' => $combination['category_id'],
                     'color_id' => $combination['color_id'],
                     'size_id' => $combination['size_id'],
+                    'material_id' => $combination['material_id'],
+                    'weight_id' => $combination['weight_id'],
                     'type' => $request->type,
                     'amount' => $request->amount,
                     'discounted_price' => $request->type ? $final_price : null,
@@ -323,9 +361,11 @@ class ProductRepository implements ProductRepositoryInterface
 
             Property::where('product_id', $product->id)->delete();
 
-            $categoryIds = $request->category_id; // آرایه‌ای از IDهای دسته‌بندی
-            $colorIds = $request->color_id; // آرایه‌ای از IDهای رنگ، می‌تواند null باشد
-            $sizeIds = $request->size_id; // آرایه‌ای از IDهای سایز، می‌تواند null باشد
+            $categoryIds = $request->category_id;
+            $colorIds = $request->color_id;
+            $sizeIds = $request->size_id;
+            $materialIds = $request->material_id;
+            $weightIds = $request->weight_id;
 
             if (! is_array($categoryIds)) {
                 return response()->json(['message' => 'Invalid input. category_id must be an array.'], 400);
@@ -334,14 +374,20 @@ class ProductRepository implements ProductRepositoryInterface
 
             $combinations = [];
             foreach ($categoryIds as $categoryId) {
-                if (is_array($colorIds) && is_array($sizeIds)) {
+                if (is_array($colorIds) && is_array($sizeIds) && is_array($materialIds) && is_array($weightIds)) {
                     foreach ($colorIds as $colorId) {
                         foreach ($sizeIds as $sizeId) {
-                            $combinations[] = [
-                                'category_id' => $categoryId,
-                                'color_id' => $colorId,
-                                'size_id' => $sizeId,
-                            ];
+                            foreach ($materialIds as $materialId) {
+                                foreach($weightIds as $weightId){
+                                    $combinations[] = [
+                                        'category_id' => $categoryId,
+                                        'color_id' => $colorId,
+                                        'size_id' => $sizeId,
+                                        'material_id' => $materialId,
+                                        'weight_id' => $weightId,
+                                    ];
+                                }
+                            }
                         }
                     }
                 } elseif (is_array($colorIds)) {
@@ -350,6 +396,8 @@ class ProductRepository implements ProductRepositoryInterface
                             'category_id' => $categoryId,
                             'color_id' => $colorId,
                             'size_id' => null,
+                            'material_id' => null,
+                            'weight_id' => null,
                         ];
                     }
                 } elseif (is_array($sizeIds)) {
@@ -358,13 +406,37 @@ class ProductRepository implements ProductRepositoryInterface
                             'category_id' => $categoryId,
                             'color_id' => null,
                             'size_id' => $sizeId,
+                            'material_id' => null,
+                            'weight_id' => null,
                         ];
                     }
-                } else {
+                } elseif (is_array($materialIds)) {
+                    foreach ($materialIds as $materialId) {
+                        $combinations[] = [
+                            'category_id' => $categoryId,
+                            'color_id' => null,
+                            'size_id' => null,
+                            'material_id' => $materialId,
+                            'weight_id' => null,
+                        ];
+                    }
+                } elseif (is_array($weightIds)) {
+                    foreach ($weightIds as $weightId) {
+                        $combinations[] = [
+                            'category_id' => $categoryId,
+                            'color_id' => null,
+                            'size_id' => null,
+                            'material_id' => null,
+                            'weight_id' => $weightId,
+                        ];
+                    }
+                }  else {
                     $combinations[] = [
                         'category_id' => $categoryId,
                         'color_id' => null,
                         'size_id' => null,
+                        'material_id' => null,
+                        'weight_id' => null,
                     ];
                 }
             }
@@ -385,6 +457,8 @@ class ProductRepository implements ProductRepositoryInterface
                     'category_id' => $combination['category_id'],
                     'color_id' => $combination['color_id'],
                     'size_id' => $combination['size_id'],
+                    'material_id' => $combination['material_id'],
+                    'weight_id' => $combination['weight_id'],
                     'type' => $request->type,
                     'amount' => $request->amount,
                     'discounted_price' => $request->type ? $final_price : null,

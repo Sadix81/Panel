@@ -7,9 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Modules\Cart\Models\CartItem;
 use Modules\Category\Models\Category;
 use Modules\Color\Models\Color;
+use Modules\Material\Models\Material;
 use Modules\Product\Models\Product;
 use Modules\Promotion\Models\Promotion;
 use Modules\Size\Models\Size;
+use Modules\Weight\Models\Weight;
 
 // use Modules\Property\Database\Factories\PropertyFactory;
 
@@ -23,6 +25,8 @@ class Property extends Model
         'product_id',
         'color_id',
         'size_id',
+        'material_id',
+        'weight_id',
         'category_id',
         'type',
         'amount',
@@ -50,6 +54,16 @@ class Property extends Model
     public function size()
     {
         return $this->belongsTo(Size::class);
+    }
+
+        public function material()
+    {
+        return $this->belongsTo(Material::class);
+    }
+
+        public function weight()
+    {
+        return $this->belongsTo(Weight::class);
     }
 
     public function discountPromotions()

@@ -31,6 +31,8 @@ class ProductDatabaseSeeder extends Seeder
                 'product_id' => $product->id,
                 'color_id' => rand(1, 5),
                 'size_id' => rand(1, 5),
+                'material_id' => rand(1, 7),
+                'weight_id' => rand(1, 6),
                 'category_id' => rand(1, 5),
                 'type' => $type,
                 'amount' => rand(50, 100),
