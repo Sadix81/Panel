@@ -18,6 +18,8 @@ return new class extends Migration
             $table->foreignId('product_id')->nullable()->constrained('products')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('color_id')->nullable()->constrained('colors')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('size_id')->nullable()->constrained('sizes')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('material_id')->nullable()->constrained('materials')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('weight_id')->nullable()->constrained('weights')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignId('category_id')->nullable()->constrained('categories')->cascadeOnUpdate()->cascadeOnDelete();
             $table->enum('type', ['percentage', 'fixed'])->nullable();
             $table->decimal('amount', 9, 2)->nullable();
