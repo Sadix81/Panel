@@ -19,7 +19,7 @@ class UserInfoResource extends JsonResource
             'mobile' => $this->mobile,
             'email' => $this->email,
             'twofactor' => $this->twofactor,
-            'avatar' => $this->avatar ? asset('/'.$this->avatar) : null, // تولید آدرس کامل عکس
+            'avatar' => $this->avatar ? $this->avatar : null, // تولید آدرس کامل عکس
             'country' => $this->country,
             'province' => $this->province,
             'city' => $this->city,
