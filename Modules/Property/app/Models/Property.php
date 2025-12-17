@@ -56,12 +56,12 @@ class Property extends Model
         return $this->belongsTo(Size::class);
     }
 
-        public function material()
+    public function material()
     {
         return $this->belongsTo(Material::class);
     }
 
-        public function weight()
+    public function weight()
     {
         return $this->belongsTo(Weight::class);
     }

@@ -2,7 +2,6 @@
 
 namespace Modules\Shop\Repository;
 
-
 use Modules\Shop\Models\Shop;
 
 class ShopRepository implements ShopRepositoryInterface
@@ -10,10 +9,11 @@ class ShopRepository implements ShopRepositoryInterface
     public function index()
     {
         $shop = Shop::all();
-         return $shop;
+
+        return $shop;
     }
 
-    public function update($shop , $request)
+    public function update($shop, $request)
     {
         $shop->update([
             'name' => $request->name ? $request->name : $shop->name,

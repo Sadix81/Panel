@@ -2,8 +2,9 @@
 
 namespace Modules\Shop\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
 // use Modules\Shop\Database\Factories\ShopFactory;
 
 class Shop extends Model
@@ -22,8 +23,6 @@ class Shop extends Model
         'city',
         'address',
         'codepost',
-
-
 
     ];
 

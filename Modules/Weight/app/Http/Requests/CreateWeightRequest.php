@@ -13,7 +13,7 @@ class CreateWeightRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:20', 'unique:weights'],
-            'weight_value' => ['required' , 'numeric'],
+            'weight_value' => ['required', 'numeric'],
         ];
     }
 

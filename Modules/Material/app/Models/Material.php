@@ -2,8 +2,8 @@
 
 namespace Modules\Material\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Modules\Property\Models\Property;
 
 // use Modules\Material\Database\Factories\MaterialFactory;
@@ -16,7 +16,7 @@ class Material extends Model
      * The attributes that are mass assignable.
      */
     protected $fillable = [
-        'title'
+        'title',
     ];
 
     public function property()

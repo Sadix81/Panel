@@ -6,5 +6,5 @@ interface ShopRepositoryInterface
 {
     public function index();
 
-    public function update($shop , $request);
+    public function update($shop, $request);
 }
