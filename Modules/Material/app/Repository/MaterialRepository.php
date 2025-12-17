@@ -4,9 +4,10 @@ namespace Modules\Material\Repository;
 
 use Modules\Material\Models\Material;
 
-class MaterialRepository implements MaterialRepositoryInterface{
-
-     public function index(){
+class MaterialRepository implements MaterialRepositoryInterface
+{
+    public function index()
+    {
         $req = [
             'sort' => request()->has('sort') ? request('sort') : 'updated_at',
             'order' => request()->has('order') ? request('order') : 'desc',
@@ -25,19 +26,22 @@ class MaterialRepository implements MaterialRepositoryInterface{
         return $material;
     }
 
-    public function store($request){
+    public function store($request)
+    {
         Material::create([
             'title' => $request->title,
         ]);
     }
 
-    public function update($material , $request){
+    public function update($material, $request)
+    {
         $material->update([
             'title' => $request->title ? $request->title : $material->title,
         ]);
     }
 
-    public function delete($material){
+    public function delete($material)
+    {
 
         $material = Material::find($material);
 

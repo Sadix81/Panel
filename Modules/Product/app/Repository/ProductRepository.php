@@ -165,8 +165,8 @@ class ProductRepository implements ProductRepositoryInterface
                 if (is_array($colorIds) && is_array($sizeIds) && is_array($materialIds) && is_array($weightIds)) {
                     foreach ($colorIds as $colorId) {
                         foreach ($sizeIds as $sizeId) {
-                            foreach($materialIds as $materialId){
-                                foreach($weightIds as $weightId){
+                            foreach ($materialIds as $materialId) {
+                                foreach ($weightIds as $weightId) {
                                     $combinations[] = [
                                         'category_id' => $categoryId,
                                         'color_id' => $colorId,
@@ -211,8 +211,7 @@ class ProductRepository implements ProductRepositoryInterface
                             'weight_id' => null,
                         ];
                     }
-                }
-                 elseif (is_array($weightIds)) {
+                } elseif (is_array($weightIds)) {
                     // Only weight is provided
                     foreach ($weightIds as $weightId) {
                         $combinations[] = [
@@ -223,7 +222,7 @@ class ProductRepository implements ProductRepositoryInterface
                             'weight_id' => $weightId,
                         ];
                     }
-                }else {
+                } else {
                     // Nothing except category
                     $combinations[] = [
                         'category_id' => $categoryId,
@@ -292,46 +291,45 @@ class ProductRepository implements ProductRepositoryInterface
                 }
             }
 
-             if ($request->hasFile('thumbnail')) {
-            $thumbnailFile = $request->file('thumbnail');
-            $thumbnailMimeType = $thumbnailFile->getMimeType();
-            $thumbnailName = time() . '-' . $thumbnailFile->getClientOriginalName();
-            $thumbnailPath = public_path('images/products/thumbnail/' . $thumbnailName);
+            if ($request->hasFile('thumbnail')) {
+                $thumbnailFile = $request->file('thumbnail');
+                $thumbnailMimeType = $thumbnailFile->getMimeType();
+                $thumbnailName = time().'-'.$thumbnailFile->getClientOriginalName();
+                $thumbnailPath = public_path('images/products/thumbnail/'.$thumbnailName);
 
-            if (in_array($thumbnailMimeType, ['image/jpeg', 'image/png', 'image/gif'])) {
-                switch ($thumbnailMimeType) {
-                    case 'image/jpeg':
-                    case 'image/pjpeg':
-                        $image = imagecreatefromjpeg($thumbnailFile->getRealPath());
-                        imagejpeg($image, $thumbnailPath, 50);
-                        break;
-                    case 'image/png':
-                        $image = imagecreatefrompng($thumbnailFile->getRealPath());
-                        imagepng($image, $thumbnailPath, 4);
-                        break;
-                    case 'image/gif':
-                        $image = imagecreatefromgif($thumbnailFile->getRealPath());
-                        imagegif($image, $thumbnailPath);
-                        break;
-                }
-
-                imagedestroy($image);
-
-                if ($product->thumbnail) {
-                    $oldThumbnailPath = public_path('images/products/thumbnail/' . basename($product->thumbnail));
-                    if (file_exists($oldThumbnailPath)) {
-                        unlink($oldThumbnailPath); // حذف تصویر قدیمی
+                if (in_array($thumbnailMimeType, ['image/jpeg', 'image/png', 'image/gif'])) {
+                    switch ($thumbnailMimeType) {
+                        case 'image/jpeg':
+                        case 'image/pjpeg':
+                            $image = imagecreatefromjpeg($thumbnailFile->getRealPath());
+                            imagejpeg($image, $thumbnailPath, 50);
+                            break;
+                        case 'image/png':
+                            $image = imagecreatefrompng($thumbnailFile->getRealPath());
+                            imagepng($image, $thumbnailPath, 4);
+                            break;
+                        case 'image/gif':
+                            $image = imagecreatefromgif($thumbnailFile->getRealPath());
+                            imagegif($image, $thumbnailPath);
+                            break;
                     }
+
+                    imagedestroy($image);
+
+                    if ($product->thumbnail) {
+                        $oldThumbnailPath = public_path('images/products/thumbnail/'.basename($product->thumbnail));
+                        if (file_exists($oldThumbnailPath)) {
+                            unlink($oldThumbnailPath); // حذف تصویر قدیمی
+                        }
+                    }
+
+                    $product->thumbnail = asset('images/products/thumbnail/'.$thumbnailName);
+                } else {
+                    return response()->json(['message' => 'فرمت فایل thumbnail پشتیبانی نمی‌شود.'], 400);
                 }
-
-                $product->thumbnail = asset('images/products/thumbnail/' . $thumbnailName);
-            } else {
-                return response()->json(['message' => 'فرمت فایل thumbnail پشتیبانی نمی‌شود.'], 400);
             }
-        }
 
-        $product->save();
-
+            $product->save();
 
             Property::where('product_id', $product->id)->delete();
 
@@ -352,7 +350,7 @@ class ProductRepository implements ProductRepositoryInterface
                     foreach ($colorIds as $colorId) {
                         foreach ($sizeIds as $sizeId) {
                             foreach ($materialIds as $materialId) {
-                                foreach($weightIds as $weightId){
+                                foreach ($weightIds as $weightId) {
                                     $combinations[] = [
                                         'category_id' => $categoryId,
                                         'color_id' => $colorId,
@@ -404,7 +402,7 @@ class ProductRepository implements ProductRepositoryInterface
                             'weight_id' => $weightId,
                         ];
                     }
-                }  else {
+                } else {
                     $combinations[] = [
                         'category_id' => $categoryId,
                         'color_id' => null,

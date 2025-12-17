@@ -3,7 +3,6 @@
 namespace Modules\Shop\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\Shop\Http\Requests\UpdateShopRequest;
 use Modules\Shop\Models\Shop;
@@ -18,6 +17,7 @@ class ShopController extends Controller
     {
         $this->shopRepo = $shopRepository;
     }
+
     public function index()
     {
         $user = Auth::user();
@@ -29,8 +29,7 @@ class ShopController extends Controller
         return IndexShopResource::collection($this->shopRepo->index());
     }
 
-
-public function update(Shop $shop, UpdateShopRequest $request)
+    public function update(Shop $shop, UpdateShopRequest $request)
     {
         $user = Auth::user();
 
@@ -45,5 +44,4 @@ public function update(Shop $shop, UpdateShopRequest $request)
 
         return response()->json(['message' => __('messages.shop.update.failed')], 500);
     }
-
 }

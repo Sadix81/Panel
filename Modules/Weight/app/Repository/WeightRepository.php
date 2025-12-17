@@ -4,9 +4,10 @@ namespace Modules\Weight\Repository;
 
 use Modules\Weight\Models\Weight;
 
-class WeightRepository implements WeightRepositoryInterface{
-
-    public function index(){
+class WeightRepository implements WeightRepositoryInterface
+{
+    public function index()
+    {
         $req = [
             'sort' => request()->has('sort') ? request('sort') : 'updated_at',
             'order' => request()->has('order') ? request('order') : 'desc',
@@ -25,21 +26,24 @@ class WeightRepository implements WeightRepositoryInterface{
         return $weight;
     }
 
-    public function store($request){
+    public function store($request)
+    {
         Weight::create([
             'title' => $request->title,
             'weight_value' => $request->weight_value,
         ]);
     }
 
-    public function update($weight , $request){
+    public function update($weight, $request)
+    {
         $weight->update([
             'title' => $request->title ? $request->title : $weight->title,
-            'weight_value' => $request->weight_value ? $request->weight_value : $weight->weight_value
+            'weight_value' => $request->weight_value ? $request->weight_value : $weight->weight_value,
         ]);
     }
 
-    public function delete($weight){
+    public function delete($weight)
+    {
 
         $weight = Weight::find($weight);
 

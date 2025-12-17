@@ -3,7 +3,6 @@
 namespace Modules\Weight\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\Weight\Http\Requests\CreateWeightRequest;
 use Modules\Weight\Http\Requests\UpdateWeightRequest;
@@ -14,7 +13,7 @@ use Modules\Weight\Transformers\ShowWeightResource;
 
 class WeightController extends Controller
 {
-      private $weightRepo;
+    private $weightRepo;
 
     public function __construct(WeightRepository $weightRepo)
     {
