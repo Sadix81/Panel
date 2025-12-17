@@ -12,14 +12,14 @@ class UpdateShopRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required' , 'string'],
-            'telephone' => ['nullable' , 'integer'],
-            'email' => ['required' , 'email'],
-            'country' => ['required' , 'string' , 'max:100'],
-            'province' => ['required' , 'string' , 'max:50'],
-            'city' => ['required' , 'string'],
-            'address' => ['required' , 'string' , 'max:1000'],
-            'codepost' => ['nullable' , 'string'],
+            'name' => ['required', 'string'],
+            'telephone' => ['nullable', 'integer'],
+            'email' => ['required', 'email'],
+            'country' => ['required', 'string', 'max:100'],
+            'province' => ['required', 'string', 'max:50'],
+            'city' => ['required', 'string'],
+            'address' => ['required', 'string', 'max:1000'],
+            'codepost' => ['nullable', 'string'],
         ];
     }
 

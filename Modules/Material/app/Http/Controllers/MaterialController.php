@@ -3,7 +3,6 @@
 namespace Modules\Material\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Modules\Material\Http\Requests\CreateMaterialRequest;
 use Modules\Material\Http\Requests\UpdateMaterialRequest;

@@ -2,13 +2,13 @@
 
 namespace Modules\Material\Repository;
 
-interface MaterialRepositoryInterface{
-
+interface MaterialRepositoryInterface
+{
     public function index();
 
     public function store($request);
 
-    public function update($material , $request);
+    public function update($material, $request);
 
     public function delete($material);
 }

@@ -2,8 +2,8 @@
 
 namespace Modules\Weight\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Modules\Property\Models\Property;
 
 // use Modules\Weight\Database\Factories\WeightFactory;
@@ -17,7 +17,7 @@ class Weight extends Model
      */
     protected $fillable = [
         'title',
-        'weight_value'
+        'weight_value',
     ];
 
     public function property()

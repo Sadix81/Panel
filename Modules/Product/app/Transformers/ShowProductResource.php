@@ -16,7 +16,7 @@ class ShowProductResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'code' => $this->code,
-            'thumbnail' => $this->thumbnail ?  $this->thumbnail : null, // تولید آدرس کامل عکس
+            'thumbnail' => $this->thumbnail ? $this->thumbnail : null, // تولید آدرس کامل عکس
             'description' => $this->description,
             'status' => $this->status,
             'category_id' => $this->categories->map(function ($category) {
