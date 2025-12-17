@@ -292,72 +292,46 @@ class ProductRepository implements ProductRepositoryInterface
                 }
             }
 
-            // ذخیره تصویر thumbnail جدید
-            if ($request->hasFile('thumbnail')) {
-                $thumbnailFile = $request->file('thumbnail');
-                $thumbnailMimeType = $thumbnailFile->getMimeType();
-                $thumbnailName = time().'-'.$thumbnailFile->getClientOriginalName();
-                $thumbnailPath = public_path('images/products/thumbnail/'.$thumbnailName);
+             if ($request->hasFile('thumbnail')) {
+            $thumbnailFile = $request->file('thumbnail');
+            $thumbnailMimeType = $thumbnailFile->getMimeType();
+            $thumbnailName = time() . '-' . $thumbnailFile->getClientOriginalName();
+            $thumbnailPath = public_path('images/products/thumbnail/' . $thumbnailName);
 
-                if (in_array($thumbnailMimeType, ['image/jpeg', 'image/png', 'image/gif'])) {
-                    $newThumbnailUrl = asset('images/products/thumbnail/'.$thumbnailName);
-
-                    // Only update the thumbnail if the content is different
-                    $oldThumbnailPath = public_path('images/products/thumbnail/'.basename($product->thumbnail));
-
-                    if (file_exists($oldThumbnailPath)) {
-                        // Compare the two files
-                        if (md5_file($thumbnailFile->getRealPath()) !== md5_file($oldThumbnailPath)) {
-                            unlink($oldThumbnailPath); // حذف تصویر قدیمی
-
-                            switch ($thumbnailMimeType) {
-                                case 'image/jpeg':
-                                case 'image/pjpeg':
-                                    $image = imagecreatefromjpeg($thumbnailFile->getRealPath());
-                                    imagejpeg($image, $thumbnailPath, 50);
-                                    break;
-                                case 'image/png':
-                                    $image = imagecreatefrompng($thumbnailFile->getRealPath());
-                                    imagepng($image, $thumbnailPath, 4);
-                                    break;
-                                case 'image/gif':
-                                    $image = imagecreatefromgif($thumbnailFile->getRealPath());
-                                    imagegif($image, $thumbnailPath);
-                                    break;
-                            }
-
-                            imagedestroy($image);
-
-                            $product->thumbnail = $newThumbnailUrl;
-                        } else {
-                            Log::info('Thumbnail not updated because it is the same as the current one.');
-                        }
-                    } else {
-                        switch ($thumbnailMimeType) {
-                            case 'image/jpeg':
-                            case 'image/pjpeg':
-                                $image = imagecreatefromjpeg($thumbnailFile->getRealPath());
-                                imagejpeg($image, $thumbnailPath, 50);
-                                break;
-                            case 'image/png':
-                                $image = imagecreatefrompng($thumbnailFile->getRealPath());
-                                imagepng($image, $thumbnailPath, 4);
-                                break;
-                            case 'image/gif':
-                                $image = imagecreatefromgif($thumbnailFile->getRealPath());
-                                imagegif($image, $thumbnailPath);
-                                break;
-                        }
-
-                        imagedestroy($image);
-
-                        $product->thumbnail = $newThumbnailUrl; // URL جدید تصویر
-                    }
-                    $product->save(); // ذخیره تغییرات در دیتابیس
-                } else {
-                    return response()->json(['message' => 'فرمت فایل thumbnail پشتیبانی نمی‌شود.'], 400);
+            if (in_array($thumbnailMimeType, ['image/jpeg', 'image/png', 'image/gif'])) {
+                switch ($thumbnailMimeType) {
+                    case 'image/jpeg':
+                    case 'image/pjpeg':
+                        $image = imagecreatefromjpeg($thumbnailFile->getRealPath());
+                        imagejpeg($image, $thumbnailPath, 50);
+                        break;
+                    case 'image/png':
+                        $image = imagecreatefrompng($thumbnailFile->getRealPath());
+                        imagepng($image, $thumbnailPath, 4);
+                        break;
+                    case 'image/gif':
+                        $image = imagecreatefromgif($thumbnailFile->getRealPath());
+                        imagegif($image, $thumbnailPath);
+                        break;
                 }
+
+                imagedestroy($image);
+
+                if ($product->thumbnail) {
+                    $oldThumbnailPath = public_path('images/products/thumbnail/' . basename($product->thumbnail));
+                    if (file_exists($oldThumbnailPath)) {
+                        unlink($oldThumbnailPath); // حذف تصویر قدیمی
+                    }
+                }
+
+                $product->thumbnail = asset('images/products/thumbnail/' . $thumbnailName);
+            } else {
+                return response()->json(['message' => 'فرمت فایل thumbnail پشتیبانی نمی‌شود.'], 400);
             }
+        }
+
+        $product->save();
+
 
             Property::where('product_id', $product->id)->delete();
 
