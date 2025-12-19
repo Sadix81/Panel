@@ -498,6 +498,14 @@ class ProductRepository implements ProductRepositoryInterface
     public function thumbnail($product)
     {
 
+        if ($product->thumbnail) {
+            $imagePath = public_path('images/products/' . basename($product->thumbnail)); // مسیر فایل تصویر
+
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
+        }
+
         $product->update([
             'thumbnail' => null,
         ]);
@@ -505,14 +513,12 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function product_image($product)
     {
-        $product_images = Product::whereHas('images', function ($query) use ($product) {
-            $query->where('product_id', $product->id);
-        })
-            ->with('images')->first();
+        $product_images = Product::with('images')->find($product->id);
         if ($product_images && $product_images->images) {
             foreach ($product_images->images as $image) {
-                if (file_exists(public_path('images/'.basename($image->image_url)))) {
-                    unlink(public_path('images/'.basename($image->image_url)));
+                $imagePath = public_path('images/' . basename($image->image_url));
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
                 }
                 $image->delete();
             }
@@ -521,6 +527,22 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function delete($product)
     {
+        if ($product->thumbnail) {
+            $thumbnailPath = public_path('images/' . basename($product->thumbnail));
+            if (file_exists($thumbnailPath)) {
+                unlink($thumbnailPath);
+            }
+        }
+
+        $productImages = $product->images;
+
+        foreach ($productImages as $image) {
+            $imagePath = public_path('images/' . basename($image->image_url));
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+            $image->delete();
+        }
         $product->delete();
     }
 }
