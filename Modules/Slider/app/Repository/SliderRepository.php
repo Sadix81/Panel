@@ -80,8 +80,19 @@ class SliderRepository implements SliderRepositoryInterface
         $slider = Slider::find($slider);
 
         if (! $slider) {
-            return response()->json(['message' => __('messages.size.not_found')], 404);
+            return response()->json(['message' => __('messages.slider.not_found')], 404);
         }
+
+        if ($slider->slider_image_url) {
+            $imagePath = public_path('images/sliders/' . basename($slider->slider_image_url)); // مسیر فایل عکس
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+             else {
+                Log::warning('Image file not found for slider ID ' . $slider->id);
+            }
+        }
+
         $slider->delete();
     }
 }
