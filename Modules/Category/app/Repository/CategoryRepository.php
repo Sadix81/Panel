@@ -2,6 +2,7 @@
 
 namespace Modules\Category\Repository;
 
+use Illuminate\Support\Facades\Auth;
 use Modules\Category\Models\Category;
 
 class CategoryRepository implements CategoryRepositoryInterface
@@ -73,50 +74,75 @@ class CategoryRepository implements CategoryRepositoryInterface
 
     public function update($category, $request)
     {
-        try {
-            $data = [
-                'name' => $request->name ?: $category->name,
-                'parent_id' => $request->parent_id,
-            ];
+        $oldImageUrl = $category->image;
 
-            if ($request->hasFile('image')) {
-                $file = $request->file('image');
-                $mimeType = $file->getMimeType();
-                $image_name = time().'-'.$file->getClientOriginalName();
-                $relative_path = 'images/categories/'.$image_name;
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $mimeType = $file->getMimeType();
+            $image_name = time() . '-' . $file->getClientOriginalName();
 
-                switch ($mimeType) {
-                    case 'image/jpeg':
-                    case 'image/pjpeg':
-                        $image = imagecreatefromjpeg($file->getRealPath());
-                        imagejpeg($image, public_path($relative_path), 50);
-                        break;
-                    case 'image/png':
-                        $image = imagecreatefrompng($file->getRealPath());
-                        imagepng($image, public_path($relative_path), 4);
-                        break;
-                    case 'image/gif':
-                        $image = imagecreatefromgif($file->getRealPath());
-                        imagegif($image, public_path($relative_path));
-                        break;
-                }
-
-                // آزاد کردن منابع تصویر
-                imagedestroy($image);
-
-                $data['image'] = $relative_path;
-            } else {
-                $data['image'] = $category->image;
+            switch ($mimeType) {
+                case 'image/jpeg':
+                case 'image/pjpeg':
+                    $image = imagecreatefromjpeg($file->getRealPath());
+                    imagejpeg($image, public_path('images/categories/' . $image_name), 50);
+                    break;
+                case 'image/png':
+                    $image = imagecreatefrompng($file->getRealPath());
+                    imagepng($image, public_path('images/categories/' . $image_name), 4);
+                    break;
+                case 'image/gif':
+                    $image = imagecreatefromgif($file->getRealPath());
+                    imagegif($image, public_path('images/categories/' . $image_name));
+                    break;
+                default:
+                    return response()->json(['message' => 'فرمت فایل پشتیبانی نمی‌شود.'], 400);
             }
 
-            $category->update($data);
-        } catch (\Exception $e) {
-            throw new \Exception('خطا در به‌روزرسانی دسته‌بندی: '.$e->getMessage());
+            imagedestroy($image);
+            $image_url = asset('images/categories/' . $image_name);
+
+            if ($oldImageUrl) {
+                $oldImagePath = public_path('images/categories/' . basename($oldImageUrl));
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
+            }
+        } else {
+            $image_url = $oldImageUrl;
         }
+
+        try {
+            $category->update([
+                'name' => $request->name ? $request->name : $category->name,
+                'parent_id' => $request->parent_id ? $request->parent_id : $category->parent_id,
+                'image' => $image_url,
+            ]);
+                return null;
+            } catch (\Exception $e) {
+                return response()->json(['message' => __('messages.user.categories.update.failed'), 'error' => $e->getMessage()], 500);
+            }
+
+            return response()->json(['message' => __('messages.user.categories.update.success')], 200);
+
     }
 
     public function remove_category_image($category)
     {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json(['message' => 'عدم دسترسی کاربر'], 403);
+        }
+
+        if ($category->image) {
+            $imagePath = public_path('images/categories/' . basename($category->image)); // مسیر فایل آواتار
+
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
+
         $category->update([
             'image' => null,
         ]);
@@ -128,6 +154,13 @@ class CategoryRepository implements CategoryRepositoryInterface
 
         if (! $category) {
             return response()->json(['message' => __('messages.category.not_found')], 404);
+        }
+
+        if ($category->image) {
+            $imagePath = public_path('images/categories/' . basename($category->image)); // مسیر فایل عکس
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
         }
 
         $all_categories_parent_id = Category::pluck('parent_id')->toArray(); // get all parent_id(s)
