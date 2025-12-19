@@ -20,7 +20,13 @@ class UpdateProfileRequest extends FormRequest
             'province' => ['required', 'string', 'max:50'],
             'city' => ['required', 'string'],
             'address' => ['required', 'string', 'max:1000'],
-            'codepost' => ['nullable', 'string'],
+            'codepost' => [
+                'nullable',
+                'string',
+                Rule::unique('users')->ignore($this->user()->id)->where(function ($query) {
+                    return $query->where('codepost', '<>', $this->codepost);
+                }),
+            ]
         ];
     }
 

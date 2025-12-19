@@ -21,7 +21,7 @@ class ProfileController extends Controller
     public function update(User $user, UpdateProfileRequest $request)
     {
 
-        $user = Auth::id();
+        $user = Auth::user();
 
         if (! $user) {
             return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
