@@ -3,87 +3,95 @@
 namespace Modules\Profile\Repository;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ProfileRepository implements ProfileRepositoryInterface
 {
     public function update($user, $request)
     {
-        $user = Auth::user();
+        $oldImageUrl = $user->avatar;
+        Log::info('User ID ' . $user->id . ' is updating profile.'); // ثبت لاگ شروع به‌روزرسانی
 
-        if (! $user) {
-            return 'عدم دسترسی کاربر';
-        }
-
-        if ($request->codepost == $user->codepost) {
-            return response()->json(['messages' => 'codepost has already selected'], 409);  // 409 for conflict
-        }
-
-        if (request()->hasFile('avatar')) {
+        if ($request->hasFile('avatar')) {
             $file = $request->file('avatar');
             $mimeType = $file->getMimeType();
+            $image_name = time() . '-' . $file->getClientOriginalName();
 
-            // ایجاد نام یونیک برای تصویر
-            $image_name = time().'-'.$file->getClientOriginalName();
-
-            // بارگذاری تصویر با توجه به نوع MIME
             switch ($mimeType) {
                 case 'image/jpeg':
                 case 'image/pjpeg':
                     $image = imagecreatefromjpeg($file->getRealPath());
+                    imagejpeg($image, public_path('images/profile/' . $image_name), 50);
                     break;
                 case 'image/png':
                     $image = imagecreatefrompng($file->getRealPath());
+                    imagepng($image, public_path('images/profile/' . $image_name), 4);
                     break;
                 case 'image/gif':
                     $image = imagecreatefromgif($file->getRealPath());
+                    imagegif($image, public_path('images/profile/' . $image_name));
                     break;
                 default:
+                    Log::warning('User ID ' . $user->id . ' uploaded an unsupported file type: ' . $mimeType);
                     return response()->json(['message' => 'فرمت فایل پشتیبانی نمی‌شود.'], 400);
             }
 
-            // JPEG
-            if ($mimeType === 'image/jpeg' || $mimeType === 'image/pjpeg') {
-                imagejpeg($image, public_path('images/profile/'.$image_name), 50); // 30 درصد کیفیت
-            } else {
-                // PNG(0 / 9) هرچی عدد بیشتر شود فشرده ساری بیشتر میشود
-                if ($mimeType === 'image/png') {
-                    imagepng($image, public_path('images/profile/'.$image_name), 4);
-                } elseif ($mimeType === 'image/gif') {
-                    imagegif($image, public_path('images/profile/'.$image_name));
+            imagedestroy($image);
+            $image_url = asset('images/profile/' . $image_name);
+
+            if ($oldImageUrl) {
+                $oldImagePath = public_path('images/profile/' . basename($oldImageUrl));
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                    Log::info('Deleted old avatar for user ID ' . $user->id);
+
                 }
             }
-
-            // آزاد کردن منابع تصویر
-            imagedestroy($image);
-
-            $image_url = asset('images/profile/'.$image_name); // تولید آدرس کامل
         } else {
-            // اگر تصویری آپلود نشده، URL قبلی را حفظ کنید
-            $image_url = $user->avatar;
+            $image_url = $oldImageUrl;
         }
 
-        $user->update([
-            'username' => $request->username ? $request->username : $user->username,
-            'lastname' => $request->lastname ? $request->lastname : $user->lastname,
-            'mobile' => $request->mobile ? $request->mobile : $user->mobile,
-            'email' => $request->email ? $request->email : $user->email,
-            'avatar' => $request->avatar ? $image_url : $user->avatar,
-            'country' => $request->country ? $request->country : $user->country,
-            'province' => $request->province ? $request->province : $user->province,
-            'city' => $request->city ? $request->city : $user->city,
-            'address' => $request->address ? $request->address : $user->address,
-            'codepost' => $request->codepost ? $request->codepost : $user->codepost,
-            'twofactor' => $request->twofactor !== null ? $request->twofactor : $user->twofactor,
+        try {
+            $user->update([
+                'username' => $request->username ?: $user->username,
+                'lastname' => $request->lastname ?: $user->lastname,
+                'mobile' => $request->mobile ?: $user->mobile,
+                'email' => $request->email ?: $user->email,
+                'avatar' => $image_url,
+                'country' => $request->country ?: $user->country,
+                'province' => $request->province ?: $user->province,
+                'city' => $request->city ?: $user->city,
+                'address' => $request->address ?: $user->address,
+                'codepost' => $request->codepost ?: $user->codepost,
+                'twofactor' => $request->twofactor !== null ? $request->twofactor : $user->twofactor,
+            ]);
+                Log::info('User ID ' . $user->id . ' profile updated successfully.');
+                return null;
+            } catch (\Exception $e) {
+                Log::error('Profile update failed for user ID ' . $user->id . ': ' . $e->getMessage());
+                return response()->json(['message' => __('messages.user.profile.update.failed'), 'error' => $e->getMessage()], 500);
+            }
 
-        ]);
+            return response()->json(['message' => __('messages.user.profile.update.success')], 200);
+
     }
 
     public function delete_avatar($user)
     {
         $user = Auth::user();
 
-        if (! $user) {
-            return 'عدم دسترسی کاربر';
+        if (!$user) {
+            Log::warning('User deletion attempt without authentication.');
+            return response()->json(['message' => 'عدم دسترسی کاربر'], 403);
+        }
+
+        if ($user->avatar) {
+            $avatarPath = public_path('images/profile/' . basename($user->avatar)); // مسیر فایل آواتار
+
+            if (file_exists($avatarPath)) {
+                unlink($avatarPath);
+                Log::info('Deleted avatar for user ID ' . $user->id); // ثبت لاگ حذف تصویر آواتار
+            }
         }
 
         $user->update([
