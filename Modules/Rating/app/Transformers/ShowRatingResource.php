@@ -10,9 +10,11 @@ class ShowRatingResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'rating' => $this->rating,
-            'product_id' => $this->product_id,
-            'user_id' => $this->user_id,
+            'user' => [
+                'id' => $this->user->id,
+                'username' => $this->user->username,
+                'rate' => $this->rating,
+            ],
         ];
     }
 }

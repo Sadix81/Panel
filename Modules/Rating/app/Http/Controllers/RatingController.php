@@ -54,23 +54,26 @@ class RatingController extends Controller
     {
         $user = Auth::user();
 
-        if (! $user) {
+        if (!$user) {
             return response()->json(['message' => __('messages.user.Inaccessibility')], 401);
         }
 
-        $ratings = Rate::where('product_id', $product->id)
+        $ratings = Rate::with('user')
+            ->where('product_id', $product->id)
             ->select('id', 'rating', 'user_id', 'product_id')
             ->get();
 
         $finalAverageRating = $ratings->avg('rating');
-        $userIds = $ratings->pluck('user_id')->toArray();
 
         $ratingResources = ShowRatingResource::collection($ratings);
 
         return response()->json([
             'average_rating' => $finalAverageRating,
+            'product' => [
+                'id' => $product->id,
+                'name' => $product->name,
+            ],
             'ratings' => $ratingResources,
-            'users_id' => $userIds,
         ]);
     }
 
